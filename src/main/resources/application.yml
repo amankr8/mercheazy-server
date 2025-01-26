@@ -17,4 +17,4 @@ spring:
       ddl-auto: create-drop
 
 jwt:
-  secret: secret
+  secret: 35bba733bdf857063a155e3038f38498c48bdb48cc5501e98d7cbf9333838d93

@@ -3,6 +3,7 @@ package com.mercheazy.server.controller.impl;
 import com.mercheazy.server.controller.AuthController;
 import com.mercheazy.server.dto.LoginRequestDto;
 import com.mercheazy.server.dto.SignupRequestDto;
+import com.mercheazy.server.dto.UserResponseDto;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.service.AuthService;
 import com.mercheazy.server.service.JwtService;
@@ -19,7 +20,7 @@ public class AuthControllerImpl implements AuthController {
 
     @Override
     public ResponseEntity<?> signup(SignupRequestDto signupRequestDto) {
-        User registeredUser = authService.signUp(signupRequestDto);
+        UserResponseDto registeredUser = authService.signUp(signupRequestDto);
         return ResponseEntity.ok(registeredUser);
     }
 

@@ -2,6 +2,7 @@ package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.LoginRequestDto;
 import com.mercheazy.server.dto.SignupRequestDto;
+import com.mercheazy.server.dto.UserResponseDto;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.AuthService;
@@ -23,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public User signUp(SignupRequestDto signupRequestDto) {
+    public UserResponseDto signUp(SignupRequestDto signupRequestDto) {
 
         // Check if the user already exists by username or email
         if (userRepository.findByUsername(signupRequestDto.getUsername()).isPresent()) {
@@ -39,9 +40,10 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(signupRequestDto.getUsername());
         user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
         user.setCreateDate(new Date());
+        user.setUpdateDate(new Date());
         user.setRole(signupRequestDto.getRole());
 
-        return userRepository.save(user);
+        return createUserResponseDto(userRepository.save(user));
     }
 
     @Override
@@ -56,5 +58,15 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
         return user;
+    }
+
+    private UserResponseDto createUserResponseDto(User user) {
+        return UserResponseDto.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .createDate(user.getCreateDate())
+                .updateDate(user.getUpdateDate())
+                .build();
     }
 }
