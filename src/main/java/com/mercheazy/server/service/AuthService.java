@@ -8,5 +8,5 @@ public interface AuthService {
 
     User signUp(SignupRequestDto signupRequestDto);
 
-    User signIn(LoginRequestDto loginRequestDto);
+    User login(LoginRequestDto loginRequestDto);
 }

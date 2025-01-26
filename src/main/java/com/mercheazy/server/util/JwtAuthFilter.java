@@ -1,4 +1,4 @@
-package com.mercheazy.server.config;
+package com.mercheazy.server.util;
 
 import com.mercheazy.server.service.JwtService;
 import jakarta.annotation.Nullable;

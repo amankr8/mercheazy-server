@@ -35,10 +35,10 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "u_create_date", nullable = false, updatable = false)
-    private Date createdAt;
+    private Date createDate;
 
     @Column(name = "u_update_date", nullable = false)
-    private Date updatedAt;
+    private Date updateDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "u_role", nullable = false)
