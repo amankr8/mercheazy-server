@@ -6,7 +6,7 @@ spring:
     enabled: false
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:mercheazy}
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:mercheazy-db}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
@@ -17,7 +17,7 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
 jwt:
   secret: ${JWT_SECRET}
