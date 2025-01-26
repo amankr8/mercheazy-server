@@ -59,15 +59,4 @@ public class AuthServiceImpl implements AuthService {
         );
         return user;
     }
-
-    @Override
-    public UserResponseDto createUserResponseDto(User user) {
-        return UserResponseDto.builder()
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .createDate(user.getCreateDate())
-                .updateDate(user.getUpdateDate())
-                .build();
-    }
 }

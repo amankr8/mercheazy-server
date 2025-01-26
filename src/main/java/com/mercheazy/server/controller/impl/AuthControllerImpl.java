@@ -8,6 +8,7 @@ import com.mercheazy.server.dto.UserResponseDto;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.service.AuthService;
 import com.mercheazy.server.service.JwtService;
+import com.mercheazy.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,17 +19,18 @@ public class AuthControllerImpl implements AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
+    private final UserService userService;
 
     @Override
     public ResponseEntity<?> signup(SignupRequestDto signupRequestDto) {
         User registeredUser = authService.signUp(signupRequestDto);
-        return ResponseEntity.ok(new AuthResponseDto(null, authService.createUserResponseDto(registeredUser), "User registered successfully!"));
+        return ResponseEntity.ok(new AuthResponseDto(null, userService.createUserResponseDto(registeredUser), "User registered successfully!"));
     }
 
     @Override
     public ResponseEntity<?> login(LoginRequestDto loginRequestDto) {
         User authenticatedUser = authService.login(loginRequestDto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
-        return ResponseEntity.ok(new AuthResponseDto(jwtToken, authService.createUserResponseDto(authenticatedUser), "Login successful"));
+        return ResponseEntity.ok(new AuthResponseDto(jwtToken, userService.createUserResponseDto(authenticatedUser), "Login successful"));
     }
 }
