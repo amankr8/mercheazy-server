@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 public interface AuthController {
 
     @PostMapping("/signup")
-    ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDto signupRequestDto);
+    ResponseEntity<?> signup(@Valid @RequestBody SignupRequestDto signupRequestDto);
 
     @PostMapping("/login")
-    ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDto loginRequestDto);
+    ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto);
 }
