@@ -20,7 +20,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/mercheazy-server:$(date +%s)
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/mercheazy-server
 
     - name: Push Docker image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/mercheazy-server:$(date +%s)
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/mercheazy-server
