@@ -2,11 +2,11 @@ package com.mercheazy.server.service;
 
 import com.mercheazy.server.dto.LoginRequestDto;
 import com.mercheazy.server.dto.SignupRequestDto;
-import com.mercheazy.server.entity.User;
+import com.mercheazy.server.dto.UserResponseDto;
 
 public interface AuthService {
 
-    User signUp(SignupRequestDto signupRequestDto);
+    UserResponseDto signUp(SignupRequestDto signupRequestDto);
 
-    User login(LoginRequestDto loginRequestDto);
+    UserResponseDto login(LoginRequestDto loginRequestDto);
 }

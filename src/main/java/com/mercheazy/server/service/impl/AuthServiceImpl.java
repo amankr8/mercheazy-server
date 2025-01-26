@@ -6,6 +6,7 @@ import com.mercheazy.server.dto.UserResponseDto;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.AuthService;
+import com.mercheazy.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,11 +21,12 @@ import java.util.Date;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public User signUp(SignupRequestDto signupRequestDto) {
+    public UserResponseDto signUp(SignupRequestDto signupRequestDto) {
 
         // Check if the user already exists by username or email
         if (userRepository.findByUsername(signupRequestDto.getUsername()).isPresent()) {
@@ -43,11 +45,11 @@ public class AuthServiceImpl implements AuthService {
         user.setUpdateDate(new Date());
         user.setRole(signupRequestDto.getRole());
 
-        return userRepository.save(user);
+        return userService.createUserResponseDto(userRepository.save(user));
     }
 
     @Override
-    public User login(LoginRequestDto loginRequestDto) {
+    public UserResponseDto login(LoginRequestDto loginRequestDto) {
         User user = userRepository.findByUsername(loginRequestDto.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -57,6 +59,6 @@ public class AuthServiceImpl implements AuthService {
                         loginRequestDto.getPassword()
                 )
         );
-        return user;
+        return userService.createUserResponseDto(user);
     }
 }

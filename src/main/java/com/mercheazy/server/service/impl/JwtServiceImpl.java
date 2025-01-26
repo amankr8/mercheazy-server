@@ -19,7 +19,10 @@ import java.util.Map;
 public class JwtServiceImpl implements JwtService {
 
     @Value("${jwt.secret}")
-    private String SECRET_KEY;
+    private String JWT_SECRET_KEY;
+
+    @Value("${jwt.expiration}")
+    private Long JWT_EXPIRATION;
 
     @Override
     public String extractUsername(String token) {
@@ -36,18 +39,18 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     private String buildToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails,
+            String username,
             long expiration) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -55,14 +58,13 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(String username) {
+        return generateToken(new HashMap<>(), username);
     }
 
     @Override
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        long jwtExpiration = 1000L * 60 * 60 * 24;
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+    public String generateToken(Map<String, Object> extraClaims, String username) {
+        return buildToken(extraClaims, username, JWT_EXPIRATION);
     }
 
     @Override
