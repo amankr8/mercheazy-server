@@ -7,7 +7,9 @@ import com.mercheazy.server.entity.User;
 
 public interface AuthService {
 
-    UserResponseDto signUp(SignupRequestDto signupRequestDto);
+    User signUp(SignupRequestDto signupRequestDto);
 
     User login(LoginRequestDto loginRequestDto);
+
+    UserResponseDto createUserResponseDto(User user);
 }

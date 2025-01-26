@@ -24,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public UserResponseDto signUp(SignupRequestDto signupRequestDto) {
+    public User signUp(SignupRequestDto signupRequestDto) {
 
         // Check if the user already exists by username or email
         if (userRepository.findByUsername(signupRequestDto.getUsername()).isPresent()) {
@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
         user.setUpdateDate(new Date());
         user.setRole(signupRequestDto.getRole());
 
-        return createUserResponseDto(userRepository.save(user));
+        return userRepository.save(user);
     }
 
     @Override
@@ -60,7 +60,8 @@ public class AuthServiceImpl implements AuthService {
         return user;
     }
 
-    private UserResponseDto createUserResponseDto(User user) {
+    @Override
+    public UserResponseDto createUserResponseDto(User user) {
         return UserResponseDto.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())

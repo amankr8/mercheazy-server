@@ -3,9 +3,9 @@ spring:
     name: server
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/mercheazy
-    username: postgres
-    password: admin
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:mercheazy}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -17,4 +17,4 @@ spring:
       ddl-auto: create-drop
 
 jwt:
-  secret: 35bba733bdf857063a155e3038f38498c48bdb48cc5501e98d7cbf9333838d93
+  secret: ${JWT_SECRET}

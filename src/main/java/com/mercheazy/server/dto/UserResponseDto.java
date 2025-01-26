@@ -9,7 +9,6 @@ import java.util.Date;
 @Data
 @Builder
 public class UserResponseDto {
-
     private String username;
     private String email;
     private Role role;
