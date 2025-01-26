@@ -69,7 +69,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public Long getExpirationTime() {
-        return 0L;
+        return JWT_EXPIRATION;
     }
 
     @Override
