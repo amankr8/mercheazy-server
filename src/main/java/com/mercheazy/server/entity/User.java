@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -37,19 +35,18 @@ public class User implements UserDetails {
     @Column(name = "u_email", unique = true, nullable = false)
     private String email;
 
-    @CreatedDate
     @Column(name = "u_create_date", nullable = false, updatable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")
-    private Date createDate;
+    private Date createDate = new Date();
 
-    @LastModifiedDate
     @Column(name = "u_update_date", nullable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")
-    private Date updateDate;
+    private Date updateDate = new Date();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "u_role", nullable = false)
-    private Role role;
+    @ColumnDefault("'USER'")
+    private Role role = Role.USER;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -58,21 +55,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 }

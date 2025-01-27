@@ -3,7 +3,6 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.LoginRequestDto;
 import com.mercheazy.server.dto.SignupRequestDto;
 import com.mercheazy.server.dto.UserResponseDto;
-import com.mercheazy.server.entity.Role;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.AuthService;
@@ -14,8 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
@@ -42,10 +39,7 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(signupRequestDto.getEmail());
         user.setUsername(signupRequestDto.getUsername());
         user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
-
-        if(signupRequestDto.getRole() == null) {
-            user.setRole(Role.USER);
-        } else {
+        if (signupRequestDto.getRole() != null) {
             user.setRole(signupRequestDto.getRole());
         }
 
