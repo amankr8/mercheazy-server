@@ -5,7 +5,7 @@ CREATE TABLE mercheazy_user (
     u_update_date TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP NOT NULL,
     u_email VARCHAR(255) NOT NULL UNIQUE,
     u_password VARCHAR(255) NOT NULL,
-    u_role VARCHAR(255) NOT NULL CHECK (u_role IN ('ADMIN', 'USER', 'CREATOR', 'MODERATOR')),
+    u_role VARCHAR(255) DEFAULT 'USER' NOT NULL CHECK (u_role IN ('ADMIN', 'USER', 'CREATOR', 'MODERATOR')),
     u_username VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (u_id)
 );
