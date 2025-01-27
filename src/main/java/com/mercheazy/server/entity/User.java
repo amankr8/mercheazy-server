@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -34,9 +36,11 @@ public class User implements UserDetails {
     @Column(name = "u_email", unique = true, nullable = false)
     private String email;
 
+    @CreatedDate
     @Column(name = "u_create_date", nullable = false, updatable = false)
     private Date createDate;
 
+    @LastModifiedDate
     @Column(name = "u_update_date", nullable = false)
     private Date updateDate;
 

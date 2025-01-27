@@ -3,6 +3,7 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.LoginRequestDto;
 import com.mercheazy.server.dto.SignupRequestDto;
 import com.mercheazy.server.dto.UserResponseDto;
+import com.mercheazy.server.entity.Role;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.AuthService;
@@ -41,9 +42,12 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(signupRequestDto.getEmail());
         user.setUsername(signupRequestDto.getUsername());
         user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
-        user.setCreateDate(new Date());
-        user.setUpdateDate(new Date());
-        user.setRole(signupRequestDto.getRole());
+
+        if(signupRequestDto.getRole() == null) {
+            user.setRole(Role.USER);
+        } else {
+            user.setRole(signupRequestDto.getRole());
+        }
 
         return userService.createUserResponseDto(userRepository.save(user));
     }
