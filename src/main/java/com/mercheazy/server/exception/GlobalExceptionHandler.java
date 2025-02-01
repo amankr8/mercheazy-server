@@ -1,6 +1,7 @@
 package com.mercheazy.server.exception;
 
 import com.mercheazy.server.dto.StatusResponseDto;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,5 +68,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new StatusResponseDto(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<?> handleExpiredJwtException(ExpiredJwtException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new StatusResponseDto(HttpStatus.FORBIDDEN.value(), e.getMessage()));
     }
 }
