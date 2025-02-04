@@ -30,6 +30,13 @@ public class User implements UserDetails {
     @Column(name = "u_username", unique = true, nullable = false)
     private String username;
 
+    @Column(name = "u_first_name", nullable = false)
+    @ColumnDefault("'User'")
+    private String firstName;
+
+    @Column(name = "u_last_name")
+    private String lastName;
+
     @Column(name = "u_password", nullable = false)
     private String password;
 
