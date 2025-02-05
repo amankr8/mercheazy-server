@@ -26,24 +26,33 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequestDto) {
 
-        // Check if the user already exists by username or email
-        if (userRepository.findByUsername(signupRequestDto.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
-        }
-
+        // Check if the user already exists by email
         if (userRepository.findByEmail(signupRequestDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists");
         }
 
         User user = new User();
+        user.setFirstName(signupRequestDto.getFirstName());
+        user.setLastName(signupRequestDto.getLastName());
+        user.setUsername(generateUniqueUsername((signupRequestDto.getFirstName() + signupRequestDto.getLastName()).toLowerCase()));
         user.setEmail(signupRequestDto.getEmail());
-        user.setUsername(signupRequestDto.getUsername());
         user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
         if (signupRequestDto.getRole() != null) {
             user.setRole(signupRequestDto.getRole());
         }
 
         return userService.createUserResponseDto(userRepository.save(user));
+    }
+
+    private String generateUniqueUsername(String username) {
+        // Generate a unique username
+        String uniqueUsername = username;
+        int i = 1;
+        while (userRepository.findByUsername(uniqueUsername).isPresent()) {
+            uniqueUsername = username + i;
+            i++;
+        }
+        return uniqueUsername;
     }
 
     @Override

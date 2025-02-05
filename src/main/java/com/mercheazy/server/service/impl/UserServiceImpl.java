@@ -24,6 +24,8 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto createUserResponseDto(User user) {
         return UserResponseDto.builder()
                 .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .email(user.getEmail())
                 .role(user.getRole())
                 .createDate(user.getCreateDate())
