@@ -1,4 +1,7 @@
 package com.mercheazy.server.repository;
 
-public interface ProductRepository {
+import com.mercheazy.server.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 }
