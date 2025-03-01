@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,13 +43,15 @@ public class User implements UserDetails {
     @Column(name = "u_email", unique = true, nullable = false)
     private String email;
 
+    @CreationTimestamp
     @Column(name = "u_create_date", nullable = false, updatable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")
-    private Date createDate = new Date();
+    private Date createDate;
 
+    @UpdateTimestamp
     @Column(name = "u_update_date", nullable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")
-    private Date updateDate = new Date();
+    private Date updateDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "u_role", nullable = false)

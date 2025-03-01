@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductControllerImpl implements ProductController {
 
-    private ProductService productService;
+    private final ProductService productService;
 
     @Override
     public ResponseEntity<?> createProduct(ProductRequestDto productRequestDto) {
