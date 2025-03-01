@@ -32,7 +32,7 @@ public class Product {
     private String desc;
 
     @Column(name = "p_actual_price", nullable = false)
-    private double actualPrice;
+    private double listPrice;
 
     @Column(name = "p_sell_price", nullable = false)
     private double sellPrice;
@@ -60,7 +60,7 @@ public class Product {
                 .name(name)
                 .description(desc)
                 .sellPrice(sellPrice)
-                .actualPrice(actualPrice)
+                .listPrice(listPrice)
                 .stock(stock)
                 .createDate(createDate)
                 .updateDate(updateDate)

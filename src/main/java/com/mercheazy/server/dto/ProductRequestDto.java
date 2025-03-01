@@ -4,7 +4,6 @@ import com.mercheazy.server.entity.Product;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -21,11 +20,9 @@ public class ProductRequestDto {
         return Product.builder()
                 .name(name)
                 .desc(desc)
-                .actualPrice(actualPrice)
+                .listPrice(actualPrice)
                 .sellPrice(sellPrice)
                 .stock(stock)
-                .createDate(new Date())
-                .updateDate(new Date())
                 .build();
     }
 }

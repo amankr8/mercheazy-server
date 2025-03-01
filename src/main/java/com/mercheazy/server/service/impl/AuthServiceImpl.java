@@ -3,6 +3,7 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.LoginRequestDto;
 import com.mercheazy.server.dto.SignupRequestDto;
 import com.mercheazy.server.dto.UserResponseDto;
+import com.mercheazy.server.entity.Role;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.AuthService;
@@ -31,15 +32,15 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        User user = new User();
-        user.setFirstName(signupRequestDto.getFirstName());
-        user.setLastName(signupRequestDto.getLastName());
-        user.setUsername(generateUniqueUsername((signupRequestDto.getFirstName() + signupRequestDto.getLastName()).toLowerCase()));
-        user.setEmail(signupRequestDto.getEmail());
-        user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
-        if (signupRequestDto.getRole() != null) {
-            user.setRole(signupRequestDto.getRole());
-        }
+        Role role = signupRequestDto.getRole() == null ? Role.USER : signupRequestDto.getRole();
+        User user = User.builder()
+                .firstName(signupRequestDto.getFirstName())
+                .lastName(signupRequestDto.getLastName())
+                .username(generateUniqueUsername((signupRequestDto.getFirstName() + signupRequestDto.getLastName()).toLowerCase()))
+                .email(signupRequestDto.getEmail())
+                .password(passwordEncoder.encode(signupRequestDto.getPassword()))
+                .role(role)
+                .build();
 
         return userService.createUserResponseDto(userRepository.save(user));
     }
