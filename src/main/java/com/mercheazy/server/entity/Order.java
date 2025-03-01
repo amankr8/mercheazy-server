@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "order")
+@Table(name = "merch_order")
 public class Order {
 
     @Id

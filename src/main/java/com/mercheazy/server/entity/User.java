@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "mercheazy_user")
+@Table(name = "merch_user")
 public class User implements UserDetails {
 
     @Id
