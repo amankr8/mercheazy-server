@@ -9,6 +9,7 @@ import java.util.Date;
 @Data
 @Builder
 public class UserResponseDto {
+    private int id;
     private String username;
     private String firstName;
     private String lastName;

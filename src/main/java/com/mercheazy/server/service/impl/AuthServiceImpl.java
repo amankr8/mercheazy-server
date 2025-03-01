@@ -3,11 +3,9 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.LoginRequestDto;
 import com.mercheazy.server.dto.SignupRequestDto;
 import com.mercheazy.server.dto.UserResponseDto;
-import com.mercheazy.server.entity.Role;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.AuthService;
-import com.mercheazy.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,31 +16,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
-
-    private final UserRepository userRepository;
-    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
 
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequestDto) {
-
         // Check if the user already exists by email
         if (userRepository.findByEmail(signupRequestDto.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new IllegalArgumentException("A user is already registered with this email");
         }
 
-        Role role = signupRequestDto.getRole() == null ? Role.USER : signupRequestDto.getRole();
-        User user = User.builder()
-                .firstName(signupRequestDto.getFirstName())
-                .lastName(signupRequestDto.getLastName())
-                .username(generateUniqueUsername((signupRequestDto.getFirstName() + signupRequestDto.getLastName()).toLowerCase()))
-                .email(signupRequestDto.getEmail())
-                .password(passwordEncoder.encode(signupRequestDto.getPassword()))
-                .role(role)
-                .build();
+        User user = signupRequestDto.toUser();
+        user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
+        user.setUsername(generateUniqueUsername((user.getFirstName() + user.getLastName()).toLowerCase()));
 
-        return userService.createUserResponseDto(userRepository.save(user));
+        return userRepository.save(user).toUserResponseDto();
     }
 
     private String generateUniqueUsername(String username) {
@@ -67,6 +56,6 @@ public class AuthServiceImpl implements AuthService {
                         loginRequestDto.getPassword()
                 )
         );
-        return userService.createUserResponseDto(user);
+        return user.toUserResponseDto();
     }
 }

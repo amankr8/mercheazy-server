@@ -1,14 +1,16 @@
 package com.mercheazy.server.dto;
 
 import com.mercheazy.server.entity.Role;
+import com.mercheazy.server.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@RequiredArgsConstructor
 public class SignupRequestDto {
-
     @NotBlank(message = "First name is required")
     @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
     private String firstName;
@@ -26,5 +28,16 @@ public class SignupRequestDto {
     private String email;
 
     private Role role;
+
+    public User toUser() {
+        Role role = this.role == null ? Role.USER : this.role;
+        return User.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .password(password)
+                .role(role)
+                .build();
+    }
 }
 

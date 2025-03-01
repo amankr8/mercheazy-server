@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.mercheazy.server.dto.UserResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +28,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "u_id")
-    private Long id;
+    private int id;
 
     @Column(name = "u_username", unique = true, nullable = false)
     private String username;
@@ -83,5 +84,18 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserResponseDto toUserResponseDto() {
+        return UserResponseDto.builder()
+                .id(id)
+                .username(username)
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .role(role)
+                .createDate(createDate)
+                .updateDate(updateDate)
+                .build();
     }
 }
