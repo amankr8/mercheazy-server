@@ -2,10 +2,13 @@ package com.mercheazy.server.controller.impl;
 
 import com.mercheazy.server.controller.ProductController;
 import com.mercheazy.server.dto.ProductRequestDto;
+import com.mercheazy.server.dto.ProductResponseDto;
 import com.mercheazy.server.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,26 +18,31 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     public ResponseEntity<?> createProduct(ProductRequestDto productRequestDto) {
-        return null;
+        ProductResponseDto product = productService.createProduct(productRequestDto);
+        return ResponseEntity.ok(product);
     }
 
     @Override
     public ResponseEntity<?> getProducts() {
-        return null;
+        List<ProductResponseDto> products = productService.getProducts();
+        return ResponseEntity.ok(products);
     }
 
     @Override
-    public ResponseEntity<?> getProductById(Long id) {
-        return null;
+    public ResponseEntity<?> getProductById(int id) {
+        ProductResponseDto product = productService.getProductById(id);
+        return ResponseEntity.ok(product);
     }
 
     @Override
     public ResponseEntity<?> updateProduct(Long id, ProductRequestDto productRequestDto) {
-        return null;
+        ProductResponseDto updatedProduct = productService.updateProduct(id, productRequestDto);
+        return ResponseEntity.ok(updatedProduct);
     }
 
     @Override
-    public ResponseEntity<?> deleteProduct(Long id) {
-        return null;
+    public ResponseEntity<?> deleteProduct(int id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.ok().build();
     }
 }

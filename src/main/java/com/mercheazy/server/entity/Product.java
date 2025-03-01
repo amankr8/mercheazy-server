@@ -1,7 +1,9 @@
 package com.mercheazy.server.entity;
 
+import com.mercheazy.server.dto.ProductResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -9,6 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 import java.util.Date;
 
 @Data
+@Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
@@ -18,7 +21,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "p_id")
-    private Long id;
+    private int id;
 
     @Column(name = "p_name", nullable = false)
     private String name;
@@ -27,10 +30,10 @@ public class Product {
     private String desc;
 
     @Column(name = "p_actual_price", nullable = false)
-    private int actualPrice;
+    private double actualPrice;
 
     @Column(name = "p_sell_price", nullable = false)
-    private int sellPrice;
+    private double sellPrice;
 
     @Column(name = "p_stock", nullable = false)
     private int stock;
@@ -46,4 +49,15 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "s_id")
     private Store store;
+
+    public ProductResponseDto toProductResponseDto() {
+        return ProductResponseDto.builder()
+                .id(id)
+                .name(name)
+                .description(desc)
+                .sellPrice(sellPrice)
+                .actualPrice(actualPrice)
+                .stock(stock)
+                .build();
+    }
 }

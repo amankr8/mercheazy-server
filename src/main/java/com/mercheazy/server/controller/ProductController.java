@@ -15,11 +15,11 @@ public interface ProductController {
     ResponseEntity<?> getProducts();
 
     @GetMapping("/{id}")
-    ResponseEntity<?> getProductById(@PathVariable Long id);
+    ResponseEntity<?> getProductById(@PathVariable int id);
 
     @PutMapping("/{id}")
     ResponseEntity<?> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequestDto productRequestDto);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> deleteProduct(@PathVariable Long id);
+    ResponseEntity<?> deleteProduct(@PathVariable int id);
 }
