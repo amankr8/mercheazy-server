@@ -21,10 +21,10 @@ import java.util.Map;
 public class JwtServiceImpl implements JwtService {
 
     @Value("${jwt.secret}")
-    private final String JWT_SECRET_KEY;
+    private String JWT_SECRET_KEY;
 
     @Value("${jwt.expiration}")
-    private final Long JWT_EXPIRATION;
+    private Long JWT_EXPIRATION;
 
     @Override
     public String extractUsername(String token) {
