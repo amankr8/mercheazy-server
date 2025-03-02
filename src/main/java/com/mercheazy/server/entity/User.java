@@ -59,7 +59,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(name = "u_role", nullable = false)
     @ColumnDefault("'USER'")
-    private Role role = Role.USER;
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -84,6 +84,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public enum Role {
+        ADMIN, USER, CREATOR, MODERATOR
     }
 
     public UserResponseDto toUserResponseDto() {

@@ -1,6 +1,6 @@
 package com.mercheazy.server.dto;
 
-import com.mercheazy.server.entity.Role;
+import com.mercheazy.server.entity.User.Role;
 import lombok.Builder;
 import lombok.Data;
 
