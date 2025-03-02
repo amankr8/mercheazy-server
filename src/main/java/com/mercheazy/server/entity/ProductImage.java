@@ -21,4 +21,8 @@ public class ProductImage {
 
     @Column(name = "pi_url")
     private String url;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "p_id")
+    private Product product;
 }

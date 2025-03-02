@@ -35,7 +35,7 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public ResponseEntity<?> updateProduct(Long id, ProductRequestDto productRequestDto) {
+    public ResponseEntity<?> updateProduct(int id, ProductRequestDto productRequestDto) {
         ProductResponseDto updatedProduct = productService.updateProduct(id, productRequestDto);
         return ResponseEntity.ok(updatedProduct);
     }

@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -54,7 +55,7 @@ public class Product {
     @JoinColumn(name = "s_id")
     private Store store;
 
-    public ProductResponseDto toProductResponseDto() {
+    public ProductResponseDto toProductResponseDto(List<String> imgUrls) {
         return ProductResponseDto.builder()
                 .id(id)
                 .name(name)
@@ -64,6 +65,7 @@ public class Product {
                 .stock(stock)
                 .createDate(createDate)
                 .updateDate(updateDate)
+                .imgUrls(imgUrls)
                 .build();
     }
 }

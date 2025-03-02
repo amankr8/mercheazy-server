@@ -18,7 +18,7 @@ public interface ProductController {
     ResponseEntity<?> getProductById(@PathVariable int id);
 
     @PutMapping("/{id}")
-    ResponseEntity<?> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequestDto productRequestDto);
+    ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ProductRequestDto productRequestDto);
 
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteProduct(@PathVariable int id);
