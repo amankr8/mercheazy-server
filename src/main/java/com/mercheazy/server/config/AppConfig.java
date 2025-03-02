@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RequiredArgsConstructor
 @Configuration
-public class ApplicationConfig {
+public class AppConfig {
 
     private final UserRepository userRepository;
 
