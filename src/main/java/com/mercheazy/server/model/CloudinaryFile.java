@@ -1,4 +1,4 @@
-package com.mercheazy.server.service.cloudinary;
+package com.mercheazy.server.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

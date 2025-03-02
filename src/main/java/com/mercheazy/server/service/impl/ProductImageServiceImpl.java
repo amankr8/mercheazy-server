@@ -5,7 +5,7 @@ import com.mercheazy.server.entity.ProductImage;
 import com.mercheazy.server.repository.ProductImageRepository;
 import com.mercheazy.server.service.CloudinaryService;
 import com.mercheazy.server.service.ProductImageService;
-import com.mercheazy.server.service.cloudinary.CloudinaryFile;
+import com.mercheazy.server.model.CloudinaryFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

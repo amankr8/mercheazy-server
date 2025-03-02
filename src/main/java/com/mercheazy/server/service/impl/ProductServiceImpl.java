@@ -9,6 +9,7 @@ import com.mercheazy.server.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,7 +22,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto createProduct(ProductRequestDto productRequestDto) {
         Product product = productRepository.save(productRequestDto.toProduct());
-        List<String> imgUrls = productImageService.saveImages(productRequestDto.getImages(), product);
+        List<String> imgUrls = new ArrayList<>();
+        if (productRequestDto.getImages() != null) {
+            imgUrls = productImageService.saveImages(productRequestDto.getImages(), product);
+        }
         return product.toProductResponseDto(imgUrls);
     }
 

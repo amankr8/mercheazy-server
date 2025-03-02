@@ -11,7 +11,7 @@ public class ProductRequestDto {
 
     private String name;
     private String desc;
-    private double actualPrice;
+    private double listPrice;
     private double sellPrice;
     private int stock;
     private List<MultipartFile> images;
@@ -20,7 +20,7 @@ public class ProductRequestDto {
         return Product.builder()
                 .name(name)
                 .desc(desc)
-                .listPrice(actualPrice)
+                .listPrice(listPrice)
                 .sellPrice(sellPrice)
                 .stock(stock)
                 .build();

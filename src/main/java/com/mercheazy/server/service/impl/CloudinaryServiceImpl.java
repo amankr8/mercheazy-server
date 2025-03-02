@@ -1,7 +1,8 @@
-package com.mercheazy.server.service.cloudinary;
+package com.mercheazy.server.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.mercheazy.server.model.CloudinaryFile;
 import com.mercheazy.server.service.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

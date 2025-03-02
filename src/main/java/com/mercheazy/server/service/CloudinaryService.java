@@ -1,6 +1,6 @@
 package com.mercheazy.server.service;
 
-import com.mercheazy.server.service.cloudinary.CloudinaryFile;
+import com.mercheazy.server.model.CloudinaryFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
