@@ -59,7 +59,7 @@ public class Product {
         return ProductResponseDto.builder()
                 .id(id)
                 .name(name)
-                .description(desc)
+                .desc(desc)
                 .sellPrice(sellPrice)
                 .listPrice(listPrice)
                 .stock(stock)
