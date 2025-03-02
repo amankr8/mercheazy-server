@@ -39,7 +39,7 @@ public class ProductImageServiceImpl implements ProductImageService {
         images.forEach(image -> {
             try {
                 CloudinaryFile cloudinaryFile = cloudinaryService.uploadFile(image, getFolderPath());
-                productImageRepository.save(toProductImage(cloudinaryFile, product));
+                productImageRepository.save(buildProductImage(cloudinaryFile, product));
                 imageUrls.add(cloudinaryFile.getUrl());
             } catch (IOException e) {
                 System.out.println("Error uploading image: " + e.getMessage());
@@ -48,7 +48,7 @@ public class ProductImageServiceImpl implements ProductImageService {
         return imageUrls;
     }
 
-    private ProductImage toProductImage(CloudinaryFile cloudinaryFile, Product product) {
+    private ProductImage buildProductImage(CloudinaryFile cloudinaryFile, Product product) {
         return ProductImage.builder()
                 .publicId(cloudinaryFile.getPublicId())
                 .url(cloudinaryFile.getUrl())
