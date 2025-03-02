@@ -1,5 +1,6 @@
 package com.mercheazy.server.service.impl;
 
+import com.mercheazy.server.dto.FileResponseDto;
 import com.mercheazy.server.dto.ProductRequestDto;
 import com.mercheazy.server.dto.ProductResponseDto;
 import com.mercheazy.server.entity.Product;
@@ -22,26 +23,26 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto createProduct(ProductRequestDto productRequestDto) {
         Product product = productRepository.save(productRequestDto.toProduct());
-        List<String> imgUrls = new ArrayList<>();
-        if (productRequestDto.getImages() != null) {
-            imgUrls = productImageService.saveImages(productRequestDto.getImages(), product);
+        List<FileResponseDto> images = new ArrayList<>();
+        if (productRequestDto.getImgFiles() != null) {
+            images = productImageService.saveImages(productRequestDto.getImgFiles(), product);
         }
-        return product.toProductResponseDto(imgUrls);
+        return product.toProductResponseDto(images);
     }
 
     @Override
     public List<ProductResponseDto> getProducts() {
         return productRepository.findAll().stream().map(product -> {
-            List<String> imgUrls = productImageService.getImagesByProduct(product);
-            return product.toProductResponseDto(imgUrls);
+            List<FileResponseDto> images = productImageService.getImagesByProduct(product);
+            return product.toProductResponseDto(images);
         }).toList();
     }
 
     @Override
     public ProductResponseDto getProductById(int id) {
         return productRepository.findById(id).map(product -> {
-            List<String> imgUrls = productImageService.getImagesByProduct(product);
-            return product.toProductResponseDto(imgUrls);
+            List<FileResponseDto> images = productImageService.getImagesByProduct(product);
+            return product.toProductResponseDto(images);
         }).orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
@@ -49,9 +50,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto updateProduct(int id, ProductRequestDto productRequestDto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        List<String> imgUrls = productImageService.getImagesByProduct(product);
+        List<FileResponseDto> images = productImageService.getImagesByProduct(product);
 
-        return productRepository.save(productRequestDto.toProduct()).toProductResponseDto(imgUrls);
+        return productRepository.save(productRequestDto.toProduct()).toProductResponseDto(images);
     }
 
     @Override

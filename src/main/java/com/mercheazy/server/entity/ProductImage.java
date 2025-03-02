@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.mercheazy.server.dto.FileResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,4 +26,11 @@ public class ProductImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
     private Product product;
+
+    public FileResponseDto toFileResponseDto() {
+        return FileResponseDto.builder()
+                .id(id)
+                .url(url)
+                .build();
+    }
 }

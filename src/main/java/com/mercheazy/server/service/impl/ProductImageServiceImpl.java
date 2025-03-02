@@ -1,5 +1,6 @@
 package com.mercheazy.server.service.impl;
 
+import com.mercheazy.server.dto.FileResponseDto;
 import com.mercheazy.server.entity.Product;
 import com.mercheazy.server.entity.ProductImage;
 import com.mercheazy.server.repository.ProductImageRepository;
@@ -29,23 +30,23 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public List<String> getImagesByProduct(Product product) {
-        return productImageRepository.findByProduct(product).stream().map(ProductImage::getUrl).toList();
+    public List<FileResponseDto> getImagesByProduct(Product product) {
+        return productImageRepository.findByProduct(product).stream().map(ProductImage::toFileResponseDto).toList();
     }
 
     @Override
-    public List<String> saveImages(List<MultipartFile> images, Product product) {
-        List<String> imageUrls = new ArrayList<>();
-        images.forEach(image -> {
+    public List<FileResponseDto> saveImages(List<MultipartFile> imgFiles, Product product) {
+        List<FileResponseDto> images = new ArrayList<>();
+        imgFiles.forEach(imgFile -> {
             try {
-                CloudinaryFile cloudinaryFile = cloudinaryService.uploadFile(image, getFolderPath());
-                productImageRepository.save(buildProductImage(cloudinaryFile, product));
-                imageUrls.add(cloudinaryFile.getUrl());
+                CloudinaryFile cloudinaryFile = cloudinaryService.uploadFile(imgFile, getFolderPath());
+                ProductImage productImage = productImageRepository.save(buildProductImage(cloudinaryFile, product));
+                images.add(productImage.toFileResponseDto());
             } catch (IOException e) {
                 System.out.println("Error uploading image: " + e.getMessage());
             }
         });
-        return imageUrls;
+        return images;
     }
 
     private ProductImage buildProductImage(CloudinaryFile cloudinaryFile, Product product) {

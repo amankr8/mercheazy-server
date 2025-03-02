@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.mercheazy.server.dto.FileResponseDto;
 import com.mercheazy.server.dto.ProductResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -55,7 +56,7 @@ public class Product {
     @JoinColumn(name = "s_id")
     private Store store;
 
-    public ProductResponseDto toProductResponseDto(List<String> imgUrls) {
+    public ProductResponseDto toProductResponseDto(List<FileResponseDto> images) {
         return ProductResponseDto.builder()
                 .id(id)
                 .name(name)
@@ -65,7 +66,7 @@ public class Product {
                 .stock(stock)
                 .createDate(createDate)
                 .updateDate(updateDate)
-                .imgUrls(imgUrls)
+                .images(images)
                 .build();
     }
 }

@@ -15,7 +15,7 @@ public class ProductResponseDto {
     private double sellPrice;
     private double listPrice;
     private int stock;
-    private List<String> imgUrls;
+    private List<FileResponseDto> images;
     private Date createDate;
     private Date updateDate;
 }

@@ -14,7 +14,7 @@ public class ProductRequestDto {
     private double listPrice;
     private double sellPrice;
     private int stock;
-    private List<MultipartFile> images;
+    private List<MultipartFile> imgFiles;
 
     public Product toProduct() {
         return Product.builder()
