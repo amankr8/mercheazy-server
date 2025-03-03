@@ -34,6 +34,7 @@ public class SignupRequestDto {
         return User.builder()
                 .firstName(firstName)
                 .lastName(lastName)
+                .username((firstName + lastName).toLowerCase())
                 .email(email)
                 .password(password)
                 .role(role)

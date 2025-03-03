@@ -4,6 +4,7 @@ import com.mercheazy.server.dto.FileResponseDto;
 import com.mercheazy.server.dto.ProductRequestDto;
 import com.mercheazy.server.dto.ProductResponseDto;
 import com.mercheazy.server.entity.Product;
+import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.ProductRepository;
 import com.mercheazy.server.service.ProductImageService;
 import com.mercheazy.server.service.ProductService;
@@ -43,13 +44,13 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id).map(product -> {
             List<FileResponseDto> images = productImageService.getImagesByProduct(product);
             return product.toProductResponseDto(images);
-        }).orElseThrow(() -> new RuntimeException("Product not found"));
+        }).orElse(null);
     }
 
     @Override
     public ProductResponseDto updateProduct(int id, ProductRequestDto productRequestDto) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         List<FileResponseDto> images = productImageService.getImagesByProduct(product);
 
         return productRepository.save(productRequestDto.toProduct()).toProductResponseDto(images);

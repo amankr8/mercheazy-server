@@ -27,13 +27,13 @@ public class AuthServiceImpl implements AuthService {
 
     @PostConstruct
     public void init() {
-        User defaultUser = new User();
-        defaultUser.setUsername("mercheazy");
-        defaultUser.setFirstName("MerchEazy");
-        defaultUser.setEmail("hello@mercheazy.com");
-        defaultUser.setPassword(passwordEncoder.encode(adminPassword));
-        defaultUser.setRole(User.Role.ADMIN);
-        userRepository.save(defaultUser);
+        User admin = new User();
+        admin.setUsername("mercheazy");
+        admin.setFirstName("MerchEazy");
+        admin.setEmail("hello@mercheazy.com");
+        admin.setPassword(passwordEncoder.encode(adminPassword));
+        admin.setRole(User.Role.ADMIN);
+        userRepository.save(admin);
         System.out.println("MerchEazy admin created!");
     }
 
@@ -45,8 +45,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = signupRequestDto.toUser();
-        user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
-        user.setUsername(generateUniqueUsername((user.getFirstName() + user.getLastName()).toLowerCase()));
+        user.setUsername(generateUniqueUsername(user.getUsername()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user).toUserResponseDto();
     }
