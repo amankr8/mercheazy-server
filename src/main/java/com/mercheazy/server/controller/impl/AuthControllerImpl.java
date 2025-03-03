@@ -28,6 +28,6 @@ public class AuthControllerImpl implements AuthController {
     public ResponseEntity<?> login(LoginRequestDto loginRequestDto) {
         UserResponseDto loginUser = authService.login(loginRequestDto);
         String jwtToken = jwtService.generateToken(loginUser.getUsername());
-        return ResponseEntity.ok(new AuthResponseDto(jwtToken, loginUser, "Login successful"));
+        return ResponseEntity.ok(new AuthResponseDto(jwtToken, loginUser, "Login successful!"));
     }
 }

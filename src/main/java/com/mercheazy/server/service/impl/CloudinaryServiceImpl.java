@@ -14,7 +14,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class CloudinaryServiceImpl implements CloudinaryService {
-
     private final Cloudinary cloudinary;
 
     private Map<?, ?> getUploadParams(String folderPath) {

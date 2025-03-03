@@ -6,7 +6,9 @@ import com.mercheazy.server.dto.UserResponseDto;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.AuthService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +21,21 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
+
+    @Value("${spring.security.password}")
+    private String adminPassword;
+
+    @PostConstruct
+    public void init() {
+        User defaultUser = new User();
+        defaultUser.setUsername("mercheazy");
+        defaultUser.setFirstName("MerchEazy");
+        defaultUser.setEmail("hello@mercheazy.com");
+        defaultUser.setPassword(passwordEncoder.encode(adminPassword));
+        defaultUser.setRole(User.Role.ADMIN);
+        userRepository.save(defaultUser);
+        System.out.println("MerchEazy admin created!");
+    }
 
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequestDto) {
