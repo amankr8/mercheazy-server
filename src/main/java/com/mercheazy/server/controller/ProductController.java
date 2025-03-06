@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/products")
+@RequestMapping("/api/product")
 public interface ProductController {
 
     @PostMapping
