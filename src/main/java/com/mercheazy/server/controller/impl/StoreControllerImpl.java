@@ -1,6 +1,7 @@
 package com.mercheazy.server.controller.impl;
 
 import com.mercheazy.server.controller.StoreController;
+import com.mercheazy.server.dto.StoreRequestDto;
 import com.mercheazy.server.entity.Store;
 import com.mercheazy.server.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,8 @@ public class StoreControllerImpl implements StoreController {
     private final StoreService storeService;
 
     @Override
-    public ResponseEntity<?> createStore(Store store) {
-        return ResponseEntity.ok(storeService.addStore(store));
+    public ResponseEntity<?> createStore(StoreRequestDto storeRequestDto) {
+        return ResponseEntity.ok(storeService.addStore(storeRequestDto));
     }
 
     @Override

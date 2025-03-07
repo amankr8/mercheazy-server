@@ -87,7 +87,7 @@ public class User implements UserDetails {
     }
 
     public enum Role {
-        ADMIN, USER, CREATOR, MODERATOR
+        ADMIN, USER
     }
 
     public UserResponseDto toUserResponseDto() {

@@ -20,7 +20,7 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "s_id")
-    private Long id;
+    private int id;
 
     @Column(name = "s_name", nullable = false)
     private String name;
@@ -35,8 +35,4 @@ public class Store {
     @Column(name = "s_update_date", nullable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")
     private Date updateDate = new Date();
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "u_id")
-    private User user;
 }

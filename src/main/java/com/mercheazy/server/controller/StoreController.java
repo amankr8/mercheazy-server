@@ -1,5 +1,6 @@
 package com.mercheazy.server.controller;
 
+import com.mercheazy.server.dto.StoreRequestDto;
 import com.mercheazy.server.entity.Store;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 public interface StoreController {
 
     @PostMapping
-    ResponseEntity<?> createStore(@RequestBody Store store);
+    ResponseEntity<?> createStore(@RequestBody StoreRequestDto storeRequestDto);
 
     @PutMapping
     ResponseEntity<?> updateStore(@PathVariable int id, @RequestBody Store store);

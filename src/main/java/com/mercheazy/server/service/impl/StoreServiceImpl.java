@@ -1,8 +1,11 @@
 package com.mercheazy.server.service.impl;
 
+import com.mercheazy.server.dto.StoreRequestDto;
 import com.mercheazy.server.entity.Store;
+import com.mercheazy.server.entity.StoreCreator;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.exception.ResourceNotFoundException;
+import com.mercheazy.server.repository.StoreCreatorRepository;
 import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.service.StoreService;
 import com.mercheazy.server.util.AuthUtil;
@@ -16,11 +19,19 @@ import java.util.List;
 public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
+    private final StoreCreatorRepository storeCreatorRepository;
 
     @Override
-    public Store addStore(Store store) {
-        store.setUser(AuthUtil.getLoggedInUser());
-        return storeRepository.save(store);
+    public Store addStore(StoreRequestDto storeRequestDto) {
+        Store store = storeRepository.save(storeRequestDto.toStore());
+        StoreCreator storeCreator = StoreCreator.builder()
+                .store(store)
+                .user(AuthUtil.getLoggedInUser())
+                .role(StoreCreator.Role.CREATOR)
+                .build();
+        storeCreatorRepository.save(storeCreator);
+
+        return store;
     }
 
     @Override
@@ -30,7 +41,7 @@ public class StoreServiceImpl implements StoreService {
 
         store.setName(newStore.getName());
         store.setDesc(newStore.getDesc());
-        return store;
+        return storeRepository.save(store);
     }
 
     @Override
@@ -45,7 +56,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store getStoreByUser(User user) {
-        return storeRepository.findByUser(user);
+        return null;
     }
 
     @Override

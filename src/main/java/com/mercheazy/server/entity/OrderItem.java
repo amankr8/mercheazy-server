@@ -17,7 +17,10 @@ public class OrderItem {
     @Column(name = "oi_id")
     private Long id;
 
-    @Column(name = "oi_cost", nullable = false)
+    @Column(name = "oi_quantity", nullable = false)
+    private int quantity;
+
+    @Column(name = "oi__cost", nullable = false)
     private int cost;
 
     @OneToOne(fetch = FetchType.LAZY)
