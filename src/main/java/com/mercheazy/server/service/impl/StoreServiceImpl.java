@@ -5,15 +5,21 @@ import com.mercheazy.server.entity.User;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.service.StoreService;
+import com.mercheazy.server.util.AuthUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
+@Service
 public class StoreServiceImpl implements StoreService {
 
-    private StoreRepository storeRepository;
+    private final StoreRepository storeRepository;
 
     @Override
     public Store addStore(Store store) {
+        store.setUser(AuthUtil.getLoggedInUser());
         return storeRepository.save(store);
     }
 

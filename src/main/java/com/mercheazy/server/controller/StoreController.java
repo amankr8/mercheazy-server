@@ -16,9 +16,9 @@ public interface StoreController {
     @GetMapping
     ResponseEntity<?> getStores();
 
-    @GetMapping
+    @GetMapping("/{id}")
     ResponseEntity<?> getStoreById(@PathVariable int id);
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     ResponseEntity<?> deleteStoreById(@PathVariable int id);
 }
