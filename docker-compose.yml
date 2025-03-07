@@ -3,12 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: mercheazy_app
+    container_name: mercheazy_springboot_app
     ports:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/mercheazy-db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://mercheazy_postgres_db:5432/mercheazy-db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
       JWT_SECRET: ${JWT_SECRET}
@@ -17,7 +17,7 @@ services:
 
   db:
     image: 'postgres:17'
-    container_name: postgres_db
+    container_name: mercheazy_postgres_db
     ports:
       - "5432:5432"
     environment:

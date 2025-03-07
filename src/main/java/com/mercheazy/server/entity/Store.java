@@ -36,7 +36,7 @@ public class Store {
     @ColumnDefault("CURRENT_TIMESTAMP")
     private Date updateDate = new Date();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "u_id")
     private User user;
 }
