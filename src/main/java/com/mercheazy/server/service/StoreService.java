@@ -1,6 +1,7 @@
 package com.mercheazy.server.service;
 
 import com.mercheazy.server.entity.Store;
+import com.mercheazy.server.entity.User;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ public interface StoreService {
     List<Store> getStores();
 
     Store getStoreById(int id);
+
+    Store getStoreByUser(User user);
 
     void deleteStore(int id);
 }

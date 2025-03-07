@@ -1,6 +1,7 @@
 package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.entity.Store;
+import com.mercheazy.server.entity.User;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.service.StoreService;
@@ -34,6 +35,11 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store getStoreById(int id) {
         return storeRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Store getStoreByUser(User user) {
+        return storeRepository.findByUser(user);
     }
 
     @Override
