@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -28,10 +30,12 @@ public class Store {
     @Column(name = "s_desc", nullable = false)
     private String desc;
 
+    @CreationTimestamp
     @Column(name = "s_create_date", nullable = false, updatable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")
     private Date createDate = new Date();
 
+    @UpdateTimestamp
     @Column(name = "s_update_date", nullable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")
     private Date updateDate = new Date();

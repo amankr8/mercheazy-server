@@ -1,7 +1,9 @@
 package com.mercheazy.server.dto;
 
 import com.mercheazy.server.entity.Store;
+import lombok.Data;
 
+@Data
 public class StoreRequestDto {
     private String name;
     private String desc;

@@ -1,6 +1,7 @@
 package com.mercheazy.server.dto;
 
 import com.mercheazy.server.entity.Product;
+import com.mercheazy.server.entity.Store;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,13 +17,14 @@ public class ProductRequestDto {
     private int stock;
     private List<MultipartFile> imgFiles;
 
-    public Product toProduct() {
+    public Product toProduct(Store store) {
         return Product.builder()
                 .name(name)
                 .desc(desc)
                 .listPrice(listPrice)
                 .sellPrice(sellPrice)
                 .stock(stock)
+                .store(store)
                 .build();
     }
 }
