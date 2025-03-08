@@ -9,5 +9,7 @@ public interface UserService {
 
     List<UserResponseDto> getAllUsers();
 
-    UserResponseDto getUserById(int id);
+    UserResponseDto getUserDetailsById(int id);
+
+    User getUserById(int id);
 }

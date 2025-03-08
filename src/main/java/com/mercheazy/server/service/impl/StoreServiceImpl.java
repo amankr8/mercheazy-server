@@ -2,20 +2,15 @@ package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.StoreRequestDto;
 import com.mercheazy.server.entity.Store;
-import com.mercheazy.server.entity.StoreCreator;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.exception.ResourceNotFoundException;
-import com.mercheazy.server.repository.StoreCreatorRepository;
 import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.service.StoreCreatorService;
 import com.mercheazy.server.service.StoreService;
-import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.mercheazy.server.entity.StoreCreator.Role.CREATOR;
 
 @RequiredArgsConstructor
 @Service

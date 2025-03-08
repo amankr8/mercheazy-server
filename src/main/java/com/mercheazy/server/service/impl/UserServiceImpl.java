@@ -2,6 +2,7 @@ package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.UserResponseDto;
 import com.mercheazy.server.entity.User;
+import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getUserById(int id) {
+    public UserResponseDto getUserDetailsById(int id) {
         return userRepository.findById(id).map(User::toUserResponseDto).orElse(null);
+    }
+
+    @Override
+    public User getUserById(int id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
     }
 }
