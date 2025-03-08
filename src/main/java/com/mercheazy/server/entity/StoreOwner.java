@@ -12,12 +12,12 @@ import org.hibernate.annotations.ColumnDefault;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "store_creator")
-public class StoreCreator {
+@Table(name = "store_owner")
+public class StoreOwner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sc_id")
+    @Column(name = "so_id")
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,7 +29,7 @@ public class StoreCreator {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "sc_role", nullable = false)
+    @Column(name = "so_role", nullable = false)
     @ColumnDefault("'CREATOR'")
     private Role role;
 
