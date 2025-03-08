@@ -22,18 +22,11 @@ import static com.mercheazy.server.entity.StoreCreator.Role.CREATOR;
 public class StoreServiceImpl implements StoreService {
     private final StoreRepository storeRepository;
     private final StoreCreatorService storeCreatorService;
-    private final StoreCreatorRepository storeCreatorRepository;
 
     @Override
     public Store addStore(StoreRequestDto storeRequestDto) {
         Store store = storeRepository.save(storeRequestDto.toStore());
-        StoreCreator storeCreator = StoreCreator.builder()
-                .store(store)
-                .user(AuthUtil.getLoggedInUser())
-                .role(CREATOR)
-                .build();
-        storeCreatorRepository.save(storeCreator);
-
+        storeCreatorService.saveStoreCreator(store);
         return store;
     }
 
