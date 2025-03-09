@@ -15,15 +15,18 @@ import com.mercheazy.server.service.ProductService;
 import com.mercheazy.server.service.StoreService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
@@ -37,28 +40,34 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto createProduct(ProductRequestDto productRequestDto) {
         Store store = storeService.getStoreByUser(AuthUtil.getLoggedInUser());
-        Product product = productRepository.save(productRequestDto.toProduct(store));
-        List<FileResponseDto> images = new ArrayList<>();
-        if (productRequestDto.getImgFiles() != null) {
-            images = saveImages(productRequestDto.getImgFiles(), product);
+        Product product = Product.builder()
+                .name(productRequestDto.getName())
+                .desc(productRequestDto.getDesc())
+                .listPrice(productRequestDto.getListPrice())
+                .sellPrice(productRequestDto.getSellPrice())
+                .stock(productRequestDto.getStock())
+                .store(store)
+                .build();
+
+        product = productRepository.save(product);
+
+        List<ProductImage> productImages = saveImages(productRequestDto.getImgFiles(), product);
+        if (!productImages.isEmpty()) {
+            product.setProductImages(productImages);
+            productRepository.save(product);
         }
-        return product.toProductResponseDto(images);
+
+        return product.toProductResponseDto();
     }
 
     @Override
     public List<ProductResponseDto> getProducts() {
-        return productRepository.findAll().stream().map(product -> {
-            List<FileResponseDto> images = getImagesByProduct(product);
-            return product.toProductResponseDto(images);
-        }).toList();
+        return productRepository.findAll().stream().map(Product::toProductResponseDto).toList();
     }
 
     @Override
     public ProductResponseDto getProductResponseById(int id) {
-        return productRepository.findById(id).map(product -> {
-            List<FileResponseDto> images = getImagesByProduct(product);
-            return product.toProductResponseDto(images);
-        }).orElse(null);
+        return productRepository.findById(id).map(Product::toProductResponseDto).orElse(null);
     }
 
     @Override
@@ -70,7 +79,6 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto updateProduct(int id, ProductRequestDto productRequestDto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-        List<FileResponseDto> images = getImagesByProduct(product);
 
         product.setName(productRequestDto.getName());
         product.setDesc(productRequestDto.getDesc());
@@ -78,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
         product.setListPrice(productRequestDto.getListPrice());
         product.setSellPrice(productRequestDto.getSellPrice());
 
-        return productRepository.save(product).toProductResponseDto(images);
+        return productRepository.save(product).toProductResponseDto();
     }
 
     @Override
@@ -86,35 +94,34 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
-    private String getFolderPath() {
-        return APP_NAME + "/products";
-    }
-
     @Override
     public List<FileResponseDto> getImagesByProduct(Product product) {
         return productImageRepository.findByProduct(product).stream().map(ProductImage::toFileResponseDto).toList();
     }
 
-    @Override
-    public List<FileResponseDto> saveImages(List<MultipartFile> imgFiles, Product product) {
-        List<FileResponseDto> images = new ArrayList<>();
+    private List<ProductImage> saveImages(List<MultipartFile> imgFiles, Product product) {
+        if (imgFiles == null || imgFiles.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<ProductImage> productImages = new ArrayList<>();
+        String folderPath = APP_NAME + "/products";
+
         imgFiles.forEach(imgFile -> {
             try {
-                CloudinaryFile cloudinaryFile = cloudinaryService.uploadFile(imgFile, getFolderPath());
-                ProductImage productImage = productImageRepository.save(buildProductImage(cloudinaryFile, product));
-                images.add(productImage.toFileResponseDto());
+                CloudinaryFile cloudinaryFile = cloudinaryService.uploadFile(imgFile, folderPath);
+                ProductImage productImage = ProductImage.builder()
+                        .publicId(cloudinaryFile.getPublicId())
+                        .url(cloudinaryFile.getUrl())
+                        .product(product)
+                        .build();
+                productImages.add(productImage);
             } catch (IOException e) {
-                System.out.println("Error uploading image: " + e.getMessage());
+                log.error("Error uploading image: {}", e.getMessage(), e);
             }
         });
-        return images;
+
+        return productImages.isEmpty() ? Collections.emptyList() : productImageRepository.saveAll(productImages);
     }
 
-    private ProductImage buildProductImage(CloudinaryFile cloudinaryFile, Product product) {
-        return ProductImage.builder()
-                .publicId(cloudinaryFile.getPublicId())
-                .url(cloudinaryFile.getUrl())
-                .product(product)
-                .build();
-    }
 }

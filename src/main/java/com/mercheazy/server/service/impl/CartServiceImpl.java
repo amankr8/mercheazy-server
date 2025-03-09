@@ -3,7 +3,6 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.cart.CartItemRequestDto;
 import com.mercheazy.server.dto.cart.CartItemResponseDto;
 import com.mercheazy.server.dto.cart.CartResponseDto;
-import com.mercheazy.server.dto.FileResponseDto;
 import com.mercheazy.server.entity.Cart;
 import com.mercheazy.server.entity.CartItem;
 import com.mercheazy.server.entity.Product;
@@ -37,7 +36,6 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
     public CartItemResponseDto addToCart(CartItemRequestDto cartItemRequestDto) {
         Cart cart = getUserCartByUser(AuthUtil.getLoggedInUser());
         Product product = productService.getProductById(cartItemRequestDto.getProductId());
-        List<FileResponseDto> images = productService.getImagesByProduct(product);
 
         CartItem cartItem = CartItem.builder()
                 .cart(cart)
@@ -45,7 +43,7 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
                 .quantity(cartItemRequestDto.getQuantity())
                 .build();
 
-        return cartItemRepository.save(cartItem).toCartItemResponseDto(images);
+        return cartItemRepository.save(cartItem).toCartItemResponseDto();
     }
 
     @Override
@@ -66,10 +64,8 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
     @Override
     public CartResponseDto getUserCart() {
         Cart cart = getUserCartByUser(AuthUtil.getLoggedInUser());
-        List<CartItemResponseDto> cartItems = cartItemRepository.findByCart(cart).stream().map(cartItem -> {
-            List<FileResponseDto> images = productService.getImagesByProduct(cartItem.getProduct());
-            return cartItem.toCartItemResponseDto(images);
-        }).toList();
+        List<CartItemResponseDto> cartItems = cartItemRepository.findByCart(cart).stream()
+                .map(CartItem::toCartItemResponseDto).toList();
 
         return CartResponseDto.builder()
                 .id(cart.getId())

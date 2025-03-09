@@ -1,11 +1,8 @@
 package com.mercheazy.server.entity;
 
 import com.mercheazy.server.dto.cart.CartItemResponseDto;
-import com.mercheazy.server.dto.FileResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -30,10 +27,10 @@ public class CartItem {
     @JoinColumn(name = "c_id")
     private Cart cart;
 
-    public CartItemResponseDto toCartItemResponseDto(List<FileResponseDto> images) {
+    public CartItemResponseDto toCartItemResponseDto() {
         return CartItemResponseDto.builder()
                 .id(id)
-                .productResponseDto(product.toProductResponseDto(images))
+                .productResponseDto(product.toProductResponseDto())
                 .quantity(quantity)
                 .build();
     }

@@ -28,7 +28,7 @@ public class Product {
     @Column(name = "p_desc", nullable = false)
     private String desc;
 
-    @Column(name = "p_actual_price", nullable = false)
+    @Column(name = "p_list_price", nullable = false)
     private double listPrice;
 
     @Column(name = "p_sell_price", nullable = false)
@@ -49,7 +49,11 @@ public class Product {
     @JoinColumn(name = "s_id")
     private Store store;
 
-    public ProductResponseDto toProductResponseDto(List<FileResponseDto> images) {
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProductImage> productImages;
+
+    public ProductResponseDto toProductResponseDto() {
+        List<FileResponseDto> images = productImages.stream().map(ProductImage::toFileResponseDto).toList();
         return ProductResponseDto.builder()
                 .id(id)
                 .name(name)
@@ -60,6 +64,7 @@ public class Product {
                 .createDate(createDate)
                 .updateDate(updateDate)
                 .images(images)
+                .storeId(store.getId())
                 .build();
     }
 }

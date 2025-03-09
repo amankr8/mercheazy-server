@@ -4,6 +4,7 @@ import com.mercheazy.server.dto.FileResponseDto;
 import com.mercheazy.server.dto.product.ProductRequestDto;
 import com.mercheazy.server.dto.product.ProductResponseDto;
 import com.mercheazy.server.entity.Product;
+import com.mercheazy.server.entity.ProductImage;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -23,6 +24,4 @@ public interface ProductService {
     void deleteProduct(int id);
 
     List<FileResponseDto> getImagesByProduct(Product product);
-
-    List<FileResponseDto> saveImages(List<MultipartFile> imgFiles, Product product);
 }
