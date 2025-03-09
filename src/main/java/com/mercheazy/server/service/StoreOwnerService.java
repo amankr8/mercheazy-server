@@ -11,4 +11,6 @@ public interface StoreOwnerService {
     void saveStoreOwner(Store store);
 
     StoreOwner getStoreOwnerByUser(User user);
+
+    void deleteStoreOwner(int id);
 }

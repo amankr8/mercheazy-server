@@ -44,4 +44,9 @@ public class StoreOwnerServiceImpl implements StoreOwnerService {
         return storeOwnerRepository.findByUser(user)
                 .orElseThrow(() -> new ResourceNotFoundException("This user does not have a store."));
     }
+
+    @Override
+    public void deleteStoreOwner(int id) {
+        storeOwnerRepository.deleteById(id);
+    }
 }
