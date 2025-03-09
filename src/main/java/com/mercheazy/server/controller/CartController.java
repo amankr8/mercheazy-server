@@ -1,19 +1,17 @@
 package com.mercheazy.server.controller;
 
+import com.mercheazy.server.dto.CartItemRequestDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/cart")
 public interface CartController {
     @PostMapping
-    ResponseEntity<?> addToCart();
+    ResponseEntity<?> addToCart(@RequestBody CartItemRequestDto cartItemRequestDto);
 
     @PutMapping
     ResponseEntity<?> updateCart();
 
-    @DeleteMapping
-    ResponseEntity<?> removeFromCart();
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> removeFromCart(@PathVariable int id);
 }

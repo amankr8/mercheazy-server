@@ -25,8 +25,8 @@ public interface StoreController {
     ResponseEntity<?> deleteStoreById(@PathVariable int id);
 
     @PostMapping("/add-owner")
-    ResponseEntity<?> createStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto);
+    ResponseEntity<?> createStoreOwner(@RequestBody StoreOwnerRequestDto storeOwnerRequestDto);
 
-    @DeleteMapping("/remove-owner")
-    ResponseEntity<?> deleteStoreOwner(int id);
+    @DeleteMapping("/remove-owner/{id}")
+    ResponseEntity<?> deleteStoreOwner(@PathVariable int id);
 }

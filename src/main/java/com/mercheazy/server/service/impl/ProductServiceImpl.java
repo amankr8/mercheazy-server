@@ -54,11 +54,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDto getProductById(int id) {
+    public ProductResponseDto getProductResponseById(int id) {
         return productRepository.findById(id).map(product -> {
             List<FileResponseDto> images = getImagesByProduct(product);
             return product.toProductResponseDto(images);
         }).orElse(null);
+    }
+
+    @Override
+    public Product getProductById(int productId) {
+        return productRepository.findById(productId).orElse(null);
     }
 
     @Override
