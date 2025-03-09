@@ -6,6 +6,7 @@ import com.mercheazy.server.dto.UserResponseDto;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.AuthService;
+import com.mercheazy.server.service.CartService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
+    private final CartService cartService;
 
     @Value("${spring.security.password}")
     private String adminPassword;
@@ -48,7 +50,10 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(generateUniqueUsername(user.getUsername()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        return userRepository.save(user).toUserResponseDto();
+        User savedUser = userRepository.save(user);
+        cartService.createUserCart(user);
+
+        return savedUser.toUserResponseDto();
     }
 
     private String generateUniqueUsername(String username) {

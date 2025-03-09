@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "merch_order")
+@Table(name = "me_order")
 public class Order {
 
     @Id

@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "merch_user")
+@Table(name = "me_user")
 public class User implements UserDetails {
 
     @Id
