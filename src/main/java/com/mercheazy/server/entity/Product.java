@@ -1,13 +1,12 @@
 package com.mercheazy.server.entity;
 
 import com.mercheazy.server.dto.FileResponseDto;
-import com.mercheazy.server.dto.ProductResponseDto;
+import com.mercheazy.server.dto.product.ProductResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 

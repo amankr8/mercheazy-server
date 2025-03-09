@@ -1,4 +1,4 @@
-package com.mercheazy.server.dto;
+package com.mercheazy.server.dto.product;
 
 import com.mercheazy.server.entity.Product;
 import com.mercheazy.server.entity.Store;

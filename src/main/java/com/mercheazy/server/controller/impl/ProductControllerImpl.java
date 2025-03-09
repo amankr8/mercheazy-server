@@ -1,8 +1,8 @@
 package com.mercheazy.server.controller.impl;
 
 import com.mercheazy.server.controller.ProductController;
-import com.mercheazy.server.dto.ProductRequestDto;
-import com.mercheazy.server.dto.ProductResponseDto;
+import com.mercheazy.server.dto.product.ProductRequestDto;
+import com.mercheazy.server.dto.product.ProductResponseDto;
 import com.mercheazy.server.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.mercheazy.server.dto;
+package com.mercheazy.server.dto.store;
 
 import java.util.Date;
 

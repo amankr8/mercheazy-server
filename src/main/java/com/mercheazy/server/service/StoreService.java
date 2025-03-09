@@ -1,7 +1,7 @@
 package com.mercheazy.server.service;
 
-import com.mercheazy.server.dto.StoreOwnerRequestDto;
-import com.mercheazy.server.dto.StoreRequestDto;
+import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
+import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.entity.Store;
 import com.mercheazy.server.entity.StoreOwner;
 import com.mercheazy.server.entity.User;

@@ -1,10 +1,10 @@
 package com.mercheazy.server.controller.impl;
 
 import com.mercheazy.server.controller.AuthController;
-import com.mercheazy.server.dto.AuthResponseDto;
-import com.mercheazy.server.dto.LoginRequestDto;
-import com.mercheazy.server.dto.SignupRequestDto;
-import com.mercheazy.server.dto.UserResponseDto;
+import com.mercheazy.server.dto.user.AuthResponseDto;
+import com.mercheazy.server.dto.user.LoginRequestDto;
+import com.mercheazy.server.dto.user.SignupRequestDto;
+import com.mercheazy.server.dto.user.UserResponseDto;
 import com.mercheazy.server.service.JwtService;
 import com.mercheazy.server.service.UserService;
 import lombok.RequiredArgsConstructor;

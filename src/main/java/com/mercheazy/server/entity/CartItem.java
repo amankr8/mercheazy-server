@@ -1,6 +1,6 @@
 package com.mercheazy.server.entity;
 
-import com.mercheazy.server.dto.CartItemResponseDto;
+import com.mercheazy.server.dto.cart.CartItemResponseDto;
 import com.mercheazy.server.dto.FileResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

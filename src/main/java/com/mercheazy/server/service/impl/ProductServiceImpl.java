@@ -1,8 +1,8 @@
 package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.FileResponseDto;
-import com.mercheazy.server.dto.ProductRequestDto;
-import com.mercheazy.server.dto.ProductResponseDto;
+import com.mercheazy.server.dto.product.ProductRequestDto;
+import com.mercheazy.server.dto.product.ProductResponseDto;
 import com.mercheazy.server.entity.Product;
 import com.mercheazy.server.entity.ProductImage;
 import com.mercheazy.server.entity.Store;

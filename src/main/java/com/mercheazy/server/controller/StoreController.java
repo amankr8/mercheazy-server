@@ -1,7 +1,7 @@
 package com.mercheazy.server.controller;
 
-import com.mercheazy.server.dto.StoreOwnerRequestDto;
-import com.mercheazy.server.dto.StoreRequestDto;
+import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
+import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.entity.Store;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

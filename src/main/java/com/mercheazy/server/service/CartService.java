@@ -1,8 +1,8 @@
 package com.mercheazy.server.service;
 
-import com.mercheazy.server.dto.CartItemRequestDto;
-import com.mercheazy.server.dto.CartItemResponseDto;
-import com.mercheazy.server.dto.CartResponseDto;
+import com.mercheazy.server.dto.cart.CartItemRequestDto;
+import com.mercheazy.server.dto.cart.CartItemResponseDto;
+import com.mercheazy.server.dto.cart.CartResponseDto;
 import com.mercheazy.server.entity.Cart;
 import com.mercheazy.server.entity.User;
 

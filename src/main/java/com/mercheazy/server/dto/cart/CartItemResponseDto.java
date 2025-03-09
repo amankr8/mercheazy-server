@@ -1,5 +1,6 @@
-package com.mercheazy.server.dto;
+package com.mercheazy.server.dto.cart;
 
+import com.mercheazy.server.dto.product.ProductResponseDto;
 import lombok.Builder;
 import lombok.Data;
 

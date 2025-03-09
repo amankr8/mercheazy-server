@@ -1,8 +1,8 @@
 package com.mercheazy.server.controller.impl;
 
 import com.mercheazy.server.controller.StoreController;
-import com.mercheazy.server.dto.StoreOwnerRequestDto;
-import com.mercheazy.server.dto.StoreRequestDto;
+import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
+import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.entity.Store;
 import com.mercheazy.server.service.StoreService;
 import lombok.RequiredArgsConstructor;

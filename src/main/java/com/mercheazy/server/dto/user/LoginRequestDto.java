@@ -1,4 +1,4 @@
-package com.mercheazy.server.dto;
+package com.mercheazy.server.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
