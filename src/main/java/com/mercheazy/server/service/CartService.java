@@ -2,6 +2,7 @@ package com.mercheazy.server.service;
 
 import com.mercheazy.server.dto.CartItemRequestDto;
 import com.mercheazy.server.dto.CartItemResponseDto;
+import com.mercheazy.server.dto.CartResponseDto;
 import com.mercheazy.server.entity.Cart;
 import com.mercheazy.server.entity.User;
 
@@ -10,7 +11,13 @@ public interface CartService {
 
     CartItemResponseDto addToCart(CartItemRequestDto cartRequestDto);
 
-    Cart getUserCart(User user);
+    void updateCartItem(int id, int quantity);
+
+    Cart getUserCartByUser(User user);
+
+    CartResponseDto getUserCart();
 
     void deleteUserCart(User user);
+
+    void removeFromCart(int id);
 }

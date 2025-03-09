@@ -3,10 +3,11 @@ package com.mercheazy.server.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
-public class CartItemResponseDto {
+public class CartResponseDto {
     private int id;
-    private ProductResponseDto productResponseDto;
-    private int quantity;
+    private List<CartItemResponseDto> cartItems;
 }

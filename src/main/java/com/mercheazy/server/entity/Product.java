@@ -21,7 +21,6 @@ import java.util.List;
 @Entity
 @Table(name = "product")
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "p_id")
@@ -44,12 +43,10 @@ public class Product {
 
     @CreationTimestamp
     @Column(name = "p_create_date", nullable = false, updatable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
     private Date createDate;
 
     @UpdateTimestamp
     @Column(name = "p_update_date", nullable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
     private Date updateDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

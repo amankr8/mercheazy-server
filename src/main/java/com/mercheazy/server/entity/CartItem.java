@@ -17,11 +17,10 @@ import java.util.List;
 @Entity
 @Table(name = "cart_item")
 public class CartItem {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ci_id")
-    private Long id;
+    private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
@@ -36,6 +35,7 @@ public class CartItem {
 
     public CartItemResponseDto toCartItemResponseDto(List<FileResponseDto> images) {
         return CartItemResponseDto.builder()
+                .id(id)
                 .productResponseDto(product.toProductResponseDto(images))
                 .quantity(quantity)
                 .build();
