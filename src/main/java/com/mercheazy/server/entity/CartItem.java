@@ -3,17 +3,14 @@ package com.mercheazy.server.entity;
 import com.mercheazy.server.dto.cart.CartItemResponseDto;
 import com.mercheazy.server.dto.FileResponseDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "cart_item")
 public class CartItem {
