@@ -1,5 +1,6 @@
 package com.mercheazy.server.controller;
 
+import com.mercheazy.server.dto.StoreOwnerRequestDto;
 import com.mercheazy.server.dto.StoreRequestDto;
 import com.mercheazy.server.entity.Store;
 import org.springframework.http.ResponseEntity;
@@ -22,4 +23,10 @@ public interface StoreController {
 
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteStoreById(@PathVariable int id);
+
+    @PostMapping("/add-owner")
+    ResponseEntity<?> createStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto);
+
+    @DeleteMapping("/remove-owner")
+    ResponseEntity<?> deleteStoreOwner(int id);
 }

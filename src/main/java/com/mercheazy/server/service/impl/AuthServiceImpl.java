@@ -16,6 +16,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.mercheazy.server.entity.User.Role.ADMIN;
+
 @RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -34,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
         admin.setFirstName("MerchEazy");
         admin.setEmail("hello@mercheazy.com");
         admin.setPassword(passwordEncoder.encode(adminPassword));
-        admin.setRole(User.Role.ADMIN);
+        admin.setRole(ADMIN);
         userRepository.save(admin);
         System.out.println("MerchEazy admin created!");
     }
