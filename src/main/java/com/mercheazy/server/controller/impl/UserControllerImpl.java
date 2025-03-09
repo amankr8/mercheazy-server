@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class UserControllerImpl implements UserController {
-
     private final UserService userService;
 
     @Override

@@ -30,6 +30,7 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
         Cart cart = new Cart();
         cart.setUser(user);
         cartRepository.save(cart);
+        System.out.println("User cart created.");
     }
 
     @Override
