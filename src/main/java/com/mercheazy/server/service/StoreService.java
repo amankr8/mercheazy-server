@@ -23,7 +23,7 @@ public interface StoreService {
 
     void deleteStore(int id);
 
-    StoreResponseDto addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto);
+    StoreOwnerResponseDto addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto);
 
-    StoreResponseDto removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto);
+    void removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto);
 }

@@ -57,6 +57,7 @@ public class StoreControllerImpl implements StoreController {
 
     @Override
     public ResponseEntity<?> removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        return ResponseEntity.ok(storeService.removeStoreOwner(storeOwnerRequestDto));
+        storeService.removeStoreOwner(storeOwnerRequestDto);
+        return ResponseEntity.ok("Store owner removed successfully!");
     }
 }

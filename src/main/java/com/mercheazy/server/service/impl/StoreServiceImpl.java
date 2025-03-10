@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.mercheazy.server.entity.StoreOwner.Role.CREATOR;
 
@@ -91,11 +92,11 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreResponseDto addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        Store store = storeOwnerRepository.findByUserId(AuthUtil.getLoggedInUserId()).map(StoreOwner::getStore)
+    public StoreOwnerResponseDto addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
+        User loggedInUser = AuthUtil.getLoggedInUser();
+        Store store = storeOwnerRepository.findByUserId(Objects.requireNonNull(loggedInUser).getId()).map(StoreOwner::getStore)
                 .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
 
-        User loggedInUser = AuthUtil.getLoggedInUser();
         boolean isUserAuthorized = store.getStoreOwners().stream()
                 .anyMatch(it -> it.getUser().equals(loggedInUser) && it.getRole() == CREATOR);
 
@@ -119,12 +120,11 @@ public class StoreServiceImpl implements StoreService {
                 .role(storeOwnerRequestDto.getRole())
                 .build();
 
-        store.getStoreOwners().add(storeOwner);
-        return storeRepository.save(store).toStoreResponseDto();
+        return storeOwnerRepository.save(storeOwner).toStoreOwnerResponseDto();
     }
 
     @Override
-    public StoreResponseDto removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
+    public void removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
         Store store = storeOwnerRepository.findByUserId(AuthUtil.getLoggedInUserId()).map(StoreOwner::getStore)
                 .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
 
@@ -148,9 +148,7 @@ public class StoreServiceImpl implements StoreService {
         if (storeOwner.getRole() == CREATOR) {
             throw new IllegalArgumentException("The creator of the store cannot be removed.");
         }
-
-        store.getStoreOwners().remove(storeOwner);
-        return storeRepository.save(store).toStoreResponseDto();
+        storeOwnerRepository.delete(storeOwner);
     }
 
 }

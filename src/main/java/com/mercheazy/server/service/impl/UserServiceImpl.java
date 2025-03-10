@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByUsername(adminUsername).isEmpty()) {
             User admin = User.builder()
                     .username(adminUsername)
-                    .password(adminPassword)
+                    .password(passwordEncoder.encode(adminPassword))
                     .email("hello@mercheazy.com")
                     .role(ADMIN)
                     .firstName("MerchEazy")
