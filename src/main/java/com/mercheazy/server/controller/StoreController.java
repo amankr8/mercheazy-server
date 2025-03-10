@@ -17,6 +17,9 @@ public interface StoreController {
     @GetMapping
     ResponseEntity<?> getStores();
 
+    @GetMapping("/user")
+    ResponseEntity<?> getUserStore();
+
     @GetMapping("/{id}")
     ResponseEntity<?> getStoreById(@PathVariable int id);
 

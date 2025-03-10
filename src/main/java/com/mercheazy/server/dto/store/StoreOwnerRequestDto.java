@@ -10,7 +10,6 @@ import lombok.Data;
 
 @Data
 public class StoreOwnerRequestDto {
-    private int storeId;
     private int userId;
     private StoreOwner.Role role;
 }

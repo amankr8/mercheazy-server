@@ -4,6 +4,7 @@ import com.mercheazy.server.controller.StoreController;
 import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
 import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.service.StoreService;
+import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,11 @@ public class StoreControllerImpl implements StoreController {
     }
 
     @Override
+    public ResponseEntity<?> getUserStore() {
+        return ResponseEntity.ok(storeService.getStoreByUser(AuthUtil.getLoggedInUser()));
+    }
+
+    @Override
     public ResponseEntity<?> getStoreById(int id) {
         return ResponseEntity.ok(storeService.getStoreById(id));
     }
@@ -46,7 +52,6 @@ public class StoreControllerImpl implements StoreController {
 
     @Override
     public ResponseEntity<?> deleteStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        storeService.removeStoreOwner(storeOwnerRequestDto);
-        return ResponseEntity.ok("Store owner deleted successfully!");
+        return ResponseEntity.ok(storeService.removeStoreOwner(storeOwnerRequestDto));
     }
 }

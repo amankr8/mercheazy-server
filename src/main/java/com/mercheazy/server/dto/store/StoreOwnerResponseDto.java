@@ -8,7 +8,6 @@ import lombok.Data;
 @Builder
 public class StoreOwnerResponseDto {
     private int id;
-    private int storeId;
     private int userId;
     private StoreOwner.Role role;
 }

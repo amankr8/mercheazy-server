@@ -34,14 +34,17 @@ public class UserServiceImpl implements UserService {
 
     @PostConstruct
     public void init() {
-        User admin = new User();
-        admin.setUsername("mercheazy");
-        admin.setFirstName("MerchEazy");
-        admin.setEmail("hello@mercheazy.com");
-        admin.setPassword(passwordEncoder.encode(adminPassword));
-        admin.setRole(ADMIN);
-        userRepository.save(admin);
-        System.out.println("MerchEazy admin created!");
+        String adminUsername = "mercheazy";
+        if (userRepository.findByUsername(adminUsername).isEmpty()) {
+            User admin = new User();
+            admin.setUsername(adminUsername);
+            admin.setFirstName("MerchEazy");
+            admin.setEmail("hello@mercheazy.com");
+            admin.setPassword(passwordEncoder.encode(adminPassword));
+            admin.setRole(ADMIN);
+            userRepository.save(admin);
+            System.out.println("MerchEazy admin created!");
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
 import com.mercheazy.server.dto.store.StoreResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,14 +40,16 @@ public class Store {
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreOwner> storeOwners;
 
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products;
+
     public StoreResponseDto toStoreResponseDto() {
-        List<Integer> storeOwnerUserIds = storeOwners.stream()
-                .map(storeOwner -> storeOwner.getUser().getId()).toList();
         return StoreResponseDto.builder()
                 .id(id)
                 .name(name)
                 .desc(desc)
-                .storeOwnerUserIds(storeOwnerUserIds)
+                .storeOwners(storeOwners.stream().map(StoreOwner::toStoreOwnerResponseDto).toList())
+                .products(products.stream().map(Product::toProductResponseDto).toList())
                 .createDate(createDate)
                 .updateDate(updateDate)
                 .build();

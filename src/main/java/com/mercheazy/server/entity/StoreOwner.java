@@ -29,7 +29,6 @@ public class StoreOwner {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "so_role", nullable = false)
-    @ColumnDefault("'CREATOR'")
     private Role role;
 
     public enum Role {
@@ -39,7 +38,6 @@ public class StoreOwner {
     public StoreOwnerResponseDto toStoreOwnerResponseDto() {
         return StoreOwnerResponseDto.builder()
                 .id(id)
-                .storeId(store.getId())
                 .userId(user.getId())
                 .role(role)
                 .build();

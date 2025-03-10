@@ -12,6 +12,11 @@ public class CartControllerImpl implements com.mercheazy.server.controller.CartC
     private final CartService cartService;
 
     @Override
+    public ResponseEntity<?> getUserCart() {
+        return ResponseEntity.ok(cartService.getUserCart());
+    }
+
+    @Override
     public ResponseEntity<?> addToCart(CartItemRequestDto cartItemRequestDto) {
         return ResponseEntity.ok(cartService.addToCart(cartItemRequestDto));
     }

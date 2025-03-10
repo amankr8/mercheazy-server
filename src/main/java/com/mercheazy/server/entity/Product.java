@@ -53,6 +53,7 @@ public class Product {
     private List<ProductImage> productImages;
 
     public ProductResponseDto toProductResponseDto() {
+        List<FileResponseDto> images = productImages.stream().map(ProductImage::toFileResponseDto).toList();
         return ProductResponseDto.builder()
                 .id(id)
                 .name(name)

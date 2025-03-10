@@ -7,6 +7,7 @@ import com.mercheazy.server.entity.Store;
 import com.mercheazy.server.entity.StoreOwner;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.exception.ResourceNotFoundException;
+import com.mercheazy.server.repository.StoreOwnerRepository;
 import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.StoreService;
@@ -24,6 +25,7 @@ import static com.mercheazy.server.entity.StoreOwner.Role.CREATOR;
 public class StoreServiceImpl implements StoreService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
+    private final StoreOwnerRepository storeOwnerRepository;
 
     @Override
     public StoreResponseDto addStore(StoreRequestDto storeRequestDto) {
@@ -68,14 +70,20 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public StoreResponseDto getStoreByUser(User user) {
+        return storeOwnerRepository.findByUser(user).map(StoreOwner::getStore).map(Store::toStoreResponseDto)
+                .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
+    }
+
+    @Override
     public void deleteStore(int id) {
         storeRepository.deleteById(id);
     }
 
     @Override
     public StoreResponseDto addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        Store store = storeRepository.findById(storeOwnerRequestDto.getStoreId())
-                .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
+        Store store = storeOwnerRepository.findByUser(AuthUtil.getLoggedInUser()).map(StoreOwner::getStore)
+                .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
 
         User loggedInUser = AuthUtil.getLoggedInUser();
         boolean isUserAuthorized = store.getStoreOwners().stream()
@@ -107,8 +115,8 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponseDto removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        Store store = storeRepository.findById(storeOwnerRequestDto.getStoreId())
-                .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
+        Store store = storeOwnerRepository.findByUser(AuthUtil.getLoggedInUser()).map(StoreOwner::getStore)
+                .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
 
         User loggedInUser = AuthUtil.getLoggedInUser();
         boolean isUserAuthorized = store.getStoreOwners().stream()
