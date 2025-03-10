@@ -40,11 +40,13 @@ public class Store {
     private List<StoreOwner> storeOwners;
 
     public StoreResponseDto toStoreResponseDto() {
+        List<Integer> storeOwnerUserIds = storeOwners.stream()
+                .map(storeOwner -> storeOwner.getUser().getId()).toList();
         return StoreResponseDto.builder()
                 .id(id)
                 .name(name)
                 .desc(desc)
-                .storeOwnerIds(storeOwners.stream().map(StoreOwner::getId).toList())
+                .storeOwnerUserIds(storeOwnerUserIds)
                 .createDate(createDate)
                 .updateDate(updateDate)
                 .build();
