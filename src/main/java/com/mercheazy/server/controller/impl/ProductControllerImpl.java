@@ -30,7 +30,7 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     public ResponseEntity<?> getProductById(int id) {
-        ProductResponseDto product = productService.getProductResponseById(id);
+        ProductResponseDto product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
 

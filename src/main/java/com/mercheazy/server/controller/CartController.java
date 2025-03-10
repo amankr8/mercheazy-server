@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/cart")
 public interface CartController {
-    @PostMapping("/add-to-cart")
+    @PostMapping
     ResponseEntity<?> addToCart(@RequestBody CartItemRequestDto cartItemRequestDto);
 
-    @DeleteMapping("/remove-from-cart")
+    @DeleteMapping
     ResponseEntity<?> removeFromCart(@RequestBody CartItemRequestDto cartItemRequestDto);
 }

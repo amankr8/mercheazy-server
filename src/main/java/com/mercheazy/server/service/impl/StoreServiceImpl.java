@@ -63,10 +63,8 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponseDto getStoreById(int id) {
-        Store store = storeRepository.findById(id)
+        return storeRepository.findById(id).map(Store::toStoreResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
-
-        return store.toStoreResponseDto();
     }
 
     @Override

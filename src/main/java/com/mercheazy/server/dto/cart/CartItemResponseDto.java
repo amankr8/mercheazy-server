@@ -1,6 +1,5 @@
 package com.mercheazy.server.dto.cart;
 
-import com.mercheazy.server.dto.product.ProductResponseDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,6 +7,6 @@ import lombok.Data;
 @Builder
 public class CartItemResponseDto {
     private int id;
-    private ProductResponseDto productResponseDto;
+    private int productId;
     private int quantity;
 }

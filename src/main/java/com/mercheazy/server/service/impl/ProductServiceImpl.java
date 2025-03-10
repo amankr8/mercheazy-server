@@ -68,13 +68,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDto getProductResponseById(int id) {
-        return productRepository.findById(id).map(Product::toProductResponseDto).orElse(null);
-    }
-
-    @Override
-    public Product getProductById(int productId) {
-        return productRepository.findById(productId).orElse(null);
+    public ProductResponseDto getProductById(int id) {
+        return productRepository.findById(id).map(Product::toProductResponseDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
     }
 
     @Override

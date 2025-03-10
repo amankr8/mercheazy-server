@@ -23,9 +23,6 @@ public class CartItem {
     @Column(name = "ci_quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "ci_price", nullable = false)
-    private double price;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "c_id")
     private Cart cart;
@@ -33,7 +30,7 @@ public class CartItem {
     public CartItemResponseDto toCartItemResponseDto() {
         return CartItemResponseDto.builder()
                 .id(id)
-                .productResponseDto(product.toProductResponseDto())
+                .productId(product.getId())
                 .quantity(quantity)
                 .build();
     }

@@ -10,7 +10,6 @@ import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.CartItemRepository;
 import com.mercheazy.server.repository.CartRepository;
 import com.mercheazy.server.repository.ProductRepository;
-import com.mercheazy.server.service.ProductService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,10 +31,8 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
 
     @Override
     public CartResponseDto getUserCart() {
-        Cart cart = cartRepository.findByUser(AuthUtil.getLoggedInUser())
+        return cartRepository.findByUser(AuthUtil.getLoggedInUser()).map(Cart::toCartResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
-
-        return cart.toCartResponseDto();
     }
 
     @Override
@@ -59,12 +56,10 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
                     .cart(cart)
                     .product(product)
                     .quantity(cartItemRequestDto.getQuantity())
-                    .price(product.getSellPrice() * cartItemRequestDto.getQuantity())
                     .build();
             cart.getCartItems().add(cartItem);
         } else {
             cartItem.setQuantity(cartItem.getQuantity() + cartItemRequestDto.getQuantity());
-            cartItem.setPrice(product.getSellPrice() * cartItem.getQuantity());
         }
 
         return cartRepository.save(cart).toCartResponseDto();
@@ -84,7 +79,6 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
 
         if (cartItem.getQuantity() > cartItemRequestDto.getQuantity()) {
             cartItem.setQuantity(cartItem.getQuantity() - cartItemRequestDto.getQuantity());
-            cartItem.setPrice(product.getSellPrice() * cartItem.getQuantity());
         } else {
             cart.getCartItems().remove(cartItem);
             cartItemRepository.delete(cartItem);
