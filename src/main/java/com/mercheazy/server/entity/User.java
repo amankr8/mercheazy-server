@@ -56,9 +56,6 @@ public class User implements UserDetails {
     @ColumnDefault("'USER'")
     private Role role;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Cart cart;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

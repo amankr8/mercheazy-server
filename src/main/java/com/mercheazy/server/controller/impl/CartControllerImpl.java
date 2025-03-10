@@ -16,7 +16,7 @@ public class CartControllerImpl implements com.mercheazy.server.controller.CartC
 
     @Override
     public ResponseEntity<?> getUserCart() {
-        return ResponseEntity.ok(cartService.getCartByUserId(AuthUtil.getLoggedInUserId()));
+        return ResponseEntity.ok(cartService.getCartByUserId(AuthUtil.getLoggedInUser().getId()));
     }
 
     @Override
