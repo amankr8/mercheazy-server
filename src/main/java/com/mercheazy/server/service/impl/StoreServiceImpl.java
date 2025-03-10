@@ -2,17 +2,20 @@ package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
 import com.mercheazy.server.dto.store.StoreRequestDto;
+import com.mercheazy.server.dto.store.StoreResponseDto;
 import com.mercheazy.server.entity.Store;
 import com.mercheazy.server.entity.StoreOwner;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.StoreOwnerRepository;
 import com.mercheazy.server.repository.StoreRepository;
+import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.StoreService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.mercheazy.server.entity.StoreOwner.Role.CREATOR;
@@ -20,39 +23,52 @@ import static com.mercheazy.server.entity.StoreOwner.Role.CREATOR;
 @RequiredArgsConstructor
 @Service
 public class StoreServiceImpl implements StoreService {
+    private final UserRepository userRepository;
     private final StoreRepository storeRepository;
     private final StoreOwnerRepository storeOwnerRepository;
 
     @Override
-    public Store addStore(StoreRequestDto storeRequestDto) {
-        Store store = storeRepository.save(storeRequestDto.toStore());
-        saveStoreOwner(store);
-        return store;
+    public StoreResponseDto addStore(StoreRequestDto storeRequestDto) {
+        Store store = Store.builder()
+                .name(storeRequestDto.getName())
+                .desc(storeRequestDto.getDesc())
+                .storeOwners(new ArrayList<>())
+                .build();
+
+        store = storeRepository.save(store);
+
+        StoreOwner storeOwner = StoreOwner.builder()
+                .store(store)
+                .user(AuthUtil.getLoggedInUser())
+                .role(CREATOR)
+                .build();
+
+        store.getStoreOwners().add(storeOwner);
+        return storeRepository.save(store).toStoreResponseDto();
     }
 
+
     @Override
-    public Store updateStore(int id, Store newStore) {
+    public StoreResponseDto updateStoreDetails(int id, StoreRequestDto storeRequestDto) {
         Store store = storeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
 
-        store.setName(newStore.getName());
-        store.setDesc(newStore.getDesc());
-        return storeRepository.save(store);
+        store.setName(storeRequestDto.getName());
+        store.setDesc(storeRequestDto.getDesc());
+        return storeRepository.save(store).toStoreResponseDto();
     }
 
     @Override
-    public List<Store> getStores() {
-        return storeRepository.findAll();
+    public List<StoreResponseDto> getStores() {
+        return storeRepository.findAll().stream().map(Store::toStoreResponseDto).toList();
     }
 
     @Override
-    public Store getStoreById(int id) {
-        return storeRepository.findById(id).orElse(null);
-    }
+    public StoreResponseDto getStoreById(int id) {
+        Store store = storeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
 
-    @Override
-    public Store getStoreByUser(User user) {
-        return getStoreOwnerByUser(user).getStore();
+        return store.toStoreResponseDto();
     }
 
     @Override
@@ -61,34 +77,66 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreOwner addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        User user = AuthUtil.getLoggedInUser();
-        StoreOwner storeOwner = getStoreOwnerByUser(user);
-        Store store = storeOwner.getStore();
-        if (store.getId() != storeOwnerRequestDto.getStoreId() || storeOwner.getRole() != CREATOR) {
-            throw new IllegalArgumentException("User is unauthorized to add a store owner to this store.");
-        }
-        return storeOwnerRepository.save(storeOwnerRequestDto.toStoreCreator());
-    }
+    public StoreResponseDto addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
+        Store store = storeRepository.findById(storeOwnerRequestDto.getStoreId())
+                .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
 
-    @Override
-    public void saveStoreOwner(Store store) {
+        User loggedInUser = AuthUtil.getLoggedInUser();
+        boolean isUserAuthorized = store.getStoreOwners().stream()
+                .anyMatch(it -> it.getUser().equals(loggedInUser) && it.getRole() == CREATOR);
+
+        if (!isUserAuthorized) {
+            throw new IllegalArgumentException("You are not authorized to add store owners.");
+        }
+
+        User user = userRepository.findById(storeOwnerRequestDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
+
+        boolean alreadyOwner = store.getStoreOwners().stream()
+                .anyMatch(it -> it.getUser().equals(user));
+
+        if (alreadyOwner) {
+            throw new IllegalArgumentException("User is already a store owner.");
+        }
+
         StoreOwner storeOwner = StoreOwner.builder()
                 .store(store)
-                .user(AuthUtil.getLoggedInUser())
-                .role(CREATOR)
+                .user(user)
+                .role(storeOwnerRequestDto.getRole())
                 .build();
-        storeOwnerRepository.save(storeOwner);
+
+        store.getStoreOwners().add(storeOwner);
+        return storeRepository.save(store).toStoreResponseDto();
     }
 
     @Override
-    public StoreOwner getStoreOwnerByUser(User user) {
-        return storeOwnerRepository.findByUser(user)
-                .orElseThrow(() -> new ResourceNotFoundException("This user does not have a store."));
+    public StoreResponseDto removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
+        Store store = storeRepository.findById(storeOwnerRequestDto.getStoreId())
+                .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
+
+        User loggedInUser = AuthUtil.getLoggedInUser();
+        boolean isUserAuthorized = store.getStoreOwners().stream()
+                .anyMatch(it -> it.getUser().equals(loggedInUser) && it.getRole() == CREATOR);
+
+        if (!isUserAuthorized) {
+            throw new IllegalArgumentException("You are not authorized to remove store owners.");
+        }
+
+        User user = userRepository.findById(storeOwnerRequestDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
+
+        StoreOwner storeOwner = store.getStoreOwners().stream()
+                .filter(it -> it.getUser().equals(user))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("User is not a store owner."));
+
+        // Prevent removing the CREATOR
+        if (storeOwner.getRole() == CREATOR) {
+            throw new IllegalArgumentException("The creator of the store cannot be removed.");
+        }
+
+        store.getStoreOwners().remove(storeOwner);
+        return storeRepository.save(store).toStoreResponseDto();
     }
 
-    @Override
-    public void deleteStoreOwner(int id) {
-        storeOwnerRepository.deleteById(id);
-    }
 }

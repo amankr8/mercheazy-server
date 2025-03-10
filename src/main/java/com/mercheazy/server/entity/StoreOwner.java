@@ -1,5 +1,7 @@
 package com.mercheazy.server.entity;
 
+import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
+import com.mercheazy.server.dto.store.StoreResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -32,5 +34,14 @@ public class StoreOwner {
 
     public enum Role {
         CREATOR, MANAGER
+    }
+
+    public StoreOwnerResponseDto toStoreOwnerResponseDto() {
+        return StoreOwnerResponseDto.builder()
+                .id(id)
+                .storeId(store.getId())
+                .userId(user.getId())
+                .role(role)
+                .build();
     }
 }

@@ -2,31 +2,23 @@ package com.mercheazy.server.service;
 
 import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
 import com.mercheazy.server.dto.store.StoreRequestDto;
-import com.mercheazy.server.entity.Store;
-import com.mercheazy.server.entity.StoreOwner;
-import com.mercheazy.server.entity.User;
+import com.mercheazy.server.dto.store.StoreResponseDto;
 
 import java.util.List;
 
 public interface StoreService {
 
-    Store addStore(StoreRequestDto storeRequestDto);
+    StoreResponseDto addStore(StoreRequestDto storeRequestDto);
 
-    Store updateStore(int id, Store newStore);
+    StoreResponseDto updateStoreDetails(int id, StoreRequestDto storeRequestDto);
 
-    List<Store> getStores();
+    List<StoreResponseDto> getStores();
 
-    Store getStoreById(int id);
-
-    Store getStoreByUser(User user);
+    StoreResponseDto getStoreById(int id);
 
     void deleteStore(int id);
 
-    StoreOwner addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto);
+    StoreResponseDto addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto);
 
-    void saveStoreOwner(Store store);
-
-    StoreOwner getStoreOwnerByUser(User user);
-
-    void deleteStoreOwner(int id);
+    StoreResponseDto removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto);
 }

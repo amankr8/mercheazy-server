@@ -12,5 +12,6 @@ public class ProductRequestDto {
     private double listPrice;
     private double sellPrice;
     private int stock;
+    private int storeId;
     private List<MultipartFile> imgFiles;
 }

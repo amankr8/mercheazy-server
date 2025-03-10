@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class CartServiceImpl implements com.mercheazy.server.service.CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final ProductService productService;
     private final ProductRepository productRepository;
 
     @Override
@@ -29,6 +28,19 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
         cart.setUser(user);
         cartRepository.save(cart);
         System.out.println("User cart created.");
+    }
+
+    @Override
+    public CartResponseDto getUserCart() {
+        Cart cart = cartRepository.findByUser(AuthUtil.getLoggedInUser())
+                .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
+
+        return cart.toCartResponseDto();
+    }
+
+    @Override
+    public void deleteUserCart(User user) {
+        cartRepository.findByUser(user).ifPresent(cartRepository::delete);
     }
 
     @Override
@@ -79,18 +91,5 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
         }
 
         return cartRepository.save(cart).toCartResponseDto();
-    }
-
-    @Override
-    public CartResponseDto getUserCart() {
-        Cart cart = cartRepository.findByUser(AuthUtil.getLoggedInUser())
-                .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
-
-        return cart.toCartResponseDto();
-    }
-
-    @Override
-    public void deleteUserCart(User user) {
-        cartRepository.findByUser(user).ifPresent(cartRepository::delete);
     }
 }

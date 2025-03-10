@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.mercheazy.server.dto.store.StoreResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,4 +38,15 @@ public class Store {
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreOwner> storeOwners;
+
+    public StoreResponseDto toStoreResponseDto() {
+        return StoreResponseDto.builder()
+                .id(id)
+                .name(name)
+                .desc(desc)
+                .storeOwnerIds(storeOwners.stream().map(StoreOwner::getId).toList())
+                .createDate(createDate)
+                .updateDate(updateDate)
+                .build();
+    }
 }

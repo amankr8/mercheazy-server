@@ -10,6 +10,7 @@ import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.model.CloudinaryFile;
 import com.mercheazy.server.repository.ProductImageRepository;
 import com.mercheazy.server.repository.ProductRepository;
+import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.service.CloudinaryService;
 import com.mercheazy.server.service.ProductService;
 import com.mercheazy.server.service.StoreService;
@@ -30,7 +31,7 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final StoreService storeService;
+    private final StoreRepository storeRepository;
     private final CloudinaryService cloudinaryService;
 
     @Value("${spring.app.name}")
@@ -38,7 +39,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDto createProduct(ProductRequestDto productRequestDto) {
-        Store store = storeService.getStoreByUser(AuthUtil.getLoggedInUser());
+        Store store = storeRepository.findById(productRequestDto.getStoreId())
+                .orElseThrow(() -> new ResourceNotFoundException("Store not found."));
+
         Product product = Product.builder()
                 .name(productRequestDto.getName())
                 .desc(productRequestDto.getDesc())

@@ -3,7 +3,6 @@ package com.mercheazy.server.controller.impl;
 import com.mercheazy.server.controller.StoreController;
 import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
 import com.mercheazy.server.dto.store.StoreRequestDto;
-import com.mercheazy.server.entity.Store;
 import com.mercheazy.server.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +19,8 @@ public class StoreControllerImpl implements StoreController {
     }
 
     @Override
-    public ResponseEntity<?> updateStore(int id,Store store) {
-        return ResponseEntity.ok(storeService.updateStore(id, store));
+    public ResponseEntity<?> updateStore(int id, StoreRequestDto storeRequestDto) {
+        return ResponseEntity.ok(storeService.updateStoreDetails(id, storeRequestDto));
     }
 
     @Override
@@ -46,8 +45,8 @@ public class StoreControllerImpl implements StoreController {
     }
 
     @Override
-    public ResponseEntity<?> deleteStoreOwner(int id) {
-        storeService.deleteStoreOwner(id);
+    public ResponseEntity<?> deleteStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
+        storeService.removeStoreOwner(storeOwnerRequestDto);
         return ResponseEntity.ok("Store owner deleted successfully!");
     }
 }

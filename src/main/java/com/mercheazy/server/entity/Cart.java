@@ -20,12 +20,12 @@ public class Cart {
     @Column(name = "c_id")
     private int id;
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> cartItems;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "u_id")
     private User user;
+
+    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems;
 
     public CartResponseDto toCartResponseDto() {
         return CartResponseDto.builder()
