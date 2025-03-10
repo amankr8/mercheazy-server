@@ -52,6 +52,10 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
                 .findFirst().orElse(null);
 
         if (cartItem == null) {
+            int requestQuantity = cartItemRequestDto.getQuantity();
+            if (requestQuantity > product.getStock()) {
+                throw new IllegalArgumentException("Requested quantity exceeds available stock.");
+            }
             cartItem = CartItem.builder()
                     .cart(cart)
                     .product(product)
@@ -59,7 +63,11 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
                     .build();
             cart.getCartItems().add(cartItem);
         } else {
-            cartItem.setQuantity(cartItem.getQuantity() + cartItemRequestDto.getQuantity());
+            int requestQuantity = cartItem.getQuantity() + cartItemRequestDto.getQuantity();
+            if (requestQuantity > product.getStock()) {
+                throw new IllegalArgumentException("Requested quantity exceeds available stock.");
+            }
+            cartItem.setQuantity(requestQuantity);
         }
 
         return cartRepository.save(cart).toCartResponseDto();
