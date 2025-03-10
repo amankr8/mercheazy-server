@@ -9,9 +9,5 @@ public interface CartController {
     @PostMapping
     ResponseEntity<?> addToCart(@RequestBody CartItemRequestDto cartItemRequestDto);
 
-    @PutMapping("/{id}")
-    ResponseEntity<?> updateCartItem(@PathVariable int id, int quantity);
-
-    @DeleteMapping("/{productId}")
-    ResponseEntity<?> removeFromCart(@PathVariable int productId);
+    ResponseEntity<?> removeFromCart(@RequestBody CartItemRequestDto cartItemRequestDto);
 }

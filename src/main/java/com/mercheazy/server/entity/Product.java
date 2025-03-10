@@ -49,11 +49,10 @@ public class Product {
     @JoinColumn(name = "s_id")
     private Store store;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> productImages;
 
     public ProductResponseDto toProductResponseDto() {
-        List<FileResponseDto> images = productImages.stream().map(ProductImage::toFileResponseDto).toList();
         return ProductResponseDto.builder()
                 .id(id)
                 .name(name)
@@ -63,7 +62,7 @@ public class Product {
                 .stock(stock)
                 .createDate(createDate)
                 .updateDate(updateDate)
-                .images(images)
+                .images(productImages.stream().map(ProductImage::toFileResponseDto).toList())
                 .storeId(store.getId())
                 .build();
     }

@@ -17,13 +17,7 @@ public class CartControllerImpl implements com.mercheazy.server.controller.CartC
     }
 
     @Override
-    public ResponseEntity<?> updateCartItem(int id, int quantity) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<?> removeFromCart(int productId) {
-        cartService.removeFromCart(productId);
-        return ResponseEntity.ok("Product removed from cart.");
+    public ResponseEntity<?> removeFromCart(CartItemRequestDto cartItemRequestDto) {
+        return ResponseEntity.ok(cartService.removeFromCart(cartItemRequestDto));
     }
 }

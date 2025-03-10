@@ -30,7 +30,6 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final ProductImageRepository productImageRepository;
     private final StoreService storeService;
     private final CloudinaryService cloudinaryService;
 
@@ -94,11 +93,6 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
-    @Override
-    public List<FileResponseDto> getImagesByProduct(Product product) {
-        return productImageRepository.findByProduct(product).stream().map(ProductImage::toFileResponseDto).toList();
-    }
-
     private List<ProductImage> saveImages(List<MultipartFile> imgFiles, Product product) {
         if (imgFiles == null || imgFiles.isEmpty()) {
             return Collections.emptyList();
@@ -117,11 +111,11 @@ public class ProductServiceImpl implements ProductService {
                         .build();
                 productImages.add(productImage);
             } catch (IOException e) {
-                log.error("Error uploading image: {}", e.getMessage(), e);
+                log.error("Error uploading image {}: {}", imgFile.getOriginalFilename(), e.getMessage(), e);
             }
         });
 
-        return productImages.isEmpty() ? Collections.emptyList() : productImageRepository.saveAll(productImages);
+        return productImages;
     }
 
 }

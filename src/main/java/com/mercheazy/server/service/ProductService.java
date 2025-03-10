@@ -22,6 +22,4 @@ public interface ProductService {
     ProductResponseDto updateProduct(int id, ProductRequestDto productRequestDto);
 
     void deleteProduct(int id);
-
-    List<FileResponseDto> getImagesByProduct(Product product);
 }
