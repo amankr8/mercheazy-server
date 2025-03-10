@@ -29,12 +29,14 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final CartService cartService;
 
+    @Value("${spring.security.username}")
+    private String adminUsername;
+
     @Value("${spring.security.password}")
     private String adminPassword;
 
     @PostConstruct
     public void init() {
-        String adminUsername = "mercheazy";
         if (userRepository.findByUsername(adminUsername).isEmpty()) {
             User admin = new User();
             admin.setUsername(adminUsername);

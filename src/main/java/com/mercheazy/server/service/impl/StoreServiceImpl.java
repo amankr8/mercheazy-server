@@ -29,6 +29,11 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponseDto addStore(StoreRequestDto storeRequestDto) {
+        User storeCreator = AuthUtil.getLoggedInUser();
+        if (storeOwnerRepository.findByUser(storeCreator).isPresent()) {
+            throw new IllegalArgumentException("User already has a store.");
+        }
+
         Store store = Store.builder()
                 .name(storeRequestDto.getName())
                 .desc(storeRequestDto.getDesc())
@@ -39,7 +44,7 @@ public class StoreServiceImpl implements StoreService {
 
         StoreOwner storeOwner = StoreOwner.builder()
                 .store(store)
-                .user(AuthUtil.getLoggedInUser())
+                .user(storeCreator)
                 .role(CREATOR)
                 .build();
 
