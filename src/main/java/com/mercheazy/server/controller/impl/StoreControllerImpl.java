@@ -31,7 +31,7 @@ public class StoreControllerImpl implements StoreController {
 
     @Override
     public ResponseEntity<?> getUserStore() {
-        return ResponseEntity.ok(storeService.getStoreByUser(AuthUtil.getLoggedInUser()));
+        return ResponseEntity.ok(storeService.getStoreByUserId(AuthUtil.getLoggedInUserId()));
     }
 
     @Override

@@ -14,6 +14,9 @@ import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 @RequiredArgsConstructor
 @Service
 public class CartServiceImpl implements com.mercheazy.server.service.CartService {
@@ -23,26 +26,23 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
 
     @Override
     public void createUserCart(User user) {
-        Cart cart = new Cart();
-        cart.setUser(user);
+        Cart cart = Cart.builder()
+                .user(user)
+                .cartItems(new ArrayList<>())
+                .build();
         cartRepository.save(cart);
         System.out.println("User cart created.");
     }
 
     @Override
-    public CartResponseDto getCartByUser(User user) {
-        return cartRepository.findByUser(user).map(Cart::toCartResponseDto)
+    public CartResponseDto getCartByUserId(int userId) {
+        return cartRepository.findByUserId(userId).map(Cart::toCartResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
     }
 
     @Override
-    public void deleteUserCart(User user) {
-        cartRepository.findByUser(user).ifPresent(cartRepository::delete);
-    }
-
-    @Override
     public CartResponseDto addToCart(CartItemRequestDto cartItemRequestDto) {
-        Cart cart = cartRepository.findByUser(AuthUtil.getLoggedInUser())
+        Cart cart = cartRepository.findByUserId(AuthUtil.getLoggedInUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         Product product = productRepository.findById(cartItemRequestDto.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
@@ -67,7 +67,7 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
 
     @Override
     public CartResponseDto removeFromCart(CartItemRequestDto cartItemRequestDto) {
-        Cart cart = cartRepository.findByUser(AuthUtil.getLoggedInUser())
+        Cart cart = cartRepository.findByUserId(AuthUtil.getLoggedInUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         Product product = productRepository.findById(cartItemRequestDto.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found."));

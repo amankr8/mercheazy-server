@@ -8,4 +8,9 @@ public class AuthUtil {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return principal instanceof User ? (User) principal : null;
     }
+
+    public static int getLoggedInUserId() {
+        User user = getLoggedInUser();
+        return user != null ? user.getId() : -1;
+    }
 }

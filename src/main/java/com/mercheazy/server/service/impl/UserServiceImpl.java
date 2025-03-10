@@ -38,13 +38,15 @@ public class UserServiceImpl implements UserService {
     @PostConstruct
     public void init() {
         if (userRepository.findByUsername(adminUsername).isEmpty()) {
-            User admin = new User();
-            admin.setUsername(adminUsername);
-            admin.setFirstName("MerchEazy");
-            admin.setEmail("hello@mercheazy.com");
-            admin.setPassword(passwordEncoder.encode(adminPassword));
-            admin.setRole(ADMIN);
-            userRepository.save(admin);
+            User admin = User.builder()
+                    .username(adminUsername)
+                    .password(adminPassword)
+                    .email("hello@mercheazy.com")
+                    .role(ADMIN)
+                    .firstName("MerchEazy")
+                    .build();
+            admin = userRepository.save(admin);
+            cartService.createUserCart(admin);
             System.out.println("MerchEazy admin created!");
         }
     }
@@ -61,7 +63,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         User savedUser = userRepository.save(user);
-        cartService.createUserCart(user);
+        cartService.createUserCart(savedUser);
 
         return savedUser.toUserResponseDto();
     }

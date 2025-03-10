@@ -30,8 +30,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponseDto addStore(StoreRequestDto storeRequestDto) {
-        User storeCreator = AuthUtil.getLoggedInUser();
-        if (storeOwnerRepository.findByUser(storeCreator).isPresent()) {
+        if (storeOwnerRepository.findByUserId(AuthUtil.getLoggedInUserId()).isPresent()) {
             throw new IllegalArgumentException("User already has a store.");
         }
 
@@ -40,12 +39,12 @@ public class StoreServiceImpl implements StoreService {
                 .desc(storeRequestDto.getDesc())
                 .storeOwners(new ArrayList<>())
                 .build();
-
         store = storeRepository.save(store);
 
+        User currentUser = AuthUtil.getLoggedInUser();
         StoreOwner storeOwner = StoreOwner.builder()
                 .store(store)
-                .user(storeCreator)
+                .user(currentUser)
                 .role(CREATOR)
                 .build();
 
@@ -81,8 +80,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreResponseDto getStoreByUser(User user) {
-        return storeOwnerRepository.findByUser(user).map(StoreOwner::getStore).map(Store::toStoreResponseDto)
+    public StoreResponseDto getStoreByUserId(int userId) {
+        return storeOwnerRepository.findByUserId(userId).map(StoreOwner::getStore).map(Store::toStoreResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
     }
 
@@ -93,7 +92,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponseDto addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        Store store = storeOwnerRepository.findByUser(AuthUtil.getLoggedInUser()).map(StoreOwner::getStore)
+        Store store = storeOwnerRepository.findByUserId(AuthUtil.getLoggedInUserId()).map(StoreOwner::getStore)
                 .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
 
         User loggedInUser = AuthUtil.getLoggedInUser();
@@ -126,7 +125,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponseDto removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        Store store = storeOwnerRepository.findByUser(AuthUtil.getLoggedInUser()).map(StoreOwner::getStore)
+        Store store = storeOwnerRepository.findByUserId(AuthUtil.getLoggedInUserId()).map(StoreOwner::getStore)
                 .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
 
         User loggedInUser = AuthUtil.getLoggedInUser();

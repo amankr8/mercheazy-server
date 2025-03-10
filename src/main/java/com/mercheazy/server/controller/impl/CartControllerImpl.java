@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RequiredArgsConstructor
 @RestController
 public class CartControllerImpl implements com.mercheazy.server.controller.CartController {
@@ -14,7 +16,7 @@ public class CartControllerImpl implements com.mercheazy.server.controller.CartC
 
     @Override
     public ResponseEntity<?> getUserCart() {
-        return ResponseEntity.ok(cartService.getCartByUser(AuthUtil.getLoggedInUser()));
+        return ResponseEntity.ok(cartService.getCartByUserId(AuthUtil.getLoggedInUserId()));
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
 import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
 import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.dto.store.StoreResponseDto;
-import com.mercheazy.server.entity.User;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public interface StoreService {
 
     List<StoreOwnerResponseDto> getStoreOwnersByStoreId(int storeId);
 
-    StoreResponseDto getStoreByUser(User user);
+    StoreResponseDto getStoreByUserId(int userId);
 
     void deleteStore(int id);
 

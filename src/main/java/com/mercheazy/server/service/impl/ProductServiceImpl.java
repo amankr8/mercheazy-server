@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDto createProduct(ProductRequestDto productRequestDto) {
-        Store store = storeOwnerRepository.findByUser(AuthUtil.getLoggedInUser()).map(StoreOwner::getStore)
+        Store store = storeOwnerRepository.findByUserId(AuthUtil.getLoggedInUserId()).map(StoreOwner::getStore)
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found."));
 
         Product product = Product.builder()

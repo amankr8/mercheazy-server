@@ -3,12 +3,14 @@ package com.mercheazy.server.entity;
 import com.mercheazy.server.dto.cart.CartResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
