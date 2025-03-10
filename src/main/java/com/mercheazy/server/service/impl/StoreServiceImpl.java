@@ -7,7 +7,6 @@ import com.mercheazy.server.entity.Store;
 import com.mercheazy.server.entity.StoreOwner;
 import com.mercheazy.server.entity.User;
 import com.mercheazy.server.exception.ResourceNotFoundException;
-import com.mercheazy.server.repository.StoreOwnerRepository;
 import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.StoreService;
@@ -25,7 +24,6 @@ import static com.mercheazy.server.entity.StoreOwner.Role.CREATOR;
 public class StoreServiceImpl implements StoreService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
-    private final StoreOwnerRepository storeOwnerRepository;
 
     @Override
     public StoreResponseDto addStore(StoreRequestDto storeRequestDto) {
