@@ -17,6 +17,9 @@ public interface ProductController {
     @GetMapping("/{id}")
     ResponseEntity<?> getProductById(@PathVariable int id);
 
+    @GetMapping("/store/{storeId}")
+    ResponseEntity<?> getProductsByStoreId(@PathVariable int storeId);
+
     @PutMapping("/{id}")
     ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ProductRequestDto productRequestDto);
 

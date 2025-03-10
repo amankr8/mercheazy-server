@@ -13,6 +13,8 @@ public interface ProductService {
 
     ProductResponseDto getProductById(int id);
 
+    List<ProductResponseDto> getProductsByStoreId(int id);
+
     ProductResponseDto updateProduct(int id, ProductRequestDto productRequestDto);
 
     void deleteProduct(int id);

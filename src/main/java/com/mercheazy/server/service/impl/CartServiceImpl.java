@@ -30,8 +30,8 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
     }
 
     @Override
-    public CartResponseDto getUserCart() {
-        return cartRepository.findByUser(AuthUtil.getLoggedInUser()).map(Cart::toCartResponseDto)
+    public CartResponseDto getCartByUser(User user) {
+        return cartRepository.findByUser(user).map(Cart::toCartResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
     }
 

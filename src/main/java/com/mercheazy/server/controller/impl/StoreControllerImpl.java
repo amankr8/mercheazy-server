@@ -40,6 +40,11 @@ public class StoreControllerImpl implements StoreController {
     }
 
     @Override
+    public ResponseEntity<?> getStoreOwnersByStoreId(int storeId) {
+        return ResponseEntity.ok(storeService.getStoreOwnersByStoreId(storeId));
+    }
+
+    @Override
     public ResponseEntity<?> deleteStoreById(int id) {
         storeService.deleteStore(id);
         return ResponseEntity.ok("Store deleted successfully!");
@@ -51,7 +56,7 @@ public class StoreControllerImpl implements StoreController {
     }
 
     @Override
-    public ResponseEntity<?> deleteStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
+    public ResponseEntity<?> removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
         return ResponseEntity.ok(storeService.removeStoreOwner(storeOwnerRequestDto));
     }
 }

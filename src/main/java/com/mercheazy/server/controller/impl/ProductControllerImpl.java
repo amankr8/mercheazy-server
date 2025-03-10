@@ -18,26 +18,27 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     public ResponseEntity<?> createProduct(ProductRequestDto productRequestDto) {
-        ProductResponseDto product = productService.createProduct(productRequestDto);
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(productService.createProduct(productRequestDto));
     }
 
     @Override
     public ResponseEntity<?> getProducts() {
-        List<ProductResponseDto> products = productService.getProducts();
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(productService.getProducts());
     }
 
     @Override
     public ResponseEntity<?> getProductById(int id) {
-        ProductResponseDto product = productService.getProductById(id);
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    @Override
+    public ResponseEntity<?> getProductsByStoreId(int storeId) {
+        return ResponseEntity.ok(productService.getProductsByStoreId(storeId));
     }
 
     @Override
     public ResponseEntity<?> updateProduct(int id, ProductRequestDto productRequestDto) {
-        ProductResponseDto updatedProduct = productService.updateProduct(id, productRequestDto);
-        return ResponseEntity.ok(updatedProduct);
+        return ResponseEntity.ok(productService.updateProduct(id, productRequestDto));
     }
 
     @Override

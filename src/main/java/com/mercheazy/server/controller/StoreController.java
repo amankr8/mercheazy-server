@@ -23,12 +23,15 @@ public interface StoreController {
     @GetMapping("/{id}")
     ResponseEntity<?> getStoreById(@PathVariable int id);
 
+    @GetMapping("/{storeId}/owners")
+    ResponseEntity<?> getStoreOwnersByStoreId(@PathVariable int storeId);
+
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteStoreById(@PathVariable int id);
 
-    @PostMapping("/owner")
+    @PostMapping("/add-owner")
     ResponseEntity<?> createStoreOwner(@RequestBody StoreOwnerRequestDto storeOwnerRequestDto);
 
-    @DeleteMapping("/owner")
-    ResponseEntity<?> deleteStoreOwner(@RequestBody StoreOwnerRequestDto storeOwnerRequestDto);
+    @DeleteMapping("/remove-owner")
+    ResponseEntity<?> removeStoreOwner(@RequestBody StoreOwnerRequestDto storeOwnerRequestDto);
 }

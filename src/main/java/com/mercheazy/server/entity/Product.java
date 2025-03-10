@@ -63,7 +63,7 @@ public class Product {
                 .stock(stock)
                 .createDate(createDate)
                 .updateDate(updateDate)
-                .images(productImages.stream().map(ProductImage::toFileResponseDto).toList())
+                .images(images)
                 .storeId(store.getId())
                 .build();
     }

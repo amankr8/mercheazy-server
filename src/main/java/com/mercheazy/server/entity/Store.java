@@ -48,8 +48,6 @@ public class Store {
                 .id(id)
                 .name(name)
                 .desc(desc)
-                .storeOwners(storeOwners.stream().map(StoreOwner::toStoreOwnerResponseDto).toList())
-                .products(products.stream().map(Product::toProductResponseDto).toList())
                 .createDate(createDate)
                 .updateDate(updateDate)
                 .build();

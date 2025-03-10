@@ -1,6 +1,5 @@
 package com.mercheazy.server.service.impl;
 
-import com.mercheazy.server.dto.FileResponseDto;
 import com.mercheazy.server.dto.product.ProductRequestDto;
 import com.mercheazy.server.dto.product.ProductResponseDto;
 import com.mercheazy.server.entity.Product;
@@ -9,13 +8,11 @@ import com.mercheazy.server.entity.Store;
 import com.mercheazy.server.entity.StoreOwner;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.model.CloudinaryFile;
-import com.mercheazy.server.repository.ProductImageRepository;
 import com.mercheazy.server.repository.ProductRepository;
 import com.mercheazy.server.repository.StoreOwnerRepository;
 import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.service.CloudinaryService;
 import com.mercheazy.server.service.ProductService;
-import com.mercheazy.server.service.StoreService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +48,7 @@ public class ProductServiceImpl implements ProductService {
                 .listPrice(productRequestDto.getListPrice())
                 .sellPrice(productRequestDto.getSellPrice())
                 .stock(productRequestDto.getStock())
+                .productImages(new ArrayList<>())
                 .store(store)
                 .build();
 
@@ -74,6 +72,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto getProductById(int id) {
         return productRepository.findById(id).map(Product::toProductResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
+    }
+
+    @Override
+    public List<ProductResponseDto> getProductsByStoreId(int id) {
+        return productRepository.findByStoreId(id).stream().map(Product::toProductResponseDto).toList();
     }
 
     @Override

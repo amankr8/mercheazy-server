@@ -1,6 +1,7 @@
 package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
+import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
 import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.dto.store.StoreResponseDto;
 import com.mercheazy.server.entity.Store;
@@ -72,6 +73,11 @@ public class StoreServiceImpl implements StoreService {
     public StoreResponseDto getStoreById(int id) {
         return storeRepository.findById(id).map(Store::toStoreResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
+    }
+
+    @Override
+    public List<StoreOwnerResponseDto> getStoreOwnersByStoreId(int storeId) {
+        return storeOwnerRepository.findByStoreId(storeId).stream().map(StoreOwner::toStoreOwnerResponseDto).toList();
     }
 
     @Override
