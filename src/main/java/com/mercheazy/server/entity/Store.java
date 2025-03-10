@@ -31,11 +31,11 @@ public class Store {
 
     @CreationTimestamp
     @Column(name = "s_create_date", nullable = false, updatable = false)
-    private Date createDate = new Date();
+    private Date createDate;
 
     @UpdateTimestamp
     @Column(name = "s_update_date", nullable = false)
-    private Date updateDate = new Date();
+    private Date updateDate;
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreOwner> storeOwners;

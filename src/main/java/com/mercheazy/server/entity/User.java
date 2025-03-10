@@ -45,12 +45,10 @@ public class User implements UserDetails {
 
     @CreationTimestamp
     @Column(name = "u_create_date", nullable = false, updatable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
     private Date createDate;
 
     @UpdateTimestamp
     @Column(name = "u_update_date", nullable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
     private Date updateDate;
 
     @Enumerated(EnumType.STRING)

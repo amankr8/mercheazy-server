@@ -1,10 +1,12 @@
 package com.mercheazy.server.entity;
 
 import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
-import com.mercheazy.server.dto.store.StoreResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.util.Date;
 
 @Data
 @Builder
@@ -30,6 +32,14 @@ public class StoreOwner {
     @Enumerated(EnumType.STRING)
     @Column(name = "so_role", nullable = false)
     private Role role;
+
+    @CreationTimestamp
+    @Column(name = "so_create_date", nullable = false, updatable = false)
+    private Date createDate;
+
+    @UpdateTimestamp
+    @Column(name = "so_update_date", nullable = false)
+    private Date updateDate;
 
     public enum Role {
         CREATOR, MANAGER
