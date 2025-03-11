@@ -1,6 +1,6 @@
 package com.mercheazy.server.entity;
 
-import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.store.StoreResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,9 +39,11 @@ public class Store {
     @Column(name = "s_update_date", nullable = false)
     private Date updateDate;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreOwner> storeOwners;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 

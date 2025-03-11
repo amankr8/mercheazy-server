@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.cart.CartResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,11 @@ public class Cart {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "u_id")
+    @JsonManagedReference
     private User user;
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<CartItem> cartItems;
 
     public CartResponseDto toCartResponseDto() {

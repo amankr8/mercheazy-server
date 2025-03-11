@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.cart.CartItemResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,6 +26,7 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "c_id")
+    @JsonBackReference
     private Cart cart;
 
     public CartItemResponseDto toCartItemResponseDto() {

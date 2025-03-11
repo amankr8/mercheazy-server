@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,10 +22,6 @@ public class StoreOwner {
     @Column(name = "so_id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "s_id")
-    private Store store;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "u_id")
     private User user;
@@ -40,6 +37,11 @@ public class StoreOwner {
     @UpdateTimestamp
     @Column(name = "so_update_date", nullable = false)
     private Date updateDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "s_id")
+    @JsonManagedReference
+    private Store store;
 
     public enum Role {
         CREATOR, MANAGER

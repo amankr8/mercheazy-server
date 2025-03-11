@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.user.UserResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
