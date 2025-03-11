@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.FileResponseDto;
 import com.mercheazy.server.dto.product.ProductResponseDto;
@@ -48,11 +49,11 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "s_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Store store;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ProductImage> productImages;
 
     public ProductResponseDto toProductResponseDto() {

@@ -1,6 +1,6 @@
 package com.mercheazy.server.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,7 +40,7 @@ public class StoreOwner {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "s_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Store store;
 
     public enum Role {
