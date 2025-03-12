@@ -3,7 +3,7 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.user.LoginRequestDto;
 import com.mercheazy.server.dto.user.SignupRequestDto;
 import com.mercheazy.server.dto.user.UserResponseDto;
-import com.mercheazy.server.entity.User;
+import com.mercheazy.server.entity.AppUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.CartService;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.mercheazy.server.entity.User.Role.ADMIN;
+import static com.mercheazy.server.entity.AppUser.Role.ADMIN;
 
 @RequiredArgsConstructor
 @Service
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @PostConstruct
     public void init() {
         if (userRepository.findByUsername(adminUsername).isEmpty()) {
-            User admin = User.builder()
+            AppUser admin = AppUser.builder()
                     .username(adminUsername)
                     .password(passwordEncoder.encode(adminPassword))
                     .email("hello@mercheazy.com")
@@ -58,14 +58,14 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("A user is already registered with this email");
         }
 
-        User user = signupRequestDto.toUser();
-        user.setUsername(generateUniqueUsername(user.getUsername()));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        AppUser appUser = signupRequestDto.toUser();
+        appUser.setUsername(generateUniqueUsername(appUser.getUsername()));
+        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
 
-        User savedUser = userRepository.save(user);
-        cartService.createUserCart(savedUser);
+        AppUser savedAppUser = userRepository.save(appUser);
+        cartService.createUserCart(savedAppUser);
 
-        return savedUser.toUserResponseDto();
+        return savedAppUser.toUserResponseDto();
     }
 
     private String generateUniqueUsername(String username) {
@@ -81,30 +81,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto login(LoginRequestDto loginRequestDto) {
-        User user = userRepository.findByEmail(loginRequestDto.getEmail())
+        AppUser appUser = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new AuthenticationCredentialsNotFoundException("Email does not exist in database"));
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        user.getUsername(),
+                        appUser.getUsername(),
                         loginRequestDto.getPassword()
                 )
         );
-        return user.toUserResponseDto();
+        return appUser.toUserResponseDto();
     }
 
     @Override
     public List<UserResponseDto> getAllUsers() {
-        return userRepository.findAll().stream().map(User::toUserResponseDto).toList();
+        return userRepository.findAll().stream().map(AppUser::toUserResponseDto).toList();
     }
 
     @Override
     public UserResponseDto getUserDetailsById(int id) {
-        return userRepository.findById(id).map(User::toUserResponseDto).orElse(null);
+        return userRepository.findById(id).map(AppUser::toUserResponseDto).orElse(null);
     }
 
     @Override
-    public User getUserById(int id) {
+    public AppUser getUserById(int id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
     }

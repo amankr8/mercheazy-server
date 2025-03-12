@@ -3,7 +3,7 @@ package com.mercheazy.server.service;
 import com.mercheazy.server.dto.user.LoginRequestDto;
 import com.mercheazy.server.dto.user.SignupRequestDto;
 import com.mercheazy.server.dto.user.UserResponseDto;
-import com.mercheazy.server.entity.User;
+import com.mercheazy.server.entity.AppUser;
 
 import java.util.List;
 
@@ -17,5 +17,5 @@ public interface UserService {
 
     UserResponseDto getUserDetailsById(int id);
 
-    User getUserById(int id);
+    AppUser getUserById(int id);
 }

@@ -3,11 +3,11 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.order.OrderItemRequestDto;
 import com.mercheazy.server.dto.order.OrderRequestDto;
 import com.mercheazy.server.dto.order.OrderResponseDto;
-import com.mercheazy.server.entity.Order;
-import com.mercheazy.server.entity.Order.OrderStatus;
-import com.mercheazy.server.entity.OrderItem;
+import com.mercheazy.server.entity.MerchOrder;
+import com.mercheazy.server.entity.MerchOrder.OrderStatus;
+import com.mercheazy.server.entity.MerchOrderItem;
 import com.mercheazy.server.entity.Product;
-import com.mercheazy.server.entity.User;
+import com.mercheazy.server.entity.AppUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.OrderRepository;
 import com.mercheazy.server.repository.ProductRepository;
@@ -32,30 +32,30 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
             throw new IllegalArgumentException("Order items cannot be empty.");
         }
 
-        Order order = Order.builder()
-                .user(AuthUtil.getLoggedInUser())
+        MerchOrder merchOrder = MerchOrder.builder()
+                .appUser(AuthUtil.getLoggedInUser())
                 .status(OrderStatus.PENDING)
                 .build();
-        order = orderRepository.save(order);
+        merchOrder = orderRepository.save(merchOrder);
 
-        List<OrderItem> orderItems = saveOrderItems(orderRequestDto.getOrderItems(), order);
+        List<MerchOrderItem> merchOrderItems = saveOrderItems(orderRequestDto.getOrderItems(), merchOrder);
 
-        order.setOrderItems(orderItems);
-        double totalPrice = orderItems.stream()
+        merchOrder.setMerchOrderItems(merchOrderItems);
+        double totalPrice = merchOrderItems.stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
-        order.setTotalPrice(totalPrice);
+        merchOrder.setTotalPrice(totalPrice);
 
-        return orderRepository.save(order).toOrderResponseDto();
+        return orderRepository.save(merchOrder).toOrderResponseDto();
     }
 
-    private List<OrderItem> saveOrderItems(List<OrderItemRequestDto> orderItemRequestDtos, Order order) {
+    private List<MerchOrderItem> saveOrderItems(List<OrderItemRequestDto> orderItemRequestDtos, MerchOrder merchOrder) {
         return orderItemRequestDtos.stream()
                 .map(requestDtoOrderItem -> {
                     Product product = productRepository.findById(requestDtoOrderItem.getProductId())
                             .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
-                    return OrderItem.builder()
-                            .order(order)
+                    return MerchOrderItem.builder()
+                            .merchOrder(merchOrder)
                             .product(product)
                             .price(product.getSellPrice())
                             .quantity(requestDtoOrderItem.getQuantity())
@@ -65,17 +65,17 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
 
     @Override
     public List<OrderResponseDto> getOrdersByUser(int userId) {
-        User user = userRepository.findById(userId)
+        AppUser appUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found."));
-        return orderRepository.findByUserId(user.getId())
-                .stream().map(Order::toOrderResponseDto).toList();
+        return orderRepository.findByAppUserId(appUser.getId())
+                .stream().map(MerchOrder::toOrderResponseDto).toList();
     }
 
     @Override
     public OrderResponseDto updateOrderStatus(int id, OrderStatus status) {
-        Order order = orderRepository.findById(id)
+        MerchOrder merchOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found."));
-        order.setStatus(status);
-        return orderRepository.save(order).toOrderResponseDto();
+        merchOrder.setStatus(status);
+        return orderRepository.save(merchOrder).toOrderResponseDto();
     }
 }

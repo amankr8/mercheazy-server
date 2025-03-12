@@ -5,7 +5,7 @@ import com.mercheazy.server.dto.cart.CartResponseDto;
 import com.mercheazy.server.entity.Cart;
 import com.mercheazy.server.entity.CartItem;
 import com.mercheazy.server.entity.Product;
-import com.mercheazy.server.entity.User;
+import com.mercheazy.server.entity.AppUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.CartItemRepository;
 import com.mercheazy.server.repository.CartRepository;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -25,9 +24,9 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
     private final ProductRepository productRepository;
 
     @Override
-    public void createUserCart(User user) {
+    public void createUserCart(AppUser appUser) {
         Cart cart = Cart.builder()
-                .user(user)
+                .appUser(appUser)
                 .cartItems(new ArrayList<>())
                 .build();
         cartRepository.save(cart);
@@ -36,13 +35,13 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
 
     @Override
     public CartResponseDto getCartByUserId(int userId) {
-        return cartRepository.findByUserId(userId).map(Cart::toCartResponseDto)
+        return cartRepository.findByAppUserId(userId).map(Cart::toCartResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
     }
 
     @Override
     public CartResponseDto addToCart(CartItemRequestDto cartItemRequestDto) {
-        Cart cart = cartRepository.findByUserId(AuthUtil.getLoggedInUser().getId())
+        Cart cart = cartRepository.findByAppUserId(AuthUtil.getLoggedInUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         Product product = productRepository.findById(cartItemRequestDto.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
@@ -75,7 +74,7 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
 
     @Override
     public CartResponseDto removeFromCart(CartItemRequestDto cartItemRequestDto) {
-        Cart cart = cartRepository.findByUserId(AuthUtil.getLoggedInUser().getId())
+        Cart cart = cartRepository.findByAppUserId(AuthUtil.getLoggedInUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         Product product = productRepository.findById(cartItemRequestDto.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found."));

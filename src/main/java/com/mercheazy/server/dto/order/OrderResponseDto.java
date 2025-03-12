@@ -1,6 +1,6 @@
 package com.mercheazy.server.dto.order;
 
-import com.mercheazy.server.entity.Order.OrderStatus;
+import com.mercheazy.server.entity.MerchOrder.OrderStatus;
 import lombok.Builder;
 import lombok.Data;
 

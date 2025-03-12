@@ -6,7 +6,7 @@ import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.dto.store.StoreResponseDto;
 import com.mercheazy.server.entity.Store;
 import com.mercheazy.server.entity.StoreOwner;
-import com.mercheazy.server.entity.User;
+import com.mercheazy.server.entity.AppUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.StoreOwnerRepository;
 import com.mercheazy.server.repository.StoreRepository;
@@ -30,8 +30,8 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponseDto addStore(StoreRequestDto storeRequestDto) {
-        User currentUser = AuthUtil.getLoggedInUser();
-        if (storeOwnerRepository.findByUserId(currentUser.getId()).isPresent()) {
+        AppUser currentAppUser = AuthUtil.getLoggedInUser();
+        if (storeOwnerRepository.findByAppUserId(currentAppUser.getId()).isPresent()) {
             throw new IllegalArgumentException("User already has a store.");
         }
 
@@ -44,7 +44,7 @@ public class StoreServiceImpl implements StoreService {
 
         StoreOwner storeOwner = StoreOwner.builder()
                 .store(store)
-                .user(currentUser)
+                .appUser(currentAppUser)
                 .role(CREATOR)
                 .build();
 
@@ -81,7 +81,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponseDto getStoreByUserId(int userId) {
-        return storeOwnerRepository.findByUserId(userId).map(StoreOwner::getStore).map(Store::toStoreResponseDto)
+        return storeOwnerRepository.findByAppUserId(userId).map(StoreOwner::getStore).map(Store::toStoreResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
     }
 
@@ -96,17 +96,17 @@ public class StoreServiceImpl implements StoreService {
                 .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
 
         boolean isUserAuthorized = store.getStoreOwners().stream()
-                .anyMatch(it -> it.getUser().equals(AuthUtil.getLoggedInUser()) && it.getRole() == CREATOR);
+                .anyMatch(it -> it.getAppUser().equals(AuthUtil.getLoggedInUser()) && it.getRole() == CREATOR);
 
         if (!isUserAuthorized) {
             throw new IllegalArgumentException("You are not authorized to add store owners.");
         }
 
-        User user = userRepository.findById(storeOwnerRequestDto.getUserId())
+        AppUser appUser = userRepository.findById(storeOwnerRequestDto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         boolean alreadyOwner = store.getStoreOwners().stream()
-                .anyMatch(it -> it.getUser().equals(user));
+                .anyMatch(it -> it.getAppUser().equals(appUser));
 
         if (alreadyOwner) {
             throw new IllegalArgumentException("User is already a store owner.");
@@ -114,7 +114,7 @@ public class StoreServiceImpl implements StoreService {
 
         StoreOwner storeOwner = StoreOwner.builder()
                 .store(store)
-                .user(user)
+                .appUser(appUser)
                 .role(storeOwnerRequestDto.getRole())
                 .build();
         storeOwner = storeOwnerRepository.save(storeOwner);
@@ -129,17 +129,17 @@ public class StoreServiceImpl implements StoreService {
                 .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
 
         boolean isUserAuthorized = store.getStoreOwners().stream()
-                .anyMatch(it -> it.getUser().equals(AuthUtil.getLoggedInUser()) && it.getRole() == CREATOR);
+                .anyMatch(it -> it.getAppUser().equals(AuthUtil.getLoggedInUser()) && it.getRole() == CREATOR);
 
         if (!isUserAuthorized) {
             throw new IllegalArgumentException("You are not authorized to remove store owners.");
         }
 
-        User user = userRepository.findById(storeOwnerRequestDto.getUserId())
+        AppUser appUser = userRepository.findById(storeOwnerRequestDto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         StoreOwner storeOwner = store.getStoreOwners().stream()
-                .filter(it -> it.getUser().equals(user))
+                .filter(it -> it.getAppUser().equals(appUser))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("User is not a store owner."));
 

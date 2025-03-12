@@ -1,7 +1,7 @@
 package com.mercheazy.server.controller;
 
 import com.mercheazy.server.dto.order.OrderRequestDto;
-import com.mercheazy.server.entity.Order.OrderStatus;
+import com.mercheazy.server.entity.MerchOrder.OrderStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -19,35 +19,35 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "merch_order")
-public class Order {
+public class MerchOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "o_id")
+    @Column(name = "mo_id")
     private int id;
 
     @CreationTimestamp
-    @Column(name = "o_create_date", nullable = false, updatable = false)
+    @Column(name = "mo_create_date", nullable = false, updatable = false)
     private Date createDate;
 
     @UpdateTimestamp
-    @Column(name = "o_update_date", nullable = false)
+    @Column(name = "mo_update_date", nullable = false)
     private Date updateDate;
 
-    @Column(name = "o_total_price", nullable = false)
+    @Column(name = "mo_total_price", nullable = false)
     private double totalPrice;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "o_status", nullable = false)
+    @Column(name = "mo_status", nullable = false)
     private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "u_id")
-    private User user;
+    @JoinColumn(name = "au_id")
+    private AppUser appUser;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "merchOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<OrderItem> orderItems;
+    private List<MerchOrderItem> merchOrderItems;
 
     public enum OrderStatus {
         PENDING, CREATED, PLACED, SHIPPED, DELIVERED, CANCELLED
@@ -60,8 +60,8 @@ public class Order {
                 .updateDate(updateDate)
                 .totalPrice(totalPrice)
                 .status(status)
-                .orderItems(orderItems.stream()
-                        .map(OrderItem::toOrderItemResponseDto)
+                .orderItems(merchOrderItems.stream()
+                        .map(MerchOrderItem::toOrderItemResponseDto)
                         .toList())
                 .build();
     }

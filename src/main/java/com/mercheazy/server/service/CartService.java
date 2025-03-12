@@ -2,10 +2,10 @@ package com.mercheazy.server.service;
 
 import com.mercheazy.server.dto.cart.CartItemRequestDto;
 import com.mercheazy.server.dto.cart.CartResponseDto;
-import com.mercheazy.server.entity.User;
+import com.mercheazy.server.entity.AppUser;
 
 public interface CartService {
-    void createUserCart(User user);
+    void createUserCart(AppUser appUser);
 
     CartResponseDto addToCart(CartItemRequestDto cartRequestDto);
 

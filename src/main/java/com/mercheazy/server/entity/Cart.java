@@ -24,9 +24,9 @@ public class Cart {
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "u_id")
+    @JoinColumn(name = "au_id")
     @JsonManagedReference
-    private User user;
+    private AppUser appUser;
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

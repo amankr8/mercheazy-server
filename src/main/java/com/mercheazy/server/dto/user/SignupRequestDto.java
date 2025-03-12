@@ -1,12 +1,11 @@
 package com.mercheazy.server.dto.user;
 
-import com.mercheazy.server.entity.User;
-import com.mercheazy.server.entity.User.Role;
+import com.mercheazy.server.entity.AppUser;
+import com.mercheazy.server.entity.AppUser.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
 public class SignupRequestDto {
@@ -28,9 +27,9 @@ public class SignupRequestDto {
 
     private Role role;
 
-    public User toUser() {
+    public AppUser toUser() {
         Role role = this.role == null ? Role.USER : this.role;
-        return User.builder()
+        return AppUser.builder()
                 .firstName(firstName)
                 .lastName(lastName)
                 .username((firstName + lastName).toLowerCase())

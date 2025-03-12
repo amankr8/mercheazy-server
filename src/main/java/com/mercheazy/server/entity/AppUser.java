@@ -1,6 +1,5 @@
 package com.mercheazy.server.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.user.UserResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,39 +20,39 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "app_user")
-public class User implements UserDetails {
+public class AppUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "u_id")
+    @Column(name = "au_id")
     private int id;
 
-    @Column(name = "u_username", unique = true, nullable = false)
+    @Column(name = "au_username", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "u_first_name", nullable = false)
+    @Column(name = "au_first_name", nullable = false)
     @ColumnDefault("'User'")
     private String firstName;
 
-    @Column(name = "u_last_name")
+    @Column(name = "au_last_name")
     private String lastName;
 
-    @Column(name = "u_password", nullable = false)
+    @Column(name = "au_password", nullable = false)
     private String password;
 
-    @Column(name = "u_email", unique = true, nullable = false)
+    @Column(name = "au_email", unique = true, nullable = false)
     private String email;
 
     @CreationTimestamp
-    @Column(name = "u_create_date", nullable = false, updatable = false)
+    @Column(name = "au_create_date", nullable = false, updatable = false)
     private Date createDate;
 
     @UpdateTimestamp
-    @Column(name = "u_update_date", nullable = false)
+    @Column(name = "au_update_date", nullable = false)
     private Date updateDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "u_role", nullable = false)
+    @Column(name = "au_role", nullable = false)
     @ColumnDefault("'USER'")
     private Role role;
 

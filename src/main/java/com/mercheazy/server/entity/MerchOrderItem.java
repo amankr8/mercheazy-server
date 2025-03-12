@@ -13,18 +13,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "order_item")
-public class OrderItem {
+@Table(name = "merch_order_item")
+public class MerchOrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "oi_id")
+    @Column(name = "moi_id")
     private int id;
 
-    @Column(name = "oi_quantity", nullable = false)
+    @Column(name = "moi_quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "oi_price", nullable = false)
+    @Column(name = "moi_price", nullable = false)
     private double price;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -32,9 +32,9 @@ public class OrderItem {
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "o_id")
+    @JoinColumn(name = "mo_id")
     @JsonBackReference
-    private Order order;
+    private MerchOrder merchOrder;
 
     public OrderItemResponseDto toOrderItemResponseDto() {
         return OrderItemResponseDto.builder()

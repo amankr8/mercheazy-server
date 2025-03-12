@@ -23,8 +23,8 @@ public class StoreOwner {
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "u_id")
-    private User user;
+    @JoinColumn(name = "au_id")
+    private AppUser appUser;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "so_role", nullable = false)
@@ -50,7 +50,7 @@ public class StoreOwner {
     public StoreOwnerResponseDto toStoreOwnerResponseDto() {
         return StoreOwnerResponseDto.builder()
                 .id(id)
-                .userId(user.getId())
+                .userId(appUser.getId())
                 .role(role)
                 .build();
     }
