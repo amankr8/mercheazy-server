@@ -12,7 +12,7 @@ import java.util.List;
 public class OrderResponseDto {
     private int id;
     private int storeId;
-    private int totalPrice;
+    private double totalPrice;
     private OrderStatus status;
     private List<OrderItemResponseDto> orderItems;
     private Date createDate;

@@ -24,8 +24,8 @@ public class OrderItem {
     @Column(name = "oi_quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "oi__cost", nullable = false)
-    private int price;
+    @Column(name = "oi_price", nullable = false)
+    private double price;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")

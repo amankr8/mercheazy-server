@@ -9,5 +9,5 @@ public class OrderItemResponseDto {
     private int id;
     private int productId;
     private int quantity;
-    private int price;
+    private double price;
 }

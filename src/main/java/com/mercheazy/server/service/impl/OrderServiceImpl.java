@@ -33,7 +33,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
                             .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
                     return OrderItem.builder()
                             .product(product)
-                            .price(requestDtoOrderItem.getPrice())
+                            .price(product.getSellPrice())
                             .quantity(requestDtoOrderItem.getQuantity())
                             .build();
                 }).toList();

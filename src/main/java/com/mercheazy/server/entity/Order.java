@@ -38,11 +38,10 @@ public class Order {
     private Date updateDate;
 
     @Column(name = "o_total_price", nullable = false)
-    private int totalPrice;
+    private double totalPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "o_status", nullable = false)
-    @ColumnDefault("'PENDING'")
     private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
