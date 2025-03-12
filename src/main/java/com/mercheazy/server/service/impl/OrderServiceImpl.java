@@ -10,7 +10,6 @@ import com.mercheazy.server.entity.Product;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.OrderRepository;
 import com.mercheazy.server.repository.ProductRepository;
-import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import java.util.List;
 public class OrderServiceImpl implements com.mercheazy.server.service.OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    private final StoreRepository storeRepository;
 
     @Override
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
