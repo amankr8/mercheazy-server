@@ -30,7 +30,6 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final StoreRepository storeRepository;
     private final StoreOwnerRepository storeOwnerRepository;
     private final CloudinaryService cloudinaryService;
 
@@ -38,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
     private String APP_NAME;
 
     @Override
-    public ProductResponseDto createProduct(ProductRequestDto productRequestDto) {
+    public Product createProduct(ProductRequestDto productRequestDto) {
         Store store = storeOwnerRepository.findByAppUserId(AuthUtil.getLoggedInUser().getId()).map(StoreOwner::getStore)
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found."));
 
@@ -59,38 +58,47 @@ public class ProductServiceImpl implements ProductService {
             product.setProductImages(productImages);
             productRepository.save(product);
         }
-
-        return product.toProductResponseDto();
+        return product;
     }
 
     @Override
-    public List<ProductResponseDto> getProducts() {
-        return productRepository.findAll().stream().map(Product::toProductResponseDto).toList();
+    public List<Product> getProducts() {
+        return productRepository.findAll();
     }
 
     @Override
-    public ProductResponseDto getProductById(int id) {
-        return productRepository.findById(id).map(Product::toProductResponseDto)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
+    public Product getProductById(int id) {
+        return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found."));
     }
 
     @Override
-    public List<ProductResponseDto> getProductsByStoreId(int id) {
-        return productRepository.findByStoreId(id).stream().map(Product::toProductResponseDto).toList();
+    public List<Product> getProductsByStoreId(int id) {
+        return productRepository.findByStoreId(id);
     }
 
     @Override
-    public ProductResponseDto updateProduct(int id, ProductRequestDto productRequestDto) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-
+    public Product updateProduct(int id, ProductRequestDto productRequestDto) {
+        Product product = getProductById(id);
         product.setName(productRequestDto.getName());
         product.setDesc(productRequestDto.getDesc());
         product.setStock(productRequestDto.getStock());
         product.setListPrice(productRequestDto.getListPrice());
         product.setSellPrice(productRequestDto.getSellPrice());
 
-        return productRepository.save(product).toProductResponseDto();
+        return productRepository.save(product);
+    }
+
+    @Override
+    public boolean outOfStock(int productId, int quantity) {
+        Product product = getProductById(productId);
+        return product.getStock() < quantity;
+    }
+
+    @Override
+    public void updateStock(int productId, int stock) {
+        Product product = getProductById(productId);
+        product.setStock(stock);
+        productRepository.save(product);
     }
 
     @Override

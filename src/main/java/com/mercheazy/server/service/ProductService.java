@@ -2,20 +2,25 @@ package com.mercheazy.server.service;
 
 import com.mercheazy.server.dto.product.ProductRequestDto;
 import com.mercheazy.server.dto.product.ProductResponseDto;
+import com.mercheazy.server.entity.product.Product;
 
 import java.util.List;
 
 public interface ProductService {
 
-    ProductResponseDto createProduct(ProductRequestDto productRequestDto);
+    Product createProduct(ProductRequestDto productRequestDto);
 
-    List<ProductResponseDto> getProducts();
+    List<Product> getProducts();
 
-    ProductResponseDto getProductById(int id);
+    Product getProductById(int id);
 
-    List<ProductResponseDto> getProductsByStoreId(int id);
+    List<Product> getProductsByStoreId(int id);
 
-    ProductResponseDto updateProduct(int id, ProductRequestDto productRequestDto);
+    Product updateProduct(int id, ProductRequestDto productRequestDto);
+
+    boolean outOfStock(int productId, int quantity);
+
+    void updateStock(int productId, int stock);
 
     void deleteProduct(int id);
 }

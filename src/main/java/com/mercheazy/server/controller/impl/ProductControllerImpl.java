@@ -3,6 +3,7 @@ package com.mercheazy.server.controller.impl;
 import com.mercheazy.server.controller.ProductController;
 import com.mercheazy.server.dto.product.ProductRequestDto;
 import com.mercheazy.server.dto.product.ProductResponseDto;
+import com.mercheazy.server.entity.product.Product;
 import com.mercheazy.server.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,27 +19,34 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     public ResponseEntity<?> createProduct(ProductRequestDto productRequestDto) {
-        return ResponseEntity.ok(productService.createProduct(productRequestDto));
+        ProductResponseDto product = productService.createProduct(productRequestDto).toProductResponseDto();
+        return ResponseEntity.ok(product);
     }
 
     @Override
     public ResponseEntity<?> getProducts() {
-        return ResponseEntity.ok(productService.getProducts());
+        List<ProductResponseDto> products = productService.getProducts().stream()
+                .map(Product::toProductResponseDto).toList();
+        return ResponseEntity.ok(products);
     }
 
     @Override
     public ResponseEntity<?> getProductById(int id) {
-        return ResponseEntity.ok(productService.getProductById(id));
+        ProductResponseDto product = productService.getProductById(id).toProductResponseDto();
+        return ResponseEntity.ok(product);
     }
 
     @Override
     public ResponseEntity<?> getProductsByStoreId(int storeId) {
-        return ResponseEntity.ok(productService.getProductsByStoreId(storeId));
+        List<ProductResponseDto> products = productService.getProductsByStoreId(storeId).stream()
+                .map(Product::toProductResponseDto).toList();
+        return ResponseEntity.ok(products);
     }
 
     @Override
     public ResponseEntity<?> updateProduct(int id, ProductRequestDto productRequestDto) {
-        return ResponseEntity.ok(productService.updateProduct(id, productRequestDto));
+        ProductResponseDto updatedProduct = productService.updateProduct(id, productRequestDto).toProductResponseDto();
+        return ResponseEntity.ok(updatedProduct);
     }
 
     @Override

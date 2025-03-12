@@ -12,4 +12,6 @@ public interface CartService {
     CartResponseDto removeFromCart(CartItemRequestDto cartItemRequestDto);
 
     CartResponseDto getCartByUserId(int userId);
+
+    void clearCartByUserId(int userId);
 }

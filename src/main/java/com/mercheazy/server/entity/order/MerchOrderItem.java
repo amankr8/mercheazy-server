@@ -28,7 +28,7 @@ public class MerchOrderItem {
     @Column(name = "moi_price", nullable = false)
     private double price;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
     private Product product;
 

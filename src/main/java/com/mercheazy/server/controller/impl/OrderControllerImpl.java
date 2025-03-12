@@ -1,6 +1,6 @@
 package com.mercheazy.server.controller.impl;
 
-import com.mercheazy.server.dto.order.OrderRequestDto;
+import com.mercheazy.server.dto.order.OrderItemRequestDto;
 import com.mercheazy.server.entity.order.MerchOrder.OrderStatus;
 import com.mercheazy.server.service.OrderService;
 import com.mercheazy.server.util.AuthUtil;
@@ -14,8 +14,13 @@ public class OrderControllerImpl implements com.mercheazy.server.controller.Orde
     private final OrderService orderService;
 
     @Override
-    public ResponseEntity<?> createOrder(OrderRequestDto orderRequestDto) {
-        return ResponseEntity.ok(orderService.createOrder(orderRequestDto));
+    public ResponseEntity<?> createOrder(OrderItemRequestDto orderItemRequestDto) {
+        return ResponseEntity.ok(orderService.placeOrder(orderItemRequestDto));
+    }
+
+    @Override
+    public ResponseEntity<?> checkoutCart() {
+        return ResponseEntity.ok(orderService.checkoutCartByUserId(AuthUtil.getLoggedInUser().getId()));
     }
 
     @Override
