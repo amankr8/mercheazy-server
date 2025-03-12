@@ -7,48 +7,68 @@ import com.mercheazy.server.entity.Order;
 import com.mercheazy.server.entity.Order.OrderStatus;
 import com.mercheazy.server.entity.OrderItem;
 import com.mercheazy.server.entity.Product;
+import com.mercheazy.server.entity.User;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.OrderRepository;
 import com.mercheazy.server.repository.ProductRepository;
+import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements com.mercheazy.server.service.OrderService {
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
     @Override
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
-        List<OrderItemRequestDto> requestDtoOrderItems = orderRequestDto.getOrderItems();
-        List<OrderItem> orderItems = requestDtoOrderItems.stream()
+        if (orderRequestDto.getOrderItems().isEmpty()) {
+            throw new IllegalArgumentException("Order items cannot be empty.");
+        }
+
+        Order order = Order.builder()
+                .user(AuthUtil.getLoggedInUser())
+                .status(OrderStatus.PENDING)
+                .build();
+        order = orderRepository.save(order);
+
+        List<OrderItem> orderItems = saveOrderItems(orderRequestDto.getOrderItems(), order);
+
+        order.setOrderItems(orderItems);
+        double totalPrice = orderItems.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+        order.setTotalPrice(totalPrice);
+
+        return orderRepository.save(order).toOrderResponseDto();
+    }
+
+    private List<OrderItem> saveOrderItems(List<OrderItemRequestDto> orderItemRequestDtos, Order order) {
+        return orderItemRequestDtos.stream()
                 .map(requestDtoOrderItem -> {
                     Product product = productRepository.findById(requestDtoOrderItem.getProductId())
                             .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
                     return OrderItem.builder()
+                            .order(order)
                             .product(product)
                             .price(product.getSellPrice())
                             .quantity(requestDtoOrderItem.getQuantity())
                             .build();
-                }).toList();
+                }).collect(Collectors.toList());
+    }
 
-        double totalPrice = orderItems.stream().map(orderItem -> {
-            double price = orderItem.getPrice();
-            int quantity = orderItem.getQuantity();
-            return price * quantity;
-        }).reduce(0.0, Double::sum);
-        Order order = Order.builder()
-                .totalPrice(totalPrice)
-                .user(AuthUtil.getLoggedInUser())
-                .status(OrderStatus.PENDING)
-                .orderItems(orderItems)
-                .build();
-
-        return orderRepository.save(order).toOrderResponseDto();
+    @Override
+    public List<OrderResponseDto> getOrdersByUser(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
+        return orderRepository.findByUserId(user.getId())
+                .stream().map(Order::toOrderResponseDto).toList();
     }
 
     @Override

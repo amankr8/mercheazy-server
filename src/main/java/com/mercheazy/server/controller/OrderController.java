@@ -10,6 +10,9 @@ public interface OrderController {
     @PostMapping
     ResponseEntity<?> createOrder(@RequestBody OrderRequestDto orderRequestDto);
 
+    @GetMapping("/user")
+    ResponseEntity<?> getUserOrders();
+
     @PutMapping("/{id}")
     ResponseEntity<?> updateOrderStatus(@PathVariable int id, @RequestBody OrderStatus orderStatus);
 }

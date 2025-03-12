@@ -3,6 +3,7 @@ package com.mercheazy.server.controller.impl;
 import com.mercheazy.server.dto.order.OrderRequestDto;
 import com.mercheazy.server.entity.Order.OrderStatus;
 import com.mercheazy.server.service.OrderService;
+import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,11 @@ public class OrderControllerImpl implements com.mercheazy.server.controller.Orde
     @Override
     public ResponseEntity<?> createOrder(OrderRequestDto orderRequestDto) {
         return ResponseEntity.ok(orderService.createOrder(orderRequestDto));
+    }
+
+    @Override
+    public ResponseEntity<?> getUserOrders() {
+        return ResponseEntity.ok(orderService.getOrdersByUser(AuthUtil.getLoggedInUser().getId()));
     }
 
     @Override
