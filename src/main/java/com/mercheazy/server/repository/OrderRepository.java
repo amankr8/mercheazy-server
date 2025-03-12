@@ -1,6 +1,6 @@
 package com.mercheazy.server.repository;
 
-import com.mercheazy.server.entity.MerchOrder;
+import com.mercheazy.server.entity.order.MerchOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

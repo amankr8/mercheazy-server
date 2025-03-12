@@ -1,6 +1,6 @@
 package com.mercheazy.server.repository;
 
-import com.mercheazy.server.entity.AppUser;
+import com.mercheazy.server.entity.user.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

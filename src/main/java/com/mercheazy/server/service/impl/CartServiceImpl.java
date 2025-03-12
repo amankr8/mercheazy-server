@@ -2,10 +2,10 @@ package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.cart.CartItemRequestDto;
 import com.mercheazy.server.dto.cart.CartResponseDto;
-import com.mercheazy.server.entity.Cart;
-import com.mercheazy.server.entity.CartItem;
-import com.mercheazy.server.entity.Product;
-import com.mercheazy.server.entity.AppUser;
+import com.mercheazy.server.entity.cart.Cart;
+import com.mercheazy.server.entity.cart.CartItem;
+import com.mercheazy.server.entity.product.Product;
+import com.mercheazy.server.entity.user.AppUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.CartItemRepository;
 import com.mercheazy.server.repository.CartRepository;

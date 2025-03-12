@@ -1,7 +1,7 @@
 package com.mercheazy.server.controller.impl;
 
 import com.mercheazy.server.dto.order.OrderRequestDto;
-import com.mercheazy.server.entity.MerchOrder.OrderStatus;
+import com.mercheazy.server.entity.order.MerchOrder.OrderStatus;
 import com.mercheazy.server.service.OrderService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,8 @@
-package com.mercheazy.server.entity;
+package com.mercheazy.server.entity.cart;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.cart.CartItemResponseDto;
+import com.mercheazy.server.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 

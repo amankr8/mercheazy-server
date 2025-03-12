@@ -3,7 +3,7 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.user.LoginRequestDto;
 import com.mercheazy.server.dto.user.SignupRequestDto;
 import com.mercheazy.server.dto.user.UserResponseDto;
-import com.mercheazy.server.entity.AppUser;
+import com.mercheazy.server.entity.user.AppUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.CartService;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.mercheazy.server.entity.AppUser.Role.ADMIN;
+import static com.mercheazy.server.entity.user.AppUser.Role.ADMIN;
 
 @RequiredArgsConstructor
 @Service

@@ -1,4 +1,4 @@
-package com.mercheazy.server.entity;
+package com.mercheazy.server.entity.user;
 
 import com.mercheazy.server.dto.user.UserResponseDto;
 import jakarta.persistence.*;

@@ -1,7 +1,7 @@
 package com.mercheazy.server.dto.user;
 
-import com.mercheazy.server.entity.AppUser;
-import com.mercheazy.server.entity.AppUser.Role;
+import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AppUser.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

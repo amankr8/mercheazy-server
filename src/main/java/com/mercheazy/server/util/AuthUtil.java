@@ -1,6 +1,6 @@
 package com.mercheazy.server.util;
 
-import com.mercheazy.server.entity.AppUser;
+import com.mercheazy.server.entity.user.AppUser;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AuthUtil {

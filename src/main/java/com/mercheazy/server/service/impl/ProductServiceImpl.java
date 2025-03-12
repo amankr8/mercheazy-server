@@ -2,10 +2,10 @@ package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.product.ProductRequestDto;
 import com.mercheazy.server.dto.product.ProductResponseDto;
-import com.mercheazy.server.entity.Product;
-import com.mercheazy.server.entity.ProductImage;
-import com.mercheazy.server.entity.Store;
-import com.mercheazy.server.entity.StoreOwner;
+import com.mercheazy.server.entity.product.Product;
+import com.mercheazy.server.entity.product.ProductImage;
+import com.mercheazy.server.entity.store.Store;
+import com.mercheazy.server.entity.store.StoreOwner;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.model.CloudinaryFile;
 import com.mercheazy.server.repository.ProductRepository;

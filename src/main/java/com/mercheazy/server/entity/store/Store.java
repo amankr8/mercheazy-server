@@ -1,7 +1,8 @@
-package com.mercheazy.server.entity;
+package com.mercheazy.server.entity.store;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.store.StoreResponseDto;
+import com.mercheazy.server.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

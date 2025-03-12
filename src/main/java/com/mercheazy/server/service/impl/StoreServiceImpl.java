@@ -4,9 +4,9 @@ import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
 import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
 import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.dto.store.StoreResponseDto;
-import com.mercheazy.server.entity.Store;
-import com.mercheazy.server.entity.StoreOwner;
-import com.mercheazy.server.entity.AppUser;
+import com.mercheazy.server.entity.store.Store;
+import com.mercheazy.server.entity.store.StoreOwner;
+import com.mercheazy.server.entity.user.AppUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.StoreOwnerRepository;
 import com.mercheazy.server.repository.StoreRepository;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mercheazy.server.entity.StoreOwner.Role.CREATOR;
+import static com.mercheazy.server.entity.store.StoreOwner.Role.CREATOR;
 
 @RequiredArgsConstructor
 @Service

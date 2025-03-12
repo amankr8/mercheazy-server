@@ -2,7 +2,7 @@ package com.mercheazy.server.service;
 
 import com.mercheazy.server.dto.order.OrderRequestDto;
 import com.mercheazy.server.dto.order.OrderResponseDto;
-import com.mercheazy.server.entity.MerchOrder.OrderStatus;
+import com.mercheazy.server.entity.order.MerchOrder.OrderStatus;
 
 import java.util.List;
 

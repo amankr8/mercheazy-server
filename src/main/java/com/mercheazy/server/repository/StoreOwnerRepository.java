@@ -1,6 +1,6 @@
 package com.mercheazy.server.repository;
 
-import com.mercheazy.server.entity.StoreOwner;
+import com.mercheazy.server.entity.store.StoreOwner;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

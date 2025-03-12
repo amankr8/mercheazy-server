@@ -1,8 +1,8 @@
 package com.mercheazy.server.repository;
 
-import com.mercheazy.server.entity.Cart;
-import com.mercheazy.server.entity.CartItem;
-import com.mercheazy.server.entity.Product;
+import com.mercheazy.server.entity.cart.Cart;
+import com.mercheazy.server.entity.cart.CartItem;
+import com.mercheazy.server.entity.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

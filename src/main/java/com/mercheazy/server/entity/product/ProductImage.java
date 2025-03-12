@@ -1,4 +1,4 @@
-package com.mercheazy.server.entity;
+package com.mercheazy.server.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.FileResponseDto;
