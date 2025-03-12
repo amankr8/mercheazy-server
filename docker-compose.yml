@@ -23,7 +23,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: mercheazy-db
+      POSTGRES_DB: mercheazy_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
