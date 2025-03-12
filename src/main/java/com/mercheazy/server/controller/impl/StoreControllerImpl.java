@@ -51,13 +51,13 @@ public class StoreControllerImpl implements StoreController {
     }
 
     @Override
-    public ResponseEntity<?> createStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        return ResponseEntity.ok(storeService.addStoreOwner(storeOwnerRequestDto));
+    public ResponseEntity<?> createStoreOwner(int id, StoreOwnerRequestDto storeOwnerRequestDto) {
+        return ResponseEntity.ok(storeService.addStoreOwner(id, storeOwnerRequestDto));
     }
 
     @Override
-    public ResponseEntity<?> removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        storeService.removeStoreOwner(storeOwnerRequestDto);
+    public ResponseEntity<?> removeStoreOwner(int id, StoreOwnerRequestDto storeOwnerRequestDto) {
+        storeService.removeStoreOwner(id, storeOwnerRequestDto);
         return ResponseEntity.ok("Store owner removed successfully!");
     }
 }

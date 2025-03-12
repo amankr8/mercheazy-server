@@ -1,0 +1,20 @@
+package com.mercheazy.server.dto.order;
+
+import com.mercheazy.server.entity.Order.OrderStatus;
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
+
+@Data
+@Builder
+public class OrderResponseDto {
+    private int id;
+    private int storeId;
+    private int totalPrice;
+    private OrderStatus status;
+    private List<OrderItemResponseDto> orderItems;
+    private Date createDate;
+    private Date updateDate;
+}

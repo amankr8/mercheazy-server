@@ -91,8 +91,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreOwnerResponseDto addStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        Store store = storeRepository.findById(storeOwnerRequestDto.getStoreId())
+    public StoreOwnerResponseDto addStoreOwner(int storeId, StoreOwnerRequestDto storeOwnerRequestDto) {
+        Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
 
         boolean isUserAuthorized = store.getStoreOwners().stream()
@@ -124,8 +124,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void removeStoreOwner(StoreOwnerRequestDto storeOwnerRequestDto) {
-        Store store = storeRepository.findById(storeOwnerRequestDto.getStoreId())
+    public void removeStoreOwner(int storeId, StoreOwnerRequestDto storeOwnerRequestDto) {
+        Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Store does not exist."));
 
         boolean isUserAuthorized = store.getStoreOwners().stream()

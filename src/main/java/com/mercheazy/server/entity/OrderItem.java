@@ -1,12 +1,15 @@
 package com.mercheazy.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.mercheazy.server.dto.order.OrderItemResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -16,7 +19,7 @@ public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "oi_id")
-    private Long id;
+    private int id;
 
     @Column(name = "oi_quantity", nullable = false)
     private int quantity;
@@ -32,4 +35,13 @@ public class OrderItem {
     @JoinColumn(name = "o_id")
     @JsonBackReference
     private Order order;
+
+    public OrderItemResponseDto toOrderItemResponseDto() {
+        return OrderItemResponseDto.builder()
+                .id(id)
+                .quantity(quantity)
+                .price(price)
+                .productId(product.getId())
+                .build();
+    }
 }

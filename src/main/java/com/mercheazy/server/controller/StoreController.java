@@ -5,7 +5,7 @@ import com.mercheazy.server.dto.store.StoreRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/store")
+@RequestMapping("/api/stores")
 public interface StoreController {
 
     @PostMapping
@@ -29,9 +29,9 @@ public interface StoreController {
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteStoreById(@PathVariable int id);
 
-    @PostMapping("/add-owner")
-    ResponseEntity<?> createStoreOwner(@RequestBody StoreOwnerRequestDto storeOwnerRequestDto);
+    @PostMapping("/{id}/add-owner")
+    ResponseEntity<?> createStoreOwner(@PathVariable int id, @RequestBody StoreOwnerRequestDto storeOwnerRequestDto);
 
-    @DeleteMapping("/remove-owner")
-    ResponseEntity<?> removeStoreOwner(@RequestBody StoreOwnerRequestDto storeOwnerRequestDto);
+    @DeleteMapping("/{id}/remove-owner")
+    ResponseEntity<?> removeStoreOwner(@PathVariable int id, @RequestBody StoreOwnerRequestDto storeOwnerRequestDto);
 }

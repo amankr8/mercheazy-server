@@ -1,10 +1,13 @@
 package com.mercheazy.server.dto.order;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class OrderItemRequestDto {
+@Builder
+public class OrderItemResponseDto {
+    private int id;
     private int productId;
-    private int price;
     private int quantity;
+    private int price;
 }
