@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -29,12 +28,10 @@ public class Order {
 
     @CreationTimestamp
     @Column(name = "o_create_date", nullable = false, updatable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
     private Date createDate;
 
     @UpdateTimestamp
     @Column(name = "o_update_date", nullable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
     private Date updateDate;
 
     @Column(name = "o_total_price", nullable = false)
@@ -47,10 +44,6 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "u_id")
     private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "s_id")
-    private Store store;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -67,7 +60,6 @@ public class Order {
                 .updateDate(updateDate)
                 .totalPrice(totalPrice)
                 .status(status)
-                .storeId(store.getId())
                 .orderItems(orderItems.stream()
                         .map(OrderItem::toOrderItemResponseDto)
                         .toList())

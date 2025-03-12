@@ -11,7 +11,6 @@ import java.util.List;
 @Builder
 public class OrderResponseDto {
     private int id;
-    private int storeId;
     private double totalPrice;
     private OrderStatus status;
     private List<OrderItemResponseDto> orderItems;

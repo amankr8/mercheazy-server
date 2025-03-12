@@ -38,10 +38,13 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
                             .build();
                 }).toList();
 
+        double totalPrice = orderItems.stream().map(orderItem -> {
+            double price = orderItem.getPrice();
+            int quantity = orderItem.getQuantity();
+            return price * quantity;
+        }).reduce(0.0, Double::sum);
         Order order = Order.builder()
-                .store(storeRepository.findById(orderRequestDto.getStoreId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Store not found.")))
-                .totalPrice(orderRequestDto.getTotalPrice())
+                .totalPrice(totalPrice)
                 .user(AuthUtil.getLoggedInUser())
                 .status(OrderStatus.PENDING)
                 .orderItems(orderItems)

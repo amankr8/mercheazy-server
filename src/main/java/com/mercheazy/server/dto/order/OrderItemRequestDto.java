@@ -5,6 +5,5 @@ import lombok.Data;
 @Data
 public class OrderItemRequestDto {
     private int productId;
-    private int price;
     private int quantity;
 }
