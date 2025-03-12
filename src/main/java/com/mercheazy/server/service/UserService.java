@@ -15,7 +15,5 @@ public interface UserService {
 
     List<UserResponseDto> getAllUsers();
 
-    UserResponseDto getUserDetailsById(int id);
-
     AppUser getUserById(int id);
 }

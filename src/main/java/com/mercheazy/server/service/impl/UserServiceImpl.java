@@ -99,11 +99,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getUserDetailsById(int id) {
-        return userRepository.findById(id).map(AppUser::toUserResponseDto).orElse(null);
-    }
-
-    @Override
     public AppUser getUserById(int id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found!"));

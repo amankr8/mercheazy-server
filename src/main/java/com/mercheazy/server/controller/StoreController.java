@@ -15,7 +15,7 @@ public interface StoreController {
     ResponseEntity<?> updateStore(@PathVariable int id, @RequestBody StoreRequestDto storeRequestDto);
 
     @GetMapping
-    ResponseEntity<?> getStores();
+    ResponseEntity<?> getAllStores();
 
     @GetMapping("/user")
     ResponseEntity<?> getUserStore();

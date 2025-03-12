@@ -16,6 +16,7 @@ import com.mercheazy.server.repository.ProductRepository;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.CartService;
 import com.mercheazy.server.service.ProductService;
+import com.mercheazy.server.service.UserService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ import java.util.*;
 public class OrderServiceImpl implements com.mercheazy.server.service.OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-    private final ProductRepository productRepository;
+    private final UserService userService;
     private final CartRepository cartRepository;
     private final CartService cartService;
     private final ProductService productService;
@@ -65,8 +66,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
 
     @Override
     public OrderResponseDto checkoutCartByUserId(int userId) {
-        AppUser appUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
+        AppUser appUser = userService.getUserById(userId);
         Cart cart = cartRepository.findByAppUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found."));
         if (cart.getCartItems().isEmpty()) {
@@ -110,8 +110,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
 
     @Override
     public List<OrderResponseDto> getOrdersByUser(int userId) {
-        AppUser appUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
+        AppUser appUser = userService.getUserById(userId);
         return orderRepository.findByAppUserId(appUser.getId())
                 .stream().map(MerchOrder::toOrderResponseDto).toList();
     }
