@@ -8,12 +8,10 @@ import com.mercheazy.server.entity.user.AppUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.StoreOwnerRepository;
 import com.mercheazy.server.repository.StoreRepository;
-import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.StoreService;
 import com.mercheazy.server.service.UserService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -78,6 +76,11 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public StoreOwner getStoreOwnerByStoreIdAndUserId(int storeId, int userId) {
+        return storeOwnerRepository.findByStoreIdAndAppUserId(storeId, userId).orElse(null);
+    }
+
+    @Override
     public Store getStoreByUserId(int userId) {
         return storeOwnerRepository.findByAppUserId(userId).map(StoreOwner::getStore)
                 .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
@@ -85,16 +88,23 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public void deleteStore(int id) {
+        StoreOwner storeOwner = getStoreOwnerByStoreIdAndUserId(id, AuthUtil.getLoggedInUser().getId());
+        if (storeOwner == null) {
+            throw new IllegalArgumentException("No store found for this user.");
+        }
+        if (storeOwner.getRole() != CREATOR) {
+            throw new IllegalArgumentException("You are unauthorized to delete this store.");
+        }
         storeRepository.deleteById(id);
     }
 
     @Override
     public StoreOwner addStoreOwner(int storeId, StoreOwnerRequestDto storeOwnerRequestDto) {
         Store store = getStoreById(storeId);
-        if (!isUserStoreOwner(storeId, AuthUtil.getLoggedInUser().getId())) {
+        if (getStoreOwnerByStoreIdAndUserId(storeId, AuthUtil.getLoggedInUser().getId()) == null) {
             throw new IllegalArgumentException("You are not authorized to add store owners.");
         }
-        if (isUserStoreOwner(storeId, storeOwnerRequestDto.getUserId())) {
+        if (getStoreOwnerByStoreIdAndUserId(storeId, AuthUtil.getLoggedInUser().getId()) != null) {
             throw new IllegalArgumentException("User is already a store owner.");
         }
 
@@ -113,28 +123,20 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public void removeStoreOwner(int storeId, StoreOwnerRequestDto storeOwnerRequestDto) {
         Store store = getStoreById(storeId);
-        if (!isUserStoreOwner(storeId, AuthUtil.getLoggedInUser().getId())) {
+        if (getStoreOwnerByStoreIdAndUserId(storeId, AuthUtil.getLoggedInUser().getId()) == null) {
             throw new IllegalArgumentException("You are not authorized to remove store owners.");
         }
-        if (!isUserStoreOwner(storeId, storeOwnerRequestDto.getUserId())) {
+
+        StoreOwner removableStoreOwner = getStoreOwnerByStoreIdAndUserId(storeId, storeOwnerRequestDto.getUserId());
+        if (removableStoreOwner == null) {
             throw new IllegalArgumentException("User requested for removal is not a store owner.");
         }
-
-        StoreOwner storeOwner = storeOwnerRepository.findByAppUserId(storeOwnerRequestDto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Store owner not found."));
         // Prevent removing the CREATOR
-        if (storeOwner.getRole() == CREATOR) {
+        if (removableStoreOwner.getRole() == CREATOR) {
             throw new IllegalArgumentException("The creator of the store cannot be removed.");
         }
 
-        store.getStoreOwners().remove(storeOwner);
-        storeOwnerRepository.delete(storeOwner);
-    }
-
-    private boolean isUserStoreOwner(int storeId, int userId) {
-        AppUser appUser = userService.getUserById(userId);
-        Store store = getStoreById(storeId);
-        return store.getStoreOwners().stream()
-                .anyMatch(it -> it.getAppUser().equals(appUser));
+        store.getStoreOwners().remove(removableStoreOwner);
+        storeOwnerRepository.delete(removableStoreOwner);
     }
 }

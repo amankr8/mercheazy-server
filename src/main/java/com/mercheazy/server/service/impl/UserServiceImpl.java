@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto signUp(SignupRequestDto signupRequestDto) {
+    public AppUser signUp(SignupRequestDto signupRequestDto) {
         // Check if the user already exists by email
         if (userRepository.findByEmail(signupRequestDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("A user is already registered with this email");
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         AppUser savedAppUser = userRepository.save(appUser);
         cartService.createUserCart(savedAppUser);
 
-        return savedAppUser.toUserResponseDto();
+        return savedAppUser;
     }
 
     private String generateUniqueUsername(String username) {
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto login(LoginRequestDto loginRequestDto) {
+    public AppUser login(LoginRequestDto loginRequestDto) {
         AppUser appUser = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new AuthenticationCredentialsNotFoundException("Email does not exist in database"));
 
@@ -90,12 +90,12 @@ public class UserServiceImpl implements UserService {
                         loginRequestDto.getPassword()
                 )
         );
-        return appUser.toUserResponseDto();
+        return appUser;
     }
 
     @Override
-    public List<UserResponseDto> getAllUsers() {
-        return userRepository.findAll().stream().map(AppUser::toUserResponseDto).toList();
+    public List<AppUser> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override

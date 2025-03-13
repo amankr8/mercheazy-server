@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface UserService {
 
-    UserResponseDto signUp(SignupRequestDto signupRequestDto);
+    AppUser signUp(SignupRequestDto signupRequestDto);
 
-    UserResponseDto login(LoginRequestDto loginRequestDto);
+    AppUser login(LoginRequestDto loginRequestDto);
 
-    List<UserResponseDto> getAllUsers();
+    List<AppUser> getAllUsers();
 
     AppUser getUserById(int id);
 }

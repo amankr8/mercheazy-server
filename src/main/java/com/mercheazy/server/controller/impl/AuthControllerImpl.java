@@ -19,13 +19,13 @@ public class AuthControllerImpl implements AuthController {
 
     @Override
     public ResponseEntity<?> signup(SignupRequestDto signupRequestDto) {
-        UserResponseDto signupUser = userService.signUp(signupRequestDto);
+        UserResponseDto signupUser = userService.signUp(signupRequestDto).toUserResponseDto();
         return ResponseEntity.ok(new AuthResponseDto(null, signupUser, "User registered successfully!"));
     }
 
     @Override
     public ResponseEntity<?> login(LoginRequestDto loginRequestDto) {
-        UserResponseDto loginUser = userService.login(loginRequestDto);
+        UserResponseDto loginUser = userService.login(loginRequestDto).toUserResponseDto();
         String jwtToken = jwtService.generateToken(loginUser.getUsername());
         return ResponseEntity.ok(new AuthResponseDto(jwtToken, loginUser, "Login successful!"));
     }

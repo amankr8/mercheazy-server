@@ -19,6 +19,8 @@ public interface StoreService {
 
     List<StoreOwner> getStoreOwnersByStoreId(int storeId);
 
+    StoreOwner getStoreOwnerByStoreIdAndUserId(int storeId, int userId);
+
     Store getStoreByUserId(int userId);
 
     void deleteStore(int id);

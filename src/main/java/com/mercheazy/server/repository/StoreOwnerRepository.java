@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StoreOwnerRepository extends JpaRepository<StoreOwner, Integer> {
+    Optional<StoreOwner> findByStoreIdAndAppUserId(int storeId, int userId);
     Optional<StoreOwner> findByAppUserId(int userId);
     List<StoreOwner> findByStoreId(int storeId);
 }
