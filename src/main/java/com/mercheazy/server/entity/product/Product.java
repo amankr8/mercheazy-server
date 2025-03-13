@@ -50,11 +50,11 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "s_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Store store;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private List<ProductImage> productImages;
 
     public ProductResponseDto toProductResponseDto() {

@@ -1,6 +1,7 @@
 package com.mercheazy.server.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.FileResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,7 +27,7 @@ public class ProductImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Product product;
 
     public FileResponseDto toFileResponseDto() {

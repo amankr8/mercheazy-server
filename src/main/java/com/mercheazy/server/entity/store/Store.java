@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity.store;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.store.StoreResponseDto;
 import com.mercheazy.server.entity.product.Product;
@@ -38,11 +39,11 @@ public class Store {
     @Column(name = "s_update_date", nullable = false)
     private Date updateDate;
 
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreOwner> storeOwners;
 
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 

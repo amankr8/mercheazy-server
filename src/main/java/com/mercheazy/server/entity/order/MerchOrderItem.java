@@ -1,6 +1,6 @@
 package com.mercheazy.server.entity.order;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.order.OrderItemResponseDto;
 import com.mercheazy.server.entity.product.Product;
 import jakarta.persistence.*;
@@ -34,7 +34,7 @@ public class MerchOrderItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mo_id")
-    @JsonBackReference
+    @JsonManagedReference
     private MerchOrder merchOrder;
 
     public OrderItemResponseDto toOrderItemResponseDto() {

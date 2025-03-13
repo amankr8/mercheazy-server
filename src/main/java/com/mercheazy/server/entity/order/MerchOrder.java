@@ -1,6 +1,6 @@
 package com.mercheazy.server.entity.order;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.order.OrderResponseDto;
 import com.mercheazy.server.entity.user.AppUser;
 import jakarta.persistence.*;
@@ -47,7 +47,7 @@ public class MerchOrder {
     private AppUser appUser;
 
     @OneToMany(mappedBy = "merchOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private List<MerchOrderItem> merchOrderItems;
 
     public enum OrderStatus {

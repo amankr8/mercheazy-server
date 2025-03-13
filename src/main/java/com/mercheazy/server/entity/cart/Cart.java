@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity.cart;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.cart.CartResponseDto;
 import com.mercheazy.server.entity.user.AppUser;
@@ -30,7 +31,7 @@ public class Cart {
     private AppUser appUser;
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private List<CartItem> cartItems;
 
     public CartResponseDto toCartResponseDto() {
