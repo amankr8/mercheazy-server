@@ -104,7 +104,7 @@ public class StoreServiceImpl implements StoreService {
         if (getStoreOwnerByStoreIdAndUserId(storeId, AuthUtil.getLoggedInUser().getId()) == null) {
             throw new IllegalArgumentException("You are not authorized to add store owners.");
         }
-        if (getStoreOwnerByStoreIdAndUserId(storeId, AuthUtil.getLoggedInUser().getId()) != null) {
+        if (getStoreOwnerByStoreIdAndUserId(storeId, storeOwnerRequestDto.getUserId()) != null) {
             throw new IllegalArgumentException("User is already a store owner.");
         }
 

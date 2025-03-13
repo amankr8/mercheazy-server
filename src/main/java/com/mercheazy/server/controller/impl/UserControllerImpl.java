@@ -1,10 +1,14 @@
 package com.mercheazy.server.controller.impl;
 
 import com.mercheazy.server.controller.UserController;
+import com.mercheazy.server.dto.user.UserResponseDto;
+import com.mercheazy.server.entity.user.AppUser;
 import com.mercheazy.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -13,6 +17,7 @@ public class UserControllerImpl implements UserController {
 
     @Override
     public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.ok().body(userService.getAllUsers());
+        List<UserResponseDto> users = userService.getAllUsers().stream().map(AppUser::toUserResponseDto).toList();
+        return ResponseEntity.ok().body(users);
     }
 }

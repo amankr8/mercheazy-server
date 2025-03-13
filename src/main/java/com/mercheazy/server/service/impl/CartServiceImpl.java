@@ -36,13 +36,13 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
     }
 
     @Override
-    public CartResponseDto getCartByUserId(int userId) {
-        return cartRepository.findByAppUserId(userId).map(Cart::toCartResponseDto)
+    public Cart getCartByUserId(int userId) {
+        return cartRepository.findByAppUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
     }
 
     @Override
-    public CartResponseDto addToCart(CartItemRequestDto cartItemRequestDto) {
+    public Cart addToCart(CartItemRequestDto cartItemRequestDto) {
         Cart cart = cartRepository.findByAppUserId(AuthUtil.getLoggedInUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         Product product = productService.getProductById(cartItemRequestDto.getProductId());
@@ -70,11 +70,11 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
             cartItem.setQuantity(requestQuantity);
         }
 
-        return cartRepository.save(cart).toCartResponseDto();
+        return cartRepository.save(cart);
     }
 
     @Override
-    public CartResponseDto removeFromCart(CartItemRequestDto cartItemRequestDto) {
+    public Cart removeFromCart(CartItemRequestDto cartItemRequestDto) {
         Cart cart = cartRepository.findByAppUserId(AuthUtil.getLoggedInUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         Product product = productService.getProductById(cartItemRequestDto.getProductId());
@@ -91,7 +91,7 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
             cartItemRepository.delete(cartItem);
         }
 
-        return cartRepository.save(cart).toCartResponseDto();
+        return cartRepository.save(cart);
     }
 
     @Override
@@ -99,6 +99,6 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
         Cart cart = cartRepository.findByAppUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         cart.getCartItems().clear();
-        cartRepository.save(cart).toCartResponseDto();
+        cartRepository.save(cart);
     }
 }
