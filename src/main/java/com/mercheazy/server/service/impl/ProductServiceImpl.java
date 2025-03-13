@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(int id, ProductRequestDto productRequestDto) {
+    public Product updateProductDetails(int id, ProductRequestDto productRequestDto) {
         Product product = getProductById(id);
         product.setName(productRequestDto.getName());
         product.setDesc(productRequestDto.getDesc());
@@ -95,9 +95,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateStock(int productId, int stock) {
+    public void updateStock(int productId, int change) {
         Product product = getProductById(productId);
-        product.setStock(stock);
+        product.setStock(product.getStock() + change);
         productRepository.save(product);
     }
 

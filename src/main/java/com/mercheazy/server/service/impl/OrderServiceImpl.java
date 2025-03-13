@@ -1,7 +1,6 @@
 package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.order.OrderItemRequestDto;
-import com.mercheazy.server.dto.order.OrderResponseDto;
 import com.mercheazy.server.entity.cart.Cart;
 import com.mercheazy.server.entity.cart.CartItem;
 import com.mercheazy.server.entity.order.MerchOrder;
@@ -43,7 +42,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
                 .appUser(AuthUtil.getLoggedInUser())
                 .merchOrderItems(new ArrayList<>())
                 .totalPrice(0.0)
-                .status(OrderStatus.PENDING)
+                .status(OrderStatus.PLACED)
                 .build();
         merchOrder = orderRepository.save(merchOrder);
 
@@ -71,7 +70,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
 
         MerchOrder merchOrder = MerchOrder.builder()
                 .appUser(appUser)
-                .status(OrderStatus.PENDING)
+                .status(OrderStatus.PLACED)
                 .build();
         merchOrder = orderRepository.save(merchOrder);
 
@@ -110,10 +109,71 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
     }
 
     @Override
-    public MerchOrder updateOrderStatus(int id, OrderStatus status) {
-        MerchOrder merchOrder = orderRepository.findById(id)
+    public MerchOrder getOrderById(int id) {
+        return orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found."));
-        merchOrder.setStatus(status);
+    }
+
+    private void validateAndUpdateStockOnOrder(MerchOrder merchOrder) {
+        for (MerchOrderItem merchOrderItem : merchOrder.getMerchOrderItems()) {
+            if (productService.outOfStock(merchOrderItem.getProduct().getId(), merchOrderItem.getQuantity())) {
+                throw new IllegalArgumentException("Requested quantity exceeds available stock.");
+            }
+            productService.updateStock(merchOrderItem.getProduct().getId(), -merchOrderItem.getQuantity());
+        }
+    }
+
+    private void updateStockOnCancel(MerchOrder merchOrder) {
+        for (MerchOrderItem merchOrderItem : merchOrder.getMerchOrderItems()) {
+            productService.updateStock(merchOrderItem.getProduct().getId(), -merchOrderItem.getQuantity());
+        }
+    }
+
+    @Override
+    public MerchOrder updateOrderStatus(int orderId, OrderStatus newStatus) {
+        MerchOrder merchOrder = getOrderById(orderId);
+        OrderStatus oldStatus = merchOrder.getStatus();
+        switch (oldStatus) {
+            case PLACED:
+                switch (newStatus) {
+                    case CREATED:
+                        validateAndUpdateStockOnOrder(merchOrder);
+                        break;
+                    case SHIPPED, DELIVERED, CANCELLED:
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid status.");
+                }
+                break;
+            case CREATED:
+                switch (newStatus) {
+                    case SHIPPED, DELIVERED:
+                        break;
+                    case CANCELLED:
+                        updateStockOnCancel(merchOrder);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid status.");
+                }
+                break;
+            case SHIPPED:
+                switch (newStatus) {
+                    case DELIVERED:
+                        break;
+                    case CANCELLED:
+                        throw new IllegalArgumentException("Order cannot be cancelled after shipping.");
+                    default:
+                        throw new IllegalArgumentException("Invalid status.");
+                }
+                break;
+            case DELIVERED:
+                throw new IllegalArgumentException("Order is already delivered.");
+            case CANCELLED:
+                throw new IllegalArgumentException("Order is already cancelled.");
+            default:
+                throw new IllegalArgumentException("Invalid status.");
+        }
+        merchOrder.setStatus(newStatus);
         return orderRepository.save(merchOrder);
     }
 }

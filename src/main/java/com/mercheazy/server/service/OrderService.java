@@ -13,5 +13,7 @@ public interface OrderService {
 
     List<MerchOrder> getOrdersByUser(int userId);
 
-    MerchOrder updateOrderStatus(int id, OrderStatus status);
+    MerchOrder getOrderById(int id);
+
+    MerchOrder updateOrderStatus(int orderId, OrderStatus newStatus);
 }

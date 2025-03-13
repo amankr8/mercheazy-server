@@ -51,7 +51,7 @@ public class MerchOrder {
     private List<MerchOrderItem> merchOrderItems;
 
     public enum OrderStatus {
-        PENDING, CREATED, PLACED, SHIPPED, DELIVERED, CANCELLED
+        PLACED, CREATED, SHIPPED, DELIVERED, CANCELLED
     }
 
     public OrderResponseDto toOrderResponseDto() {
