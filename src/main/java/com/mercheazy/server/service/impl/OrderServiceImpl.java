@@ -12,7 +12,6 @@ import com.mercheazy.server.entity.user.AppUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.CartRepository;
 import com.mercheazy.server.repository.OrderRepository;
-import com.mercheazy.server.repository.ProductRepository;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.CartService;
 import com.mercheazy.server.service.ProductService;
@@ -34,7 +33,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
     private final ProductService productService;
 
     @Override
-    public OrderResponseDto placeOrder(OrderItemRequestDto orderItemRequestDto) {
+    public MerchOrder placeOrder(OrderItemRequestDto orderItemRequestDto) {
         Product product = productService.getProductById(orderItemRequestDto.getProductId());
         if (productService.outOfStock(product.getId(), orderItemRequestDto.getQuantity())) {
             throw new IllegalArgumentException("Requested quantity exceeds available stock.");
@@ -58,14 +57,11 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
         merchOrder.getMerchOrderItems().add(merchOrderItem);
         double totalPrice = merchOrderItem.getPrice() * merchOrderItem.getQuantity();
         merchOrder.setTotalPrice(totalPrice);
-        merchOrder = orderRepository.save(merchOrder);
-
-        productService.updateStock(product.getId(), product.getStock() - orderItemRequestDto.getQuantity());
-        return merchOrder.toOrderResponseDto();
+        return orderRepository.save(merchOrder);
     }
 
     @Override
-    public OrderResponseDto checkoutCartByUserId(int userId) {
+    public MerchOrder checkoutCartByUserId(int userId) {
         AppUser appUser = userService.getUserById(userId);
         Cart cart = cartRepository.findByAppUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found."));
@@ -93,7 +89,6 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
                     .quantity(cartItem.getQuantity())
                     .build();
             merchOrderItems.add(merchOrderItem);
-            productService.updateStock(product.getId(), product.getStock() - cartItem.getQuantity());
         }
 
         merchOrder.setMerchOrderItems(merchOrderItems);
@@ -105,21 +100,20 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
 
         // Clear user cart
         cartService.clearCartByUserId(userId);
-        return merchOrder.toOrderResponseDto();
+        return merchOrder;
     }
 
     @Override
-    public List<OrderResponseDto> getOrdersByUser(int userId) {
+    public List<MerchOrder> getOrdersByUser(int userId) {
         AppUser appUser = userService.getUserById(userId);
-        return orderRepository.findByAppUserId(appUser.getId())
-                .stream().map(MerchOrder::toOrderResponseDto).toList();
+        return orderRepository.findByAppUserId(appUser.getId());
     }
 
     @Override
-    public OrderResponseDto updateOrderStatus(int id, OrderStatus status) {
+    public MerchOrder updateOrderStatus(int id, OrderStatus status) {
         MerchOrder merchOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found."));
         merchOrder.setStatus(status);
-        return orderRepository.save(merchOrder).toOrderResponseDto();
+        return orderRepository.save(merchOrder);
     }
 }
