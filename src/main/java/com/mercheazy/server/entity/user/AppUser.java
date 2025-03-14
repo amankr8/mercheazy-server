@@ -1,5 +1,6 @@
 package com.mercheazy.server.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.user.UserResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +22,6 @@ import java.util.List;
 @Entity
 @Table(name = "app_user")
 public class AppUser implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "au_id")
@@ -55,6 +55,10 @@ public class AppUser implements UserDetails {
     @Column(name = "au_role", nullable = false)
     @ColumnDefault("'USER'")
     private Role role;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
