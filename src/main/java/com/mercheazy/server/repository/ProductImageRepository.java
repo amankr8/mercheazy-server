@@ -3,8 +3,5 @@ package com.mercheazy.server.repository;
 import com.mercheazy.server.entity.product.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
-    List<ProductImage> findByProductId(int id);
 }

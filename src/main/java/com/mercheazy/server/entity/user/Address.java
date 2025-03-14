@@ -19,6 +19,12 @@ public class Address {
     @Column(name = "a_id")
     private int id;
 
+    @Column(name = "a_name", nullable = false)
+    private String name;
+
+    @Column(name = "a_house", nullable = false)
+    private String house;
+
     @Column(name = "a_street", nullable = false)
     private String street;
 
@@ -33,6 +39,9 @@ public class Address {
 
     @Column(name = "a_country", nullable = false)
     private String country;
+
+    @Column(name = "a_phone", nullable = false)
+    private String phone;
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)

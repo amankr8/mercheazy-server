@@ -27,14 +27,22 @@ public class AuthUser implements UserDetails {
     @Column(name = "au_id")
     private int id;
 
+    @Column(name = "a_name", nullable = false)
+    private String name;
+
     @Column(name = "au_username", unique = true, nullable = false)
     private String username;
+
+    @Column(name = "au_email", unique = true, nullable = false)
+    private String email;
 
     @Column(name = "au_password", nullable = false)
     private String password;
 
-    @Column(name = "au_email", unique = true, nullable = false)
-    private String email;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "au_role", nullable = false)
+    @ColumnDefault("'USER'")
+    private Role role;
 
     @CreationTimestamp
     @Column(name = "au_create_date", nullable = false, updatable = false)
@@ -43,11 +51,6 @@ public class AuthUser implements UserDetails {
     @UpdateTimestamp
     @Column(name = "au_update_date", nullable = false)
     private Date updateDate;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "au_role", nullable = false)
-    @ColumnDefault("'USER'")
-    private Role role;
 
     @JsonBackReference
     @OneToMany(mappedBy = "authUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

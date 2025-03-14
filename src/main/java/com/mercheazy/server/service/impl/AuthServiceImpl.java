@@ -32,6 +32,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     public void init() {
         if (userRepository.findByUsername(adminUsername).isEmpty()) {
             AuthUser admin = AuthUser.builder()
+                    .name("MerchEazy")
                     .username(adminUsername)
                     .password(passwordEncoder.encode(adminPassword))
                     .email("hello@mercheazy.com")
