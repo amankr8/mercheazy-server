@@ -1,4 +1,4 @@
-package com.mercheazy.server.dto.user;
+package com.mercheazy.server.dto.auth;
 
 import com.mercheazy.server.entity.user.AppUser;
 import com.mercheazy.server.entity.user.AppUser.Role;

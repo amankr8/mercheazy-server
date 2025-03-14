@@ -1,5 +1,6 @@
-package com.mercheazy.server.dto.user;
+package com.mercheazy.server.dto.auth;
 
+import com.mercheazy.server.dto.user.UserResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

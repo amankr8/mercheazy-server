@@ -1,7 +1,7 @@
 package com.mercheazy.server.controller;
 
-import com.mercheazy.server.dto.user.LoginRequestDto;
-import com.mercheazy.server.dto.user.SignupRequestDto;
+import com.mercheazy.server.dto.auth.LoginRequestDto;
+import com.mercheazy.server.dto.auth.SignupRequestDto;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
