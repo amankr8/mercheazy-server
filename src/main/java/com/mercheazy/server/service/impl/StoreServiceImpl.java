@@ -29,7 +29,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store addStore(StoreRequestDto storeRequestDto) {
         AuthUser currentAuthUser = AuthUtil.getLoggedInUser();
-        if (storeOwnerRepository.findByAppUserId(currentAuthUser.getId()).isPresent()) {
+        if (storeOwnerRepository.findByAuthUserId(currentAuthUser.getId()).isPresent()) {
             throw new IllegalArgumentException("User already has a store.");
         }
 
@@ -77,12 +77,12 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreOwner getStoreOwnerByStoreIdAndUserId(int storeId, int userId) {
-        return storeOwnerRepository.findByStoreIdAndAppUserId(storeId, userId).orElse(null);
+        return storeOwnerRepository.findByStoreIdAndAuthUserId(storeId, userId).orElse(null);
     }
 
     @Override
     public Store getStoreByUserId(int userId) {
-        return storeOwnerRepository.findByAppUserId(userId).map(StoreOwner::getStore)
+        return storeOwnerRepository.findByAuthUserId(userId).map(StoreOwner::getStore)
                 .orElseThrow(() -> new ResourceNotFoundException("No store found for this user."));
     }
 

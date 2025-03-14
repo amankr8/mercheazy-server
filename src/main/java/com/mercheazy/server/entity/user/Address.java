@@ -34,9 +34,6 @@ public class Address {
     @Column(name = "a_country", nullable = false)
     private String country;
 
-    @Column(name = "a_phone", nullable = false)
-    private String phone;
-
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "au_id")

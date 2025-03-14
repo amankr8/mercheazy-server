@@ -14,8 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.mercheazy.server.entity.user.AuthUser.Role.ADMIN;
-
 @RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements com.mercheazy.server.service.AuthService {
@@ -37,8 +35,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                     .username(adminUsername)
                     .password(passwordEncoder.encode(adminPassword))
                     .email("hello@mercheazy.com")
-                    .role(ADMIN)
-                    .firstName("MerchEazy")
+                    .role(AuthUser.Role.ADMIN)
                     .build();
             admin = userRepository.save(admin);
             cartService.createUserCart(admin);
@@ -53,9 +50,13 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
             throw new IllegalArgumentException("A user is already registered with this email");
         }
 
-        AuthUser authUser = signupRequestDto.toUser();
-        authUser.setUsername(generateUniqueUsername(authUser.getUsername()));
-        authUser.setPassword(passwordEncoder.encode(authUser.getPassword()));
+        String username = generateUniqueUsername(signupRequestDto.getEmail().split("@")[0]);
+        AuthUser authUser = AuthUser.builder()
+                .username(username)
+                .password(passwordEncoder.encode(signupRequestDto.getPassword()))
+                .email(signupRequestDto.getEmail())
+                .role(AuthUser.Role.USER)
+                .build();
 
         AuthUser savedAuthUser = userRepository.save(authUser);
         cartService.createUserCart(savedAuthUser);

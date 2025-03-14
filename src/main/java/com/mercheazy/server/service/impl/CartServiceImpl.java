@@ -36,13 +36,13 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
 
     @Override
     public Cart getCartByUserId(int userId) {
-        return cartRepository.findByAppUserId(userId)
+        return cartRepository.findByAuthUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
     }
 
     @Override
     public Cart addToCart(CartItemRequestDto cartItemRequestDto) {
-        Cart cart = cartRepository.findByAppUserId(AuthUtil.getLoggedInUser().getId())
+        Cart cart = cartRepository.findByAuthUserId(AuthUtil.getLoggedInUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         Product product = productService.getProductById(cartItemRequestDto.getProductId());
 
@@ -74,7 +74,7 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
 
     @Override
     public Cart removeFromCart(CartItemRequestDto cartItemRequestDto) {
-        Cart cart = cartRepository.findByAppUserId(AuthUtil.getLoggedInUser().getId())
+        Cart cart = cartRepository.findByAuthUserId(AuthUtil.getLoggedInUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         Product product = productService.getProductById(cartItemRequestDto.getProductId());
 
@@ -95,7 +95,7 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
 
     @Override
     public void clearCartByUserId(int userId) {
-        Cart cart = cartRepository.findByAppUserId(userId)
+        Cart cart = cartRepository.findByAuthUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         cart.getCartItems().clear();
         cartRepository.save(cart);

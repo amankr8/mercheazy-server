@@ -30,13 +30,6 @@ public class AuthUser implements UserDetails {
     @Column(name = "au_username", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "au_first_name", nullable = false)
-    @ColumnDefault("'User'")
-    private String firstName;
-
-    @Column(name = "au_last_name")
-    private String lastName;
-
     @Column(name = "au_password", nullable = false)
     private String password;
 
@@ -57,7 +50,7 @@ public class AuthUser implements UserDetails {
     private Role role;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "authUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
 
     @Override
@@ -92,9 +85,6 @@ public class AuthUser implements UserDetails {
     public UserResponseDto toUserResponseDto() {
         return UserResponseDto.builder()
                 .id(id)
-                .username(username)
-                .firstName(firstName)
-                .lastName(lastName)
                 .email(email)
                 .role(role)
                 .createDate(createDate)

@@ -1,7 +1,6 @@
 package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.product.ProductRequestDto;
-import com.mercheazy.server.dto.product.ProductResponseDto;
 import com.mercheazy.server.entity.product.Product;
 import com.mercheazy.server.entity.product.ProductImage;
 import com.mercheazy.server.entity.store.Store;
@@ -10,7 +9,6 @@ import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.model.CloudinaryFile;
 import com.mercheazy.server.repository.ProductRepository;
 import com.mercheazy.server.repository.StoreOwnerRepository;
-import com.mercheazy.server.repository.StoreRepository;
 import com.mercheazy.server.service.CloudinaryService;
 import com.mercheazy.server.service.ProductService;
 import com.mercheazy.server.util.AuthUtil;
@@ -38,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(ProductRequestDto productRequestDto) {
-        Store store = storeOwnerRepository.findByAppUserId(AuthUtil.getLoggedInUser().getId()).map(StoreOwner::getStore)
+        Store store = storeOwnerRepository.findByAuthUserId(AuthUtil.getLoggedInUser().getId()).map(StoreOwner::getStore)
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found."));
 
         Product product = Product.builder()

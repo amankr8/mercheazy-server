@@ -62,7 +62,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
     @Override
     public MerchOrder checkoutCartByUserId(int userId) {
         AuthUser authUser = userService.getUserById(userId);
-        Cart cart = cartRepository.findByAppUserId(userId)
+        Cart cart = cartRepository.findByAuthUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found."));
         if (cart.getCartItems().isEmpty()) {
             throw new ResourceNotFoundException("Cart is empty.");
@@ -105,7 +105,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
     @Override
     public List<MerchOrder> getOrdersByUser(int userId) {
         AuthUser authUser = userService.getUserById(userId);
-        return orderRepository.findByAppUserId(authUser.getId());
+        return orderRepository.findByAuthUserId(authUser.getId());
     }
 
     @Override
