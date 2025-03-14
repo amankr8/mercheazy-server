@@ -27,9 +27,6 @@ public class AuthUser implements UserDetails {
     @Column(name = "au_id")
     private int id;
 
-    @Column(name = "a_name", nullable = false)
-    private String name;
-
     @Column(name = "au_username", unique = true, nullable = false)
     private String username;
 
@@ -41,7 +38,6 @@ public class AuthUser implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "au_role", nullable = false)
-    @ColumnDefault("'USER'")
     private Role role;
 
     @CreationTimestamp
@@ -54,7 +50,7 @@ public class AuthUser implements UserDetails {
 
     @JsonBackReference
     @OneToMany(mappedBy = "authUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addresses;
+    private List<Profile> profiles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

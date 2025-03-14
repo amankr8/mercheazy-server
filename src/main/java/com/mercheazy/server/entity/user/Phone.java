@@ -12,33 +12,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "address")
-public class Address {
+@Table(name = "phone")
+public class Phone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "a_id")
+    @Column(name = "ph_id")
     private int id;
 
-    @Column(name = "a_house", nullable = false)
-    private String house;
+    @Column(name = "ph_type", nullable = false)
+    private Type type;
 
-    @Column(name = "a_street", nullable = false)
-    private String street;
+    @Column(name = "ph_country_code", nullable = false)
+    private String countryCode;
 
-    @Column(name = "a_city", nullable = false)
-    private String city;
-
-    @Column(name = "a_state", nullable = false)
-    private String state;
-
-    @Column(name = "a_zip", nullable = false)
-    private String zip;
-
-    @Column(name = "a_country", nullable = false)
-    private String country;
+    @Column(name = "ph_number", unique = true, nullable = false)
+    private String number;
 
     @JsonManagedReference
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
     private Profile profile;
+
+    public enum Type {
+        HOME, WORK, MOBILE
+    }
 }
