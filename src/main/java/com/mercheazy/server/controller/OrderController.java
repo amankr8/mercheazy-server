@@ -1,6 +1,6 @@
 package com.mercheazy.server.controller;
 
-import com.mercheazy.server.dto.order.OrderItemRequestDto;
+import com.mercheazy.server.dto.order.OrderRequestDto;
 import com.mercheazy.server.entity.order.MerchOrder.OrderStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/orders")
 public interface OrderController {
     @PostMapping
-    ResponseEntity<?> createOrder(@RequestBody OrderItemRequestDto orderItemRequestDto);
+    ResponseEntity<?> createOrder(@RequestBody OrderRequestDto orderRequestDto);
 
     @PostMapping("/checkout")
     ResponseEntity<?> checkoutCart();

@@ -4,7 +4,7 @@ import com.mercheazy.server.dto.auth.LoginRequestDto;
 import com.mercheazy.server.dto.auth.SignupRequestDto;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.entity.user.Profile;
-import com.mercheazy.server.repository.UserRepository;
+import com.mercheazy.server.repository.user.UserRepository;
 import com.mercheazy.server.service.CartService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

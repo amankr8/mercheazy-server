@@ -1,6 +1,6 @@
 package com.mercheazy.server.config;
 
-import com.mercheazy.server.repository.UserRepository;
+import com.mercheazy.server.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

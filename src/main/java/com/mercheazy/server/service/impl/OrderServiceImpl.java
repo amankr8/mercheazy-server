@@ -1,6 +1,6 @@
 package com.mercheazy.server.service.impl;
 
-import com.mercheazy.server.dto.order.OrderItemRequestDto;
+import com.mercheazy.server.dto.order.OrderRequestDto;
 import com.mercheazy.server.entity.cart.Cart;
 import com.mercheazy.server.entity.cart.CartItem;
 import com.mercheazy.server.entity.order.MerchOrder;
@@ -10,10 +10,7 @@ import com.mercheazy.server.entity.product.Product;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.entity.user.Profile;
 import com.mercheazy.server.exception.ResourceNotFoundException;
-import com.mercheazy.server.repository.CartRepository;
-import com.mercheazy.server.repository.OrderRepository;
-import com.mercheazy.server.repository.ProfileRepository;
-import com.mercheazy.server.repository.UserRepository;
+import com.mercheazy.server.repository.order.OrderRepository;
 import com.mercheazy.server.service.CartService;
 import com.mercheazy.server.service.ProductService;
 import com.mercheazy.server.service.UserService;
@@ -32,11 +29,11 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
     private final ProductService productService;
 
     @Override
-    public MerchOrder placeOrder(OrderItemRequestDto orderItemRequestDto) {
-        Profile orderProfile = validateAndReturnProfile(orderItemRequestDto.getProfileId());
+    public MerchOrder placeOrder(OrderRequestDto orderRequestDto) {
+        Profile orderProfile = validateAndReturnProfile(orderRequestDto.getProfileId());
 
-        Product product = productService.getProductById(orderItemRequestDto.getProductId());
-        if (productService.outOfStock(product.getId(), orderItemRequestDto.getQuantity())) {
+        Product product = productService.getProductById(orderRequestDto.getProductId());
+        if (productService.outOfStock(product.getId(), orderRequestDto.getQuantity())) {
             throw new IllegalArgumentException("Requested quantity exceeds available stock.");
         }
 
@@ -51,7 +48,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
         MerchOrderItem merchOrderItem = MerchOrderItem.builder()
                         .product(product)
                         .merchOrder(merchOrder)
-                        .quantity(orderItemRequestDto.getQuantity())
+                        .quantity(orderRequestDto.getQuantity())
                         .price(product.getSellPrice())
                         .build();
 

@@ -3,7 +3,7 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.entity.user.Profile;
 import com.mercheazy.server.exception.ResourceNotFoundException;
-import com.mercheazy.server.repository.UserRepository;
+import com.mercheazy.server.repository.user.UserRepository;
 import com.mercheazy.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

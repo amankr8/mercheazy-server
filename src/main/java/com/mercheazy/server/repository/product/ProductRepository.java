@@ -1,4 +1,4 @@
-package com.mercheazy.server.repository;
+package com.mercheazy.server.repository.product;
 
 import com.mercheazy.server.entity.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
