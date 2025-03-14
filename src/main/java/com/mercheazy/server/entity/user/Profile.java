@@ -17,13 +17,13 @@ import lombok.NoArgsConstructor;
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "p_id")
+    @Column(name = "pr_id")
     private int id;
 
-    @Column(name = "p_primary", nullable = false)
+    @Column(name = "pr_primary", nullable = false)
     private Boolean primary;
 
-    @Column(name = "p_name", nullable = false)
+    @Column(name = "pr_name", nullable = false)
     private String name;
 
     @JsonBackReference

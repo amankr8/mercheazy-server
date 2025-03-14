@@ -1,6 +1,7 @@
 package com.mercheazy.server.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mercheazy.server.entity.Country;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,8 +35,10 @@ public class Address {
     @Column(name = "a_zip", nullable = false)
     private String zip;
 
-    @Column(name = "a_country", nullable = false)
-    private String country;
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cr_id")
+    private Country country;
 
     @JsonManagedReference
     @OneToOne(fetch = FetchType.LAZY)

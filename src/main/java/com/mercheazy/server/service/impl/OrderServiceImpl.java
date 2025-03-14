@@ -8,9 +8,11 @@ import com.mercheazy.server.entity.order.MerchOrder.OrderStatus;
 import com.mercheazy.server.entity.order.MerchOrderItem;
 import com.mercheazy.server.entity.product.Product;
 import com.mercheazy.server.entity.user.AuthUser;
+import com.mercheazy.server.entity.user.Profile;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.CartRepository;
 import com.mercheazy.server.repository.OrderRepository;
+import com.mercheazy.server.repository.ProfileRepository;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.CartService;
 import com.mercheazy.server.service.ProductService;
@@ -25,21 +27,24 @@ import java.util.*;
 @Service
 public class OrderServiceImpl implements com.mercheazy.server.service.OrderService {
     private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
-    private final CartRepository cartRepository;
     private final CartService cartService;
     private final ProductService productService;
 
     @Override
     public MerchOrder placeOrder(OrderItemRequestDto orderItemRequestDto) {
+        List<Profile> userProfiles = AuthUtil.getLoggedInUser().getProfiles();
+        Profile orderProfile = userProfiles.stream().filter(it -> it.getId() == orderItemRequestDto.getProfileId())
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found."));
+
         Product product = productService.getProductById(orderItemRequestDto.getProductId());
         if (productService.outOfStock(product.getId(), orderItemRequestDto.getQuantity())) {
             throw new IllegalArgumentException("Requested quantity exceeds available stock.");
         }
 
         MerchOrder merchOrder = MerchOrder.builder()
-                .authUser(AuthUtil.getLoggedInUser())
+                .profile(orderProfile)
                 .merchOrderItems(new ArrayList<>())
                 .totalPrice(0.0)
                 .status(OrderStatus.PLACED)
@@ -60,16 +65,17 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
     }
 
     @Override
-    public MerchOrder checkoutCartByUserId(int userId) {
-        AuthUser authUser = userService.getUserById(userId);
-        Cart cart = cartRepository.findByAuthUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart not found."));
+    public MerchOrder checkoutOrderByProfileId(int profileId) {
+        Profile orderProfile = validateAndReturnProfile(profileId);
+
+        AuthUser authUser = AuthUtil.getLoggedInUser();
+        Cart cart = cartService.getCartByUserId(authUser.getId());
         if (cart.getCartItems().isEmpty()) {
             throw new ResourceNotFoundException("Cart is empty.");
         }
 
         MerchOrder merchOrder = MerchOrder.builder()
-                .authUser(authUser)
+                .profile(orderProfile)
                 .status(OrderStatus.PLACED)
                 .build();
         merchOrder = orderRepository.save(merchOrder);
@@ -98,14 +104,26 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
         merchOrder = orderRepository.save(merchOrder);
 
         // Clear user cart
-        cartService.clearCartByUserId(userId);
+        cartService.clearCartByUserId(authUser.getId());
         return merchOrder;
+    }
+
+    private Profile validateAndReturnProfile(int profileId) {
+        AuthUser loggedInUser = AuthUtil.getLoggedInUser();
+        List<Profile> userProfiles = loggedInUser.getProfiles();
+        return userProfiles.stream().filter(it -> it.getId() == profileId)
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found."));
     }
 
     @Override
     public List<MerchOrder> getOrdersByUser(int userId) {
         AuthUser authUser = userService.getUserById(userId);
-        return orderRepository.findByAuthUserId(authUser.getId());
+        List<MerchOrder> userOrders = new ArrayList<>();
+        for (Profile profile : authUser.getProfiles()) {
+            userOrders.addAll(orderRepository.findByProfileId(profile.getId()));
+        }
+        return userOrders;
     }
 
     @Override

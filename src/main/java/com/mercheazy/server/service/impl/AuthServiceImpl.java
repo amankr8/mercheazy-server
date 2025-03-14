@@ -3,6 +3,7 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.auth.LoginRequestDto;
 import com.mercheazy.server.dto.auth.SignupRequestDto;
 import com.mercheazy.server.entity.user.AuthUser;
+import com.mercheazy.server.entity.user.Profile;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.CartService;
 import jakarta.annotation.PostConstruct;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @RequiredArgsConstructor
 @Service
@@ -32,7 +35,6 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     public void init() {
         if (userRepository.findByUsername(adminUsername).isEmpty()) {
             AuthUser admin = AuthUser.builder()
-                    .name("MerchEazy")
                     .username(adminUsername)
                     .password(passwordEncoder.encode(adminPassword))
                     .email("hello@mercheazy.com")
@@ -57,9 +59,17 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
                 .email(signupRequestDto.getEmail())
                 .role(AuthUser.Role.USER)
+                .profiles(new ArrayList<>())
                 .build();
 
         AuthUser savedAuthUser = userRepository.save(authUser);
+        Profile defaultProfile = Profile.builder()
+                .primary(true)
+                .authUser(savedAuthUser)
+                .build();
+
+        savedAuthUser.getProfiles().add(defaultProfile);
+        userRepository.save(savedAuthUser);
         cartService.createUserCart(savedAuthUser);
 
         return savedAuthUser;

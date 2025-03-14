@@ -25,7 +25,7 @@ public class OrderControllerImpl implements com.mercheazy.server.controller.Orde
 
     @Override
     public ResponseEntity<?> checkoutCart() {
-        OrderResponseDto order = orderService.checkoutCartByUserId(AuthUtil.getLoggedInUser().getId()).toOrderResponseDto();
+        OrderResponseDto order = orderService.checkoutOrderByProfileId(AuthUtil.getLoggedInUser().getId()).toOrderResponseDto();
         return ResponseEntity.ok(order);
     }
 

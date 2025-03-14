@@ -9,7 +9,7 @@ import java.util.List;
 public interface OrderService {
     MerchOrder placeOrder(OrderItemRequestDto orderItemRequestDto);
 
-    MerchOrder checkoutCartByUserId(int userId);
+    MerchOrder checkoutOrderByProfileId(int profileId);
 
     List<MerchOrder> getOrdersByUser(int userId);
 

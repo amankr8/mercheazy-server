@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<MerchOrder, Integer> {
-    List<MerchOrder> findByAuthUserId(int userId);
+    List<MerchOrder> findByProfileId(int userId);
 }
