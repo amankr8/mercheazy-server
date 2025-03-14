@@ -7,7 +7,7 @@ import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.dto.store.StoreResponseDto;
 import com.mercheazy.server.entity.store.Store;
 import com.mercheazy.server.entity.store.StoreOwner;
-import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.service.StoreService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class StoreControllerImpl implements StoreController {
 
     @Override
     public ResponseEntity<?> getUserStore() {
-        AppUser loggedInUser = AuthUtil.getLoggedInUser();
+        AuthUser loggedInUser = AuthUtil.getLoggedInUser();
         StoreResponseDto userStore = storeService.getStoreByUserId(loggedInUser.getId()).toStoreResponseDto();
         return ResponseEntity.ok(userStore);
     }

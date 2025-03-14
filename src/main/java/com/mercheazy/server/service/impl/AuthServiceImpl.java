@@ -2,7 +2,7 @@ package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.auth.LoginRequestDto;
 import com.mercheazy.server.dto.auth.SignupRequestDto;
-import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.CartService;
 import jakarta.annotation.PostConstruct;
@@ -14,7 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.mercheazy.server.entity.user.AppUser.Role.ADMIN;
+import static com.mercheazy.server.entity.user.AuthUser.Role.ADMIN;
 
 @RequiredArgsConstructor
 @Service
@@ -33,7 +33,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     @PostConstruct
     public void init() {
         if (userRepository.findByUsername(adminUsername).isEmpty()) {
-            AppUser admin = AppUser.builder()
+            AuthUser admin = AuthUser.builder()
                     .username(adminUsername)
                     .password(passwordEncoder.encode(adminPassword))
                     .email("hello@mercheazy.com")
@@ -47,20 +47,20 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     }
 
     @Override
-    public AppUser signUp(SignupRequestDto signupRequestDto) {
+    public AuthUser signUp(SignupRequestDto signupRequestDto) {
         // Check if the user already exists by email
         if (userRepository.findByEmail(signupRequestDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("A user is already registered with this email");
         }
 
-        AppUser appUser = signupRequestDto.toUser();
-        appUser.setUsername(generateUniqueUsername(appUser.getUsername()));
-        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        AuthUser authUser = signupRequestDto.toUser();
+        authUser.setUsername(generateUniqueUsername(authUser.getUsername()));
+        authUser.setPassword(passwordEncoder.encode(authUser.getPassword()));
 
-        AppUser savedAppUser = userRepository.save(appUser);
-        cartService.createUserCart(savedAppUser);
+        AuthUser savedAuthUser = userRepository.save(authUser);
+        cartService.createUserCart(savedAuthUser);
 
-        return savedAppUser;
+        return savedAuthUser;
     }
 
     private String generateUniqueUsername(String username) {
@@ -75,16 +75,16 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     }
 
     @Override
-    public AppUser login(LoginRequestDto loginRequestDto) {
-        AppUser appUser = userRepository.findByEmail(loginRequestDto.getEmail())
+    public AuthUser login(LoginRequestDto loginRequestDto) {
+        AuthUser authUser = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new AuthenticationCredentialsNotFoundException("Email does not exist in database"));
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        appUser.getUsername(),
+                        authUser.getUsername(),
                         loginRequestDto.getPassword()
                 )
         );
-        return appUser;
+        return authUser;
     }
 }

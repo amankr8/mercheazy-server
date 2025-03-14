@@ -1,6 +1,6 @@
 package com.mercheazy.server.dto.user;
 
-import com.mercheazy.server.entity.user.AppUser.Role;
+import com.mercheazy.server.entity.user.AuthUser.Role;
 import lombok.Builder;
 import lombok.Data;
 

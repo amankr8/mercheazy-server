@@ -2,7 +2,7 @@ package com.mercheazy.server.entity.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mercheazy.server.dto.order.OrderResponseDto;
-import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AuthUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,7 +44,7 @@ public class MerchOrder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "au_id")
-    private AppUser appUser;
+    private AuthUser authUser;
 
     @OneToMany(mappedBy = "merchOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference

@@ -1,7 +1,7 @@
 package com.mercheazy.server.dto.auth;
 
-import com.mercheazy.server.entity.user.AppUser;
-import com.mercheazy.server.entity.user.AppUser.Role;
+import com.mercheazy.server.entity.user.AuthUser;
+import com.mercheazy.server.entity.user.AuthUser.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,9 +27,9 @@ public class SignupRequestDto {
 
     private Role role;
 
-    public AppUser toUser() {
+    public AuthUser toUser() {
         Role role = this.role == null ? Role.USER : this.role;
-        return AppUser.builder()
+        return AuthUser.builder()
                 .firstName(firstName)
                 .lastName(lastName)
                 .username((firstName + lastName).toLowerCase())

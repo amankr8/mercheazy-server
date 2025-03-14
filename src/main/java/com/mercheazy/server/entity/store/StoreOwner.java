@@ -1,9 +1,8 @@
 package com.mercheazy.server.entity.store;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.store.StoreOwnerResponseDto;
-import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AuthUser;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,7 +25,7 @@ public class StoreOwner {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "au_id")
-    private AppUser appUser;
+    private AuthUser authUser;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "so_role", nullable = false)
@@ -52,7 +51,7 @@ public class StoreOwner {
     public StoreOwnerResponseDto toStoreOwnerResponseDto() {
         return StoreOwnerResponseDto.builder()
                 .id(id)
-                .userId(appUser.getId())
+                .userId(authUser.getId())
                 .role(role)
                 .build();
     }

@@ -20,8 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "app_user")
-public class AppUser implements UserDetails {
+@Table(name = "auth_user")
+public class AuthUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "au_id")

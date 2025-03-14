@@ -7,7 +7,7 @@ import com.mercheazy.server.entity.order.MerchOrder;
 import com.mercheazy.server.entity.order.MerchOrder.OrderStatus;
 import com.mercheazy.server.entity.order.MerchOrderItem;
 import com.mercheazy.server.entity.product.Product;
-import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.CartRepository;
 import com.mercheazy.server.repository.OrderRepository;
@@ -39,7 +39,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
         }
 
         MerchOrder merchOrder = MerchOrder.builder()
-                .appUser(AuthUtil.getLoggedInUser())
+                .authUser(AuthUtil.getLoggedInUser())
                 .merchOrderItems(new ArrayList<>())
                 .totalPrice(0.0)
                 .status(OrderStatus.PLACED)
@@ -61,7 +61,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
 
     @Override
     public MerchOrder checkoutCartByUserId(int userId) {
-        AppUser appUser = userService.getUserById(userId);
+        AuthUser authUser = userService.getUserById(userId);
         Cart cart = cartRepository.findByAppUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found."));
         if (cart.getCartItems().isEmpty()) {
@@ -69,7 +69,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
         }
 
         MerchOrder merchOrder = MerchOrder.builder()
-                .appUser(appUser)
+                .authUser(authUser)
                 .status(OrderStatus.PLACED)
                 .build();
         merchOrder = orderRepository.save(merchOrder);
@@ -104,8 +104,8 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
 
     @Override
     public List<MerchOrder> getOrdersByUser(int userId) {
-        AppUser appUser = userService.getUserById(userId);
-        return orderRepository.findByAppUserId(appUser.getId());
+        AuthUser authUser = userService.getUserById(userId);
+        return orderRepository.findByAppUserId(authUser.getId());
     }
 
     @Override

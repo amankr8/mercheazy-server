@@ -3,7 +3,7 @@ package com.mercheazy.server.entity.cart;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.cart.CartResponseDto;
-import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AuthUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +28,7 @@ public class Cart {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "au_id")
     @JsonManagedReference
-    private AppUser appUser;
+    private AuthUser authUser;
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference

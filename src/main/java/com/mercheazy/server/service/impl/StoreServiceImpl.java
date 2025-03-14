@@ -4,7 +4,7 @@ import com.mercheazy.server.dto.store.StoreOwnerRequestDto;
 import com.mercheazy.server.dto.store.StoreRequestDto;
 import com.mercheazy.server.entity.store.Store;
 import com.mercheazy.server.entity.store.StoreOwner;
-import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.StoreOwnerRepository;
 import com.mercheazy.server.repository.StoreRepository;
@@ -28,8 +28,8 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store addStore(StoreRequestDto storeRequestDto) {
-        AppUser currentAppUser = AuthUtil.getLoggedInUser();
-        if (storeOwnerRepository.findByAppUserId(currentAppUser.getId()).isPresent()) {
+        AuthUser currentAuthUser = AuthUtil.getLoggedInUser();
+        if (storeOwnerRepository.findByAppUserId(currentAuthUser.getId()).isPresent()) {
             throw new IllegalArgumentException("User already has a store.");
         }
 
@@ -42,7 +42,7 @@ public class StoreServiceImpl implements StoreService {
 
         StoreOwner storeOwner = StoreOwner.builder()
                 .store(store)
-                .appUser(currentAppUser)
+                .authUser(currentAuthUser)
                 .role(CREATOR)
                 .build();
 
@@ -108,10 +108,10 @@ public class StoreServiceImpl implements StoreService {
             throw new IllegalArgumentException("User is already a store owner.");
         }
 
-        AppUser appUser = userService.getUserById(storeOwnerRequestDto.getUserId());
+        AuthUser authUser = userService.getUserById(storeOwnerRequestDto.getUserId());
         StoreOwner storeOwner = StoreOwner.builder()
                 .store(store)
-                .appUser(appUser)
+                .authUser(authUser)
                 .role(storeOwnerRequestDto.getRole())
                 .build();
         storeOwner = storeOwnerRepository.save(storeOwner);

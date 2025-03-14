@@ -1,11 +1,10 @@
 package com.mercheazy.server.service.impl;
 
 import com.mercheazy.server.dto.cart.CartItemRequestDto;
-import com.mercheazy.server.dto.cart.CartResponseDto;
 import com.mercheazy.server.entity.cart.Cart;
 import com.mercheazy.server.entity.cart.CartItem;
 import com.mercheazy.server.entity.product.Product;
-import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.CartItemRepository;
 import com.mercheazy.server.repository.CartRepository;
@@ -26,9 +25,9 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
     private final ProductService productService;
 
     @Override
-    public void createUserCart(AppUser appUser) {
+    public void createUserCart(AuthUser authUser) {
         Cart cart = Cart.builder()
-                .appUser(appUser)
+                .authUser(authUser)
                 .cartItems(new ArrayList<>())
                 .build();
         cartRepository.save(cart);

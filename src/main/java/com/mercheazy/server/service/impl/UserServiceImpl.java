@@ -1,6 +1,6 @@
 package com.mercheazy.server.service.impl;
 
-import com.mercheazy.server.entity.user.AppUser;
+import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.UserRepository;
 import com.mercheazy.server.service.UserService;
@@ -15,12 +15,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<AppUser> getAllUsers() {
+    public List<AuthUser> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public AppUser getUserById(int id) {
+    public AuthUser getUserById(int id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
     }

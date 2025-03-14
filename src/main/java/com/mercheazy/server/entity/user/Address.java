@@ -40,5 +40,5 @@ public class Address {
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "au_id")
-    private AppUser appUser;
+    private AuthUser authUser;
 }
