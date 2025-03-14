@@ -94,8 +94,8 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
     }
 
     @Override
-    public void clearCartByUserId(int userId) {
-        Cart cart = cartRepository.findByAuthUserId(userId)
+    public void clearCartById(int id) {
+        Cart cart = cartRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
         cart.getCartItems().clear();
         cartRepository.save(cart);

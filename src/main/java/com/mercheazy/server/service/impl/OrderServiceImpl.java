@@ -33,10 +33,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
 
     @Override
     public MerchOrder placeOrder(OrderItemRequestDto orderItemRequestDto) {
-        List<Profile> userProfiles = AuthUtil.getLoggedInUser().getProfiles();
-        Profile orderProfile = userProfiles.stream().filter(it -> it.getId() == orderItemRequestDto.getProfileId())
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Profile not found."));
+        Profile orderProfile = validateAndReturnProfile(orderItemRequestDto.getProfileId());
 
         Product product = productService.getProductById(orderItemRequestDto.getProductId());
         if (productService.outOfStock(product.getId(), orderItemRequestDto.getQuantity())) {
@@ -104,7 +101,7 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
         merchOrder = orderRepository.save(merchOrder);
 
         // Clear user cart
-        cartService.clearCartByUserId(authUser.getId());
+        cartService.clearCartById(cart.getId());
         return merchOrder;
     }
 
