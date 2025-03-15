@@ -3,6 +3,7 @@ package com.mercheazy.server.controller.impl;
 import com.mercheazy.server.controller.UserController;
 import com.mercheazy.server.dto.user.UserResponseDto;
 import com.mercheazy.server.entity.user.AuthUser;
+import com.mercheazy.server.entity.user.Profile;
 import com.mercheazy.server.service.UserService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +19,19 @@ public class UserControllerImpl implements UserController {
 
     @Override
     public ResponseEntity<?> getAllUsers() {
-        List<UserResponseDto> users = userService.getAllUsers().stream()
-                .map(AuthUser::toUserResponseDto).toList();
-        return ResponseEntity.ok().body(users);
+        List<AuthUser> users = userService.getAllUsers();
+        return ResponseEntity.ok().body(users.stream().map(AuthUser::toUserResponseDto).toList());
+    }
+
+    @Override
+    public ResponseEntity<?> getUserById(int id) {
+        AuthUser user = userService.getUserById(id);
+        return ResponseEntity.ok().body(user.toUserResponseDto());
     }
 
     @Override
     public ResponseEntity<?> getUserProfiles() {
-        List<Pro> profiles = userService.getProfilesByUserId(AuthUtil.getLoggedInUser().getId()).stream()
-                .map(AuthUser::toUserResponseDto).toList();
+        List<Profile> profiles = userService.getProfilesByUserId(AuthUtil.getLoggedInUser().getId());
         return ResponseEntity.ok().body(profiles);
     }
 }

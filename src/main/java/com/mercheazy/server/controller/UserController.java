@@ -10,4 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface UserController {
     @GetMapping
     ResponseEntity<?> getAllUsers();
+
+    @GetMapping("/{id}")
+    ResponseEntity<?> getUserById(int id);
+
+    @GetMapping("/profiles")
+    ResponseEntity<?> getUserProfiles();
 }
