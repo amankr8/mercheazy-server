@@ -13,6 +13,7 @@ public class OrderResponseDto {
     private int id;
     private double totalPrice;
     private OrderStatus status;
+    private int profileId;
     private List<OrderItemResponseDto> orderItems;
     private Date createDate;
     private Date updateDate;

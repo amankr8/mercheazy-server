@@ -61,6 +61,7 @@ public class MerchOrder {
                 .updateDate(updateDate)
                 .totalPrice(totalPrice)
                 .status(status)
+                .profileId(profile.getId())
                 .orderItems(merchOrderItems.stream()
                         .map(MerchOrderItem::toOrderItemResponseDto)
                         .toList())

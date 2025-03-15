@@ -1,5 +1,6 @@
 package com.mercheazy.server.service;
 
+import com.mercheazy.server.dto.user.ProfileRequestDto;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.entity.user.Profile;
 
@@ -11,4 +12,6 @@ public interface UserService {
     AuthUser getUserById(int id);
 
     List<Profile> getProfilesByUserId(int userId);
+
+    Profile addProfile(ProfileRequestDto profileRequestDto);
 }

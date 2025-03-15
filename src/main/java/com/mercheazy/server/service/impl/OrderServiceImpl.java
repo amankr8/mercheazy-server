@@ -105,9 +105,14 @@ public class OrderServiceImpl implements com.mercheazy.server.service.OrderServi
     private Profile validateAndReturnProfile(int profileId) {
         AuthUser loggedInUser = AuthUtil.getLoggedInUser();
         List<Profile> userProfiles = loggedInUser.getProfiles();
-        return userProfiles.stream().filter(it -> it.getId() == profileId)
+        Profile profile = userProfiles.stream().filter(it -> it.getId() == profileId)
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Profile not found."));
+
+        if (profile.getAddress() == null || profile.getPhone() == null) {
+            throw new IllegalArgumentException("Missing contact info.");
+        }
+        return profile;
     }
 
     @Override
