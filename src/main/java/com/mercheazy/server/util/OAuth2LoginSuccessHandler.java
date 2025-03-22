@@ -1,7 +1,5 @@
 package com.mercheazy.server.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercheazy.server.dto.auth.AuthResponseDto;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.repository.user.UserRepository;
 import com.mercheazy.server.service.JwtService;
@@ -24,7 +22,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
-    private final ObjectMapper objectMapper;
 
     @Value("${spring.frontend.url}")
     private String redirectUrl;
@@ -47,21 +44,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                     });
 
             String token = jwtService.generateToken(authUser.getUsername());
-            writeResponseAsJson(response, token, authUser);
+            response.sendRedirect(redirectUrl + "/oauth2/callback?token=" + token);
         } catch (Exception e) {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.getWriter().write("Error occurred while processing the request.");
             response.getWriter().flush();
         }
-    }
-
-    private void writeResponseAsJson(HttpServletResponse response, String token, AuthUser authUser) throws IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        response.getWriter()
-                .write(objectMapper.writeValueAsString(
-                        new AuthResponseDto(token, authUser.toUserResponseDto(), "User logged in successfully"))
-                );
     }
 }
