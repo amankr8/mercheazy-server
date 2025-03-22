@@ -11,8 +11,6 @@ import java.util.Date;
 public class UserResponseDto {
     private int id;
     private String username;
-    private String firstName;
-    private String lastName;
     private String email;
     private Role role;
     private Date createDate;

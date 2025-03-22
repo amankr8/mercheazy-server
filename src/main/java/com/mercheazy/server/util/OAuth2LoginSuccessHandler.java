@@ -1,5 +1,7 @@
 package com.mercheazy.server.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercheazy.server.dto.auth.AuthResponseDto;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.repository.user.UserRepository;
 import com.mercheazy.server.service.JwtService;
@@ -7,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -21,6 +24,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
 
     @Value("${spring.frontend.url}")
     private String redirectUrl;
@@ -30,17 +34,34 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
 
-        AuthUser authUser = userRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    AuthUser newUser = AuthUser.builder()
-                            .email(email)
-                            .role(AuthUser.Role.USER)
-                            .profiles(new ArrayList<>())
-                            .build();
-                    return userRepository.save(newUser);
-                });
+        try {
+            AuthUser authUser = userRepository.findByEmail(email)
+                    .orElseGet(() -> {
+                        AuthUser newUser = AuthUser.builder()
+                                .username(email)
+                                .email(email)
+                                .role(AuthUser.Role.USER)
+                                .profiles(new ArrayList<>())
+                                .build();
+                        return userRepository.save(newUser);
+                    });
 
-        String token = jwtService.generateToken(authUser.getUsername());
-        response.sendRedirect(redirectUrl + "/oauth2/redirect?token=" + token);
+            String token = jwtService.generateToken(authUser.getUsername());
+            writeResponseAsJson(response, token, authUser);
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.getWriter().write("Error occurred while processing the request.");
+            response.getWriter().flush();
+        }
+    }
+
+    private void writeResponseAsJson(HttpServletResponse response, String token, AuthUser authUser) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        response.getWriter()
+                .write(objectMapper.writeValueAsString(
+                        new AuthResponseDto(token, authUser.toUserResponseDto(), "User logged in successfully"))
+                );
     }
 }

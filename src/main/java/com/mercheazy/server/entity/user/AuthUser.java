@@ -27,7 +27,7 @@ public class AuthUser implements UserDetails {
     @Column(name = "au_id")
     private int id;
 
-    @Column(name = "au_username", unique = true)
+    @Column(name = "au_username", unique = true, nullable = false)
     private String username;
 
     @Column(name = "au_email", unique = true, nullable = false)
@@ -84,6 +84,7 @@ public class AuthUser implements UserDetails {
     public UserResponseDto toUserResponseDto() {
         return UserResponseDto.builder()
                 .id(id)
+                .username(username)
                 .email(email)
                 .role(role)
                 .createDate(createDate)
