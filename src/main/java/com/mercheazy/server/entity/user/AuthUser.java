@@ -27,13 +27,13 @@ public class AuthUser implements UserDetails {
     @Column(name = "au_id")
     private int id;
 
-    @Column(name = "au_username", unique = true, nullable = false)
+    @Column(name = "au_username", unique = true)
     private String username;
 
     @Column(name = "au_email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "au_password", nullable = false)
+    @Column(name = "au_password")
     private String password;
 
     @Enumerated(EnumType.STRING)
