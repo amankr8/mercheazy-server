@@ -77,16 +77,14 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                 .build();
 
         AuthUser savedAuthUser = userRepository.save(authUser);
+        cartService.createUserCart(savedAuthUser);
         Profile defaultProfile = Profile.builder()
                 .primary(true)
                 .authUser(savedAuthUser)
                 .build();
 
         savedAuthUser.getProfiles().add(defaultProfile);
-        userRepository.save(savedAuthUser);
-        cartService.createUserCart(savedAuthUser);
-
-        return savedAuthUser;
+        return userRepository.save(savedAuthUser);
     }
 
     @Override
@@ -133,6 +131,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                             .profiles(new ArrayList<>())
                             .build();
                     newUser = userRepository.save(newUser);
+                    cartService.createUserCart(newUser);
 
                     Profile defaultProfile = Profile.builder()
                             .name(name)

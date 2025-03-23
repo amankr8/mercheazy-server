@@ -7,9 +7,9 @@ import com.mercheazy.server.entity.user.AuthUser;
 public interface CartService {
     void createUserCart(AuthUser authUser);
 
-    Cart addToCart(CartItemRequestDto cartRequestDto);
+    Cart addToCart(CartItemRequestDto cartRequestDto, int userId);
 
-    Cart removeFromCart(CartItemRequestDto cartItemRequestDto);
+    Cart removeFromCart(CartItemRequestDto cartItemRequestDto, int userId);
 
     Cart getCartByUserId(int userId);
 

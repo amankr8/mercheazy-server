@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 @RequiredArgsConstructor
 @RestController
 public class CartControllerImpl implements com.mercheazy.server.controller.CartController {
@@ -23,13 +21,13 @@ public class CartControllerImpl implements com.mercheazy.server.controller.CartC
 
     @Override
     public ResponseEntity<?> addToCart(CartItemRequestDto cartItemRequestDto) {
-        CartResponseDto cart = cartService.addToCart(cartItemRequestDto).toCartResponseDto();
+        CartResponseDto cart = cartService.addToCart(cartItemRequestDto, AuthUtil.getLoggedInUser().getId()).toCartResponseDto();
         return ResponseEntity.ok(cart);
     }
 
     @Override
     public ResponseEntity<?> removeFromCart(CartItemRequestDto cartItemRequestDto) {
-        CartResponseDto cart = cartService.removeFromCart(cartItemRequestDto).toCartResponseDto();
+        CartResponseDto cart = cartService.removeFromCart(cartItemRequestDto, AuthUtil.getLoggedInUser().getId()).toCartResponseDto();
         return ResponseEntity.ok(cart);
     }
 }

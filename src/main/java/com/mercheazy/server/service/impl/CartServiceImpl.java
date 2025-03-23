@@ -31,7 +31,6 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
                 .cartItems(new ArrayList<>())
                 .build();
         cartRepository.save(cart);
-        System.out.println("User cart created.");
     }
 
     @Override
@@ -41,9 +40,8 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
     }
 
     @Override
-    public Cart addToCart(CartItemRequestDto cartItemRequestDto) {
-        Cart cart = cartRepository.findByAuthUserId(AuthUtil.getLoggedInUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
+    public Cart addToCart(CartItemRequestDto cartItemRequestDto, int userId) {
+        Cart cart = getCartByUserId(userId);
         Product product = productService.getProductById(cartItemRequestDto.getProductId());
 
         CartItem cartItem = cart.getCartItems().stream()
@@ -73,9 +71,8 @@ public class CartServiceImpl implements com.mercheazy.server.service.CartService
     }
 
     @Override
-    public Cart removeFromCart(CartItemRequestDto cartItemRequestDto) {
-        Cart cart = cartRepository.findByAuthUserId(AuthUtil.getLoggedInUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
+    public Cart removeFromCart(CartItemRequestDto cartItemRequestDto, int userId) {
+        Cart cart = getCartByUserId(userId);
         Product product = productService.getProductById(cartItemRequestDto.getProductId());
 
         CartItem cartItem = cart.getCartItems().stream()
