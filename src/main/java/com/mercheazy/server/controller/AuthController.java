@@ -5,9 +5,7 @@ import com.mercheazy.server.dto.auth.SignupRequestDto;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Validated
 @RequestMapping("/api/auth")
@@ -18,4 +16,7 @@ public interface AuthController {
 
     @PostMapping("/login")
     ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto);
+
+    @GetMapping("google-login")
+    ResponseEntity<?> googleLogin(@RequestParam String code);
 }

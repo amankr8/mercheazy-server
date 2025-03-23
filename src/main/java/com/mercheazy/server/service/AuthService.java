@@ -8,4 +8,6 @@ public interface AuthService {
     AuthUser signUp(SignupRequestDto signupRequestDto);
 
     AuthUser login(LoginRequestDto loginRequestDto);
+
+    AuthUser googleLogin(String code);
 }

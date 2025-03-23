@@ -29,4 +29,11 @@ public class AuthControllerImpl implements AuthController {
         String jwtToken = jwtService.generateToken(loginUser.getUsername());
         return ResponseEntity.ok(new AuthResponseDto(jwtToken, loginUser, "Login successful!"));
     }
+
+    @Override
+    public ResponseEntity<?> googleLogin(String code) {
+        UserResponseDto oAuthUser = authService.googleLogin(code).toUserResponseDto();
+        String jwtToken = jwtService.generateToken(oAuthUser.getUsername());
+        return ResponseEntity.ok(new AuthResponseDto(jwtToken, oAuthUser, "Login successful!"));
+    }
 }

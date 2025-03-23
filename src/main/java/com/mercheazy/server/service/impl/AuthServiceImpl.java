@@ -9,13 +9,18 @@ import com.mercheazy.server.service.CartService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +28,8 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final OAuth2AuthorizedClientService authorizedClientService;
+    private final RestTemplate restTemplate;
     private final CartService cartService;
 
     @Value("${spring.security.username}")
@@ -53,11 +60,10 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
             throw new IllegalArgumentException("A user is already registered with this email");
         }
 
-        String username = generateUniqueUsername(signupRequestDto.getEmail().split("@")[0]);
         AuthUser authUser = AuthUser.builder()
-                .username(username)
-                .password(passwordEncoder.encode(signupRequestDto.getPassword()))
+                .username(signupRequestDto.getEmail())
                 .email(signupRequestDto.getEmail())
+                .password(passwordEncoder.encode(signupRequestDto.getPassword()))
                 .role(AuthUser.Role.USER)
                 .profiles(new ArrayList<>())
                 .build();
@@ -75,17 +81,6 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
         return savedAuthUser;
     }
 
-    private String generateUniqueUsername(String username) {
-        // Generate a unique username
-        String uniqueUsername = username;
-        int i = 1;
-        while (userRepository.findByUsername(uniqueUsername).isPresent()) {
-            uniqueUsername = username + i;
-            i++;
-        }
-        return uniqueUsername;
-    }
-
     @Override
     public AuthUser login(LoginRequestDto loginRequestDto) {
         AuthUser authUser = userRepository.findByEmail(loginRequestDto.getEmail())
@@ -98,5 +93,51 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                 )
         );
         return authUser;
+    }
+
+    @Override
+    public AuthUser googleLogin(String code) {
+        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient("google", code);
+
+        if (authorizedClient == null) {
+            throw new AuthenticationCredentialsNotFoundException("Error processing request");
+        }
+
+        // Get access token
+        String accessToken = authorizedClient.getAccessToken().getTokenValue();
+
+        // Fetch user details from Google API
+        String userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<?> response = restTemplate.exchange(userInfoEndpoint, HttpMethod.GET, entity, Map.class);
+        Map<?,?> userAttributes = (Map<?, ?>) response.getBody();
+
+        if (userAttributes == null || !userAttributes.containsKey("email")) {
+            throw new AuthenticationCredentialsNotFoundException("Error processing request");
+        }
+
+        String email = (String) userAttributes.get("email");
+        String name = (String) userAttributes.get("name");
+        return userRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    AuthUser newUser = AuthUser.builder()
+                            .username(email)
+                            .email(email)
+                            .role(AuthUser.Role.USER)
+                            .profiles(new ArrayList<>())
+                            .build();
+                    newUser = userRepository.save(newUser);
+
+                    Profile defaultProfile = Profile.builder()
+                            .name(name)
+                            .authUser(newUser)
+                            .primary(true)
+                            .build();
+                    newUser.getProfiles().add(defaultProfile);
+                    return userRepository.save(newUser);
+                });
     }
 }
