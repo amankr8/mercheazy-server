@@ -25,7 +25,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final UserRepository userRepository;
 
     @Value("${spring.frontend.url}")
-    private String redirectUrl;
+    private String frontendUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -55,7 +55,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                     });
 
             String token = jwtService.generateToken(authUser.getUsername());
-            response.sendRedirect(redirectUrl + "/oauth2/callback?token=" + token);
+            response.sendRedirect(frontendUrl + "/oauth2/callback?token=" + token);
         } catch (Exception e) {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.getWriter().write("Error occurred while processing the request.");
