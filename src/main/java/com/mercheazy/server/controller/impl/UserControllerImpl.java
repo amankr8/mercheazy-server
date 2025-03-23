@@ -30,6 +30,12 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
+    public ResponseEntity<?> getLoggedInUser() {
+        AuthUser loggedInUser = userService.getUserById(AuthUtil.getLoggedInUser().getId());
+        return ResponseEntity.ok().body(loggedInUser.toUserResponseDto());
+    }
+
+    @Override
     public ResponseEntity<?> getUserProfiles() {
         List<Profile> profiles = userService.getProfilesByUserId(AuthUtil.getLoggedInUser().getId());
         return ResponseEntity.ok().body(profiles);

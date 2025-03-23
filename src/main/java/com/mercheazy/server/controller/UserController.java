@@ -14,6 +14,9 @@ public interface UserController {
     @GetMapping("/{id}")
     ResponseEntity<?> getUserById(int id);
 
+    @GetMapping("/current")
+    ResponseEntity<?> getLoggedInUser();
+
     @GetMapping("/profiles")
     ResponseEntity<?> getUserProfiles();
 }
