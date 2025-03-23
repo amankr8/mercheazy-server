@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -82,9 +83,13 @@ public class AuthUser implements UserDetails {
     }
 
     public UserResponseDto toUserResponseDto() {
+        Optional<Profile> defaultProfile = profiles.stream().filter(Profile::getPrimary).findFirst();
+        String name = defaultProfile.map(Profile::getName).orElse("");
+
         return UserResponseDto.builder()
                 .id(id)
                 .username(username)
+                .name(name)
                 .email(email)
                 .role(role)
                 .createDate(createDate)

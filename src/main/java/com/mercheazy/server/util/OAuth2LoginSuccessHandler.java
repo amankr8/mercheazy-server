@@ -1,6 +1,7 @@
 package com.mercheazy.server.util;
 
 import com.mercheazy.server.entity.user.AuthUser;
+import com.mercheazy.server.entity.user.Profile;
 import com.mercheazy.server.repository.user.UserRepository;
 import com.mercheazy.server.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
 
         try {
             AuthUser authUser = userRepository.findByEmail(email)
@@ -40,6 +42,15 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                                 .role(AuthUser.Role.USER)
                                 .profiles(new ArrayList<>())
                                 .build();
+                        newUser = userRepository.save(newUser);
+
+                        Profile defaultProfile = Profile.builder()
+                                .name(name)
+                                .authUser(newUser)
+                                .primary(true)
+                                .build();
+                        newUser.getProfiles().add(defaultProfile);
+
                         return userRepository.save(newUser);
                     });
 
