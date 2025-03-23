@@ -14,9 +14,9 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final OAuth2AuthorizedClientService authorizedClientService;
     private final RestTemplate restTemplate;
     private final CartService cartService;
 
@@ -37,6 +36,15 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
 
     @Value("${spring.security.password}")
     private String adminPassword;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String googleClientId;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
+    private String googleClientSecret;
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @PostConstruct
     public void init() {
@@ -97,14 +105,8 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
 
     @Override
     public AuthUser googleLogin(String code) {
-        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient("google", code);
-
-        if (authorizedClient == null) {
-            throw new AuthenticationCredentialsNotFoundException("Error processing request");
-        }
-
-        // Get access token
-        String accessToken = authorizedClient.getAccessToken().getTokenValue();
+        // Manually exchange authorization code for access token
+        String accessToken = exchangeAuthorizationCodeForToken(code);
 
         // Fetch user details from Google API
         String userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo";
@@ -113,7 +115,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<?> response = restTemplate.exchange(userInfoEndpoint, HttpMethod.GET, entity, Map.class);
-        Map<?,?> userAttributes = (Map<?, ?>) response.getBody();
+        Map<?, ?> userAttributes = (Map<?, ?>) response.getBody();
 
         if (userAttributes == null || !userAttributes.containsKey("email")) {
             throw new AuthenticationCredentialsNotFoundException("Error processing request");
@@ -121,6 +123,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
 
         String email = (String) userAttributes.get("email");
         String name = (String) userAttributes.get("name");
+
         return userRepository.findByEmail(email)
                 .orElseGet(() -> {
                     AuthUser newUser = AuthUser.builder()
@@ -139,5 +142,27 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                     newUser.getProfiles().add(defaultProfile);
                     return userRepository.save(newUser);
                 });
+    }
+
+    private String exchangeAuthorizationCodeForToken(String authorizationCode) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("client_id", googleClientId);
+        body.add("client_secret", googleClientSecret);
+        body.add("code", authorizationCode);
+        body.add("redirect_uri", "http://localhost:4200/oauth2/callback");
+        body.add("grant_type", "authorization_code");
+
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
+        ResponseEntity<?> response = restTemplate.postForEntity("https://oauth2.googleapis.com/token", requestEntity, Map.class);
+
+        Map<?,?> responseBody = (Map<?, ?>) response.getBody();
+        if (responseBody != null && responseBody.containsKey("access_token")) {
+            return (String) responseBody.get("access_token");
+        } else {
+            throw new RuntimeException("Failed to retrieve access token");
+        }
     }
 }
