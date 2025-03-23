@@ -152,7 +152,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
         body.add("client_id", googleClientId);
         body.add("client_secret", googleClientSecret);
         body.add("code", authorizationCode);
-        body.add("redirect_uri", "http://localhost:4200/oauth2/callback");
+        body.add("redirect_uri", frontendUrl + "/oauth2/callback");
         body.add("grant_type", "authorization_code");
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
