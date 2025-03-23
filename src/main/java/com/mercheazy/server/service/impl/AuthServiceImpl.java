@@ -5,7 +5,7 @@ import com.mercheazy.server.dto.auth.SignupRequestDto;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.entity.user.Profile;
 import com.mercheazy.server.repository.user.UserRepository;
-import com.mercheazy.server.service.CartService;
+import com.mercheazy.server.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final RestTemplate restTemplate;
-    private final CartService cartService;
+    private final UserService userService;
 
     @Value("${spring.security.username}")
     private String adminUsername;
@@ -55,9 +55,12 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                     .email("hello@mercheazy.com")
                     .role(AuthUser.Role.ADMIN)
                     .build();
-            admin = userRepository.save(admin);
-            cartService.createUserCart(admin);
-            System.out.println("MerchEazy admin created!");
+
+            Profile adminProfile = Profile.builder()
+                    .primary(true)
+                    .name("MerchEazy")
+                    .build();
+            userService.addUserProfile(admin, adminProfile);
         }
     }
 
@@ -73,18 +76,13 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                 .email(signupRequestDto.getEmail())
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
                 .role(AuthUser.Role.USER)
-                .profiles(new ArrayList<>())
                 .build();
 
-        AuthUser savedAuthUser = userRepository.save(authUser);
-        cartService.createUserCart(savedAuthUser);
         Profile defaultProfile = Profile.builder()
                 .primary(true)
-                .authUser(savedAuthUser)
                 .build();
 
-        savedAuthUser.getProfiles().add(defaultProfile);
-        return userRepository.save(savedAuthUser);
+        return userService.addUserProfile(authUser, defaultProfile);
     }
 
     @Override
@@ -130,16 +128,13 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                             .role(AuthUser.Role.USER)
                             .profiles(new ArrayList<>())
                             .build();
-                    newUser = userRepository.save(newUser);
-                    cartService.createUserCart(newUser);
 
                     Profile defaultProfile = Profile.builder()
                             .name(name)
-                            .authUser(newUser)
                             .primary(true)
                             .build();
-                    newUser.getProfiles().add(defaultProfile);
-                    return userRepository.save(newUser);
+
+                    return userService.addUserProfile(newUser, defaultProfile);
                 });
     }
 

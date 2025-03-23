@@ -13,5 +13,7 @@ public interface UserService {
 
     List<Profile> getProfilesByUserId(int userId);
 
+    AuthUser addUserProfile(AuthUser authUser, Profile profile);
+
     Profile addProfile(ProfileRequestDto profileRequestDto);
 }

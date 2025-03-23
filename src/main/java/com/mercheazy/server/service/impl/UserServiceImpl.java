@@ -12,11 +12,13 @@ import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.CountryRepository;
 import com.mercheazy.server.repository.user.ProfileRepository;
 import com.mercheazy.server.repository.user.UserRepository;
+import com.mercheazy.server.service.CartService;
 import com.mercheazy.server.service.UserService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final CountryRepository countryRepository;
+    private final CartService cartService;
 
     @Override
     public List<AuthUser> getAllUsers() {
@@ -41,6 +44,20 @@ public class UserServiceImpl implements UserService {
     public List<Profile> getProfilesByUserId(int userId) {
         AuthUser user = getUserById(userId);
         return user.getProfiles();
+    }
+
+    @Override
+    public AuthUser addUserProfile(AuthUser authUser, Profile profile) {
+        AuthUser newUser = userRepository.save(authUser);
+
+        // Create default profile
+        profile.setAuthUser(newUser);
+        newUser.setProfiles(Collections.singletonList(profile));
+
+        // Create user cart
+        cartService.createUserCart(newUser);
+
+        return userRepository.save(newUser);
     }
 
     @Override
