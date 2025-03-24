@@ -126,7 +126,6 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                             .username(email)
                             .email(email)
                             .role(AuthUser.Role.USER)
-                            .profiles(new ArrayList<>())
                             .build();
 
                     Profile defaultProfile = Profile.builder()

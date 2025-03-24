@@ -50,12 +50,12 @@ public class UserServiceImpl implements UserService {
     public AuthUser addUserProfile(AuthUser authUser, Profile profile) {
         AuthUser newUser = userRepository.save(authUser);
 
+        // Create user cart
+        cartService.createUserCart(newUser);
+
         // Create default profile
         profile.setAuthUser(newUser);
         newUser.setProfiles(Collections.singletonList(profile));
-
-        // Create user cart
-        cartService.createUserCart(newUser);
 
         return userRepository.save(newUser);
     }
