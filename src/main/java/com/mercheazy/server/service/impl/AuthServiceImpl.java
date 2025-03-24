@@ -53,6 +53,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                     .username(adminUsername)
                     .password(passwordEncoder.encode(adminPassword))
                     .email("hello@mercheazy.com")
+                    .profiles(new ArrayList<>())
                     .role(AuthUser.Role.ADMIN)
                     .build();
 
@@ -75,6 +76,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                 .username(signupRequestDto.getEmail())
                 .email(signupRequestDto.getEmail())
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
+                .profiles(new ArrayList<>())
                 .role(AuthUser.Role.USER)
                 .build();
 
@@ -125,6 +127,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                     AuthUser newUser = AuthUser.builder()
                             .username(email)
                             .email(email)
+                            .profiles(new ArrayList<>())
                             .role(AuthUser.Role.USER)
                             .build();
 

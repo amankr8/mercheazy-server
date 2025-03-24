@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
         // Create default profile
         profile.setAuthUser(newUser);
-        newUser.setProfiles(Collections.singletonList(profile));
+        newUser.getProfiles().add(profile);
 
         return userRepository.save(newUser);
     }
