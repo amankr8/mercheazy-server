@@ -5,6 +5,7 @@ import com.mercheazy.server.dto.auth.SignupRequestDto;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.entity.user.Profile;
 import com.mercheazy.server.repository.user.UserRepository;
+import com.mercheazy.server.service.EmailService;
 import com.mercheazy.server.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -30,6 +32,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     private final AuthenticationManager authenticationManager;
     private final RestTemplate restTemplate;
     private final UserService userService;
+    private final EmailService emailService;
 
     @Value("${spring.security.username}")
     private String adminUsername;
@@ -43,8 +46,8 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String googleClientSecret;
 
-    @Value("${frontend.url}")
-    private String frontendUrl;
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    private String redirectUri;
 
     @PostConstruct
     public void init() {
@@ -81,8 +84,11 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                 .build();
 
         Profile defaultProfile = Profile.builder()
+                .name("")
                 .primary(true)
                 .build();
+
+        emailService.sendUserVerificationMail(authUser.getEmail(), UUID.randomUUID().toString());
 
         return userService.addUserProfile(authUser, defaultProfile);
     }
@@ -148,7 +154,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
         body.add("client_id", googleClientId);
         body.add("client_secret", googleClientSecret);
         body.add("code", authorizationCode);
-        body.add("redirect_uri", frontendUrl + "/oauth2/callback");
+        body.add("redirect_uri", redirectUri);
         body.add("grant_type", "authorization_code");
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);

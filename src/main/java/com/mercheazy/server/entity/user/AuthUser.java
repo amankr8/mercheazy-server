@@ -41,6 +41,9 @@ public class AuthUser implements UserDetails {
     @Column(name = "au_role", nullable = false)
     private Role role;
 
+    @Column(name = "au_enabled")
+    private boolean enabled;
+
     @CreationTimestamp
     @Column(name = "au_create_date", nullable = false, updatable = false)
     private Date createDate;
@@ -75,7 +78,7 @@ public class AuthUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     public enum Role {
