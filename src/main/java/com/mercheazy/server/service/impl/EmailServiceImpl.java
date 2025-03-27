@@ -19,9 +19,9 @@ public class EmailServiceImpl implements com.mercheazy.server.service.EmailServi
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(email);
-            mailMessage.setSubject("Welcome to MerchEazy: Complete Registration!");
+            mailMessage.setSubject("Welcome to MerchEazy: Activate your account!");
             mailMessage.setText("To confirm your account, please click here : "
-                    + baseUrl + "/api/auth/verify-account?token=" + token);
+                    + baseUrl + "/api/auth/verify-email?token=" + token);
             javaMailSender.send(mailMessage);
         } catch (Exception e) {
             System.out.println("Error sending email: " + e.getMessage());

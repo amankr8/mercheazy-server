@@ -17,6 +17,9 @@ public interface AuthController {
     @PostMapping("/login")
     ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto);
 
-    @GetMapping("google-login")
+    @GetMapping("/verify-email")
+    ResponseEntity<?> verifyEmail(@RequestParam String token);
+
+    @GetMapping("/google-login")
     ResponseEntity<?> googleLogin(@RequestParam String code);
 }

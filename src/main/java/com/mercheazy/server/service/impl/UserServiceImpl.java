@@ -4,21 +4,18 @@ import com.mercheazy.server.dto.user.AddressRequestDto;
 import com.mercheazy.server.dto.user.PhoneRequestDto;
 import com.mercheazy.server.dto.user.ProfileRequestDto;
 import com.mercheazy.server.entity.Country;
-import com.mercheazy.server.entity.user.Address;
-import com.mercheazy.server.entity.user.AuthUser;
-import com.mercheazy.server.entity.user.Phone;
-import com.mercheazy.server.entity.user.Profile;
+import com.mercheazy.server.entity.user.*;
 import com.mercheazy.server.exception.ResourceNotFoundException;
 import com.mercheazy.server.repository.CountryRepository;
 import com.mercheazy.server.repository.user.ProfileRepository;
 import com.mercheazy.server.repository.user.UserRepository;
+import com.mercheazy.server.repository.user.UserTokenRepository;
 import com.mercheazy.server.service.CartService;
 import com.mercheazy.server.service.UserService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final ProfileRepository profileRepository;
     private final CountryRepository countryRepository;
     private final CartService cartService;
+    private final UserTokenRepository userTokenRepository;
 
     @Override
     public List<AuthUser> getAllUsers() {
@@ -58,6 +56,15 @@ public class UserServiceImpl implements UserService {
         newUser.getProfiles().add(profile);
 
         return userRepository.save(newUser);
+    }
+
+    @Override
+    public void saveUserToken(AuthUser authUser, String token) {
+        UserToken userToken = UserToken.builder()
+                .authUser(authUser)
+                .token(token)
+                .build();
+        userTokenRepository.save(userToken);
     }
 
     @Override

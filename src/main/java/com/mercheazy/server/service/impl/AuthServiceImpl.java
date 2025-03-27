@@ -4,7 +4,9 @@ import com.mercheazy.server.dto.auth.LoginRequestDto;
 import com.mercheazy.server.dto.auth.SignupRequestDto;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.entity.user.Profile;
+import com.mercheazy.server.entity.user.UserToken;
 import com.mercheazy.server.repository.user.UserRepository;
+import com.mercheazy.server.repository.user.UserTokenRepository;
 import com.mercheazy.server.service.EmailService;
 import com.mercheazy.server.service.UserService;
 import jakarta.annotation.PostConstruct;
@@ -33,6 +35,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
     private final RestTemplate restTemplate;
     private final UserService userService;
     private final EmailService emailService;
+    private final UserTokenRepository userTokenRepository;
 
     @Value("${spring.security.username}")
     private String adminUsername;
@@ -81,6 +84,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
                 .profiles(new ArrayList<>())
                 .role(AuthUser.Role.USER)
+                .enabled(false)
                 .build();
 
         Profile defaultProfile = Profile.builder()
@@ -88,9 +92,27 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                 .primary(true)
                 .build();
 
-        emailService.sendUserVerificationMail(authUser.getEmail(), UUID.randomUUID().toString());
+        String token = UUID.randomUUID().toString();
+        emailService.sendUserVerificationMail(authUser.getEmail(), token);
 
-        return userService.addUserProfile(authUser, defaultProfile);
+        authUser = userService.addUserProfile(authUser, defaultProfile);
+        userService.saveUserToken(authUser, token);
+
+        return authUser;
+    }
+
+    @Override
+    public void verifyEmail(String token) {
+        AuthUser authUser = userTokenRepository.findByToken(token)
+                .map(userToken -> {
+                    AuthUser user = userToken.getAuthUser();
+                    userTokenRepository.delete(userToken);
+                    return user;
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
+
+        authUser.setEnabled(true);
+        userRepository.save(authUser);
     }
 
     @Override

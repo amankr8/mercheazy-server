@@ -31,6 +31,12 @@ public class AuthControllerImpl implements AuthController {
     }
 
     @Override
+    public ResponseEntity<?> verifyEmail(String token) {
+        authService.verifyEmail(token);
+        return ResponseEntity.ok("Email verified successfully!");
+    }
+
+    @Override
     public ResponseEntity<?> googleLogin(String code) {
         UserResponseDto oAuthUser = authService.googleLogin(code).toUserResponseDto();
         String jwtToken = jwtService.generateToken(oAuthUser.getUsername());
