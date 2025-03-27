@@ -18,7 +18,7 @@ public class Country {
     @Column(name = "cr_id")
     private int id;
 
-    @Column(name = "cr_code", nullable = false)
+    @Column(name = "cr_phone_code", nullable = false)
     private String code;
 
     @Column(name = "cr_name", nullable = false)

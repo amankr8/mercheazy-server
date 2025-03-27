@@ -10,6 +10,7 @@ import com.mercheazy.server.repository.cart.CartItemRepository;
 import com.mercheazy.server.repository.cart.CartRepository;
 import com.mercheazy.server.repository.product.ProductRepository;
 import com.mercheazy.server.service.ProductService;
+import com.mercheazy.server.service.UserService;
 import com.mercheazy.server.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,22 +22,22 @@ import java.util.ArrayList;
 public class CartServiceImpl implements com.mercheazy.server.service.CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final ProductRepository productRepository;
+    private final UserService userService;
     private final ProductService productService;
 
     @Override
-    public void createUserCart(AuthUser authUser) {
+    public Cart createUserCart(int userId) {
+        AuthUser user = userService.getUserById(userId);
         Cart cart = Cart.builder()
-                .authUser(authUser)
+                .authUser(user)
                 .cartItems(new ArrayList<>())
                 .build();
-        cartRepository.save(cart);
+        return cartRepository.save(cart);
     }
 
     @Override
     public Cart getCartByUserId(int userId) {
-        return cartRepository.findByAuthUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User cart not found."));
+        return cartRepository.findByAuthUserId(userId).orElseGet(() -> createUserCart(userId));
     }
 
     @Override

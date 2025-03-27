@@ -28,6 +28,9 @@ public class AuthUser implements UserDetails {
     @Column(name = "au_id")
     private int id;
 
+    @Column(name = "au_name")
+    private String name;
+
     @Column(name = "au_username", unique = true, nullable = false)
     private String username;
 
@@ -86,9 +89,6 @@ public class AuthUser implements UserDetails {
     }
 
     public UserResponseDto toUserResponseDto() {
-        Optional<Profile> defaultProfile = profiles.stream().filter(Profile::getPrimary).findFirst();
-        String name = defaultProfile.map(Profile::getName).orElse("");
-
         return UserResponseDto.builder()
                 .id(id)
                 .username(username)

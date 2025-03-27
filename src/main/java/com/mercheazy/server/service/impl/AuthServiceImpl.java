@@ -4,7 +4,6 @@ import com.mercheazy.server.dto.auth.LoginRequestDto;
 import com.mercheazy.server.dto.auth.SignupRequestDto;
 import com.mercheazy.server.entity.user.AuthUser;
 import com.mercheazy.server.entity.user.Profile;
-import com.mercheazy.server.entity.user.UserToken;
 import com.mercheazy.server.repository.user.UserRepository;
 import com.mercheazy.server.repository.user.UserTokenRepository;
 import com.mercheazy.server.service.EmailService;
@@ -59,15 +58,9 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                     .username(adminUsername)
                     .password(passwordEncoder.encode(adminPassword))
                     .email("hello@mercheazy.com")
-                    .profiles(new ArrayList<>())
                     .role(AuthUser.Role.ADMIN)
                     .build();
-
-            Profile adminProfile = Profile.builder()
-                    .primary(true)
-                    .name("MerchEazy")
-                    .build();
-            userService.addUserProfile(admin, adminProfile);
+            userRepository.save(admin);
         }
     }
 
@@ -87,15 +80,10 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                 .enabled(false)
                 .build();
 
-        Profile defaultProfile = Profile.builder()
-                .name("")
-                .primary(true)
-                .build();
-
         String token = UUID.randomUUID().toString();
         emailService.sendUserVerificationMail(authUser.getEmail(), token);
 
-        authUser = userService.addUserProfile(authUser, defaultProfile);
+        authUser = userRepository.save(authUser);
         userService.saveUserToken(authUser, token);
 
         return authUser;
@@ -158,13 +146,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                             .profiles(new ArrayList<>())
                             .role(AuthUser.Role.USER)
                             .build();
-
-                    Profile defaultProfile = Profile.builder()
-                            .name(name)
-                            .primary(true)
-                            .build();
-
-                    return userService.addUserProfile(newUser, defaultProfile);
+                    return userRepository.save(newUser);
                 });
     }
 

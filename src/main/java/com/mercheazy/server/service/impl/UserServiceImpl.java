@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final CountryRepository countryRepository;
-    private final CartService cartService;
     private final UserTokenRepository userTokenRepository;
 
     @Override
@@ -45,20 +44,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthUser addUserProfile(AuthUser authUser, Profile profile) {
-        AuthUser newUser = userRepository.save(authUser);
-
-        // Create user cart
-        cartService.createUserCart(newUser);
-
-        // Create default profile
-        profile.setAuthUser(newUser);
-        newUser.getProfiles().add(profile);
-
-        return userRepository.save(newUser);
-    }
-
-    @Override
     public void saveUserToken(AuthUser authUser, String token) {
         UserToken userToken = UserToken.builder()
                 .authUser(authUser)
@@ -74,11 +59,8 @@ public class UserServiceImpl implements UserService {
                 .authUser(loggedInUser)
                 .name(profileRequestDto.getName())
                 .build();
-        profile = profileRepository.save(profile);
 
-        if (profileRequestDto.getAddressRequestDto() != null && profileRequestDto.getPhoneRequestDto() != null) {
-            return profile;
-        } else if (profileRequestDto.getAddressRequestDto() != null) {
+        if (profileRequestDto.getAddressRequestDto() != null) {
             AddressRequestDto addressRequestDto = profileRequestDto.getAddressRequestDto();
             Country country = countryRepository.findByName(addressRequestDto.getCountry())
                     .orElseThrow(() -> new ResourceNotFoundException("Country not found!"));
@@ -92,7 +74,9 @@ public class UserServiceImpl implements UserService {
                     .zip(addressRequestDto.getZip())
                     .build();
             profile.setAddress(address);
-        } else {
+        }
+
+        if (profileRequestDto.getPhoneRequestDto() != null) {
             PhoneRequestDto phoneRequestDto = profileRequestDto.getPhoneRequestDto();
             Country countryPhone = countryRepository.findByName(phoneRequestDto.getCountryCode())
                     .orElseThrow(() -> new ResourceNotFoundException("Country not found!"));
@@ -102,6 +86,7 @@ public class UserServiceImpl implements UserService {
                     .build();
             profile.setPhone(phone);
         }
+
         return profileRepository.save(profile);
     }
 }

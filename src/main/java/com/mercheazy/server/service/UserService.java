@@ -13,8 +13,6 @@ public interface UserService {
 
     List<Profile> getProfilesByUserId(int userId);
 
-    AuthUser addUserProfile(AuthUser authUser, Profile profile);
-
     void saveUserToken(AuthUser authUser, String token);
 
     Profile addProfile(ProfileRequestDto profileRequestDto);
