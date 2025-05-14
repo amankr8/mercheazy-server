@@ -3,7 +3,6 @@ package com.mercheazy.server.service.impl;
 import com.mercheazy.server.dto.auth.LoginRequestDto;
 import com.mercheazy.server.dto.auth.SignupRequestDto;
 import com.mercheazy.server.entity.user.AuthUser;
-import com.mercheazy.server.entity.user.Profile;
 import com.mercheazy.server.repository.user.UserRepository;
 import com.mercheazy.server.repository.user.UserTokenRepository;
 import com.mercheazy.server.service.EmailService;
