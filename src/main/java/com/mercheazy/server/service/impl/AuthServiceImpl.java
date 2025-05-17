@@ -58,6 +58,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
                     .password(passwordEncoder.encode(adminPassword))
                     .email("hello@mercheazy.com")
                     .role(AuthUser.Role.ADMIN)
+                    .enabled(true)
                     .build();
             userRepository.save(admin);
         }
