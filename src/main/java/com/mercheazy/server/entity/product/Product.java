@@ -54,7 +54,7 @@ public class Product {
     private Store store;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @JsonManagedReference
     private List<ProductImage> productImages;
 
     public ProductResponseDto toProductResponseDto() {

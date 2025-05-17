@@ -49,14 +49,9 @@ public class ProductServiceImpl implements ProductService {
                 .store(store)
                 .build();
 
-        product = productRepository.save(product);
-
         List<ProductImage> productImages = saveImages(productRequestDto.getImgFiles(), product);
-        if (!productImages.isEmpty()) {
-            product.setProductImages(productImages);
-            productRepository.save(product);
-        }
-        return product;
+        product.setProductImages(productImages);
+        return productRepository.save(product);
     }
 
     @Override

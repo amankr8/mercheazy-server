@@ -27,7 +27,7 @@ public class ProductImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Product product;
 
     public FileResponseDto toFileResponseDto() {
