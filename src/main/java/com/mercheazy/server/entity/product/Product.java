@@ -1,6 +1,5 @@
 package com.mercheazy.server.entity.product;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mercheazy.server.dto.FileResponseDto;
 import com.mercheazy.server.dto.product.ProductResponseDto;
@@ -69,7 +68,7 @@ public class Product {
                 .createDate(createDate)
                 .updateDate(updateDate)
                 .images(images)
-                .storeId(store.getId())
+                .storeName(store.getName())
                 .build();
     }
 }
