@@ -16,4 +16,6 @@ public interface UserService {
     void saveUserToken(AuthUser authUser, String token);
 
     Profile addProfile(ProfileRequestDto profileRequestDto);
+
+    void deleteUserById(int id);
 }

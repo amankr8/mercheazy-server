@@ -89,4 +89,10 @@ public class UserServiceImpl implements UserService {
 
         return profileRepository.save(profile);
     }
+
+    @Override
+    public void deleteUserById(int id) {
+        AuthUser user = getUserById(id);
+        userRepository.delete(user);
+    }
 }

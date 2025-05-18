@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -39,5 +40,11 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<?> getUserProfiles() {
         List<Profile> profiles = userService.getProfilesByUserId(AuthUtil.getLoggedInUser().getId());
         return ResponseEntity.ok().body(profiles);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteLoggedInUser() {
+        userService.deleteUserById(AuthUtil.getLoggedInUser().getId());
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "User deleted successfully"));
     }
 }
