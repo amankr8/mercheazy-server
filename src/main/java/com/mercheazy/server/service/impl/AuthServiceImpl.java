@@ -141,6 +141,7 @@ public class AuthServiceImpl implements com.mercheazy.server.service.AuthService
         return userRepository.findByEmail(email)
                 .orElseGet(() -> {
                     AuthUser newUser = AuthUser.builder()
+                            .name(name)
                             .username(email)
                             .email(email)
                             .profiles(new ArrayList<>())
